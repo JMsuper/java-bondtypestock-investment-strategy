@@ -1,23 +1,15 @@
 package com.example.financeapi.util;
 
-import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.ssl.SSLContextBuilder;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.client.ClientHttpRequestFactory;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import io.netty.handler.ssl.SslContext;
+import io.netty.handler.ssl.SslContextBuilder;
+import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
+import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
+import reactor.netty.http.client.HttpClient;
 
-import javax.net.ssl.SSLContext;
-import java.io.IOException;
-import java.security.KeyManagementException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
+import javax.net.ssl.SSLException;
 
 @Component
 public class FinanceAPI {
@@ -25,25 +17,27 @@ public class FinanceAPI {
 
     String key = "L%2Fhjnn%2Fxajcw2XmxzNMQMsB2ATjPu%2B2pAMzxLSn7ES0Yi6SGcjslJq7SP1xrgLJyH8Ca1rk5BaERd9XIWZx0KA%3D%3D";
 
-    String uri = "https://apis.data.go.kr/1160100/service/GetStockSecuritiesInfoService";
+    String uri = "https://apis.data.go.kr/1160100/service/GetStockSecuritiesInfoService/getStockPriceInfo";
 
-    @Value("${trust.store}")
-    private Resource trustStore;
 
-    @Value("${trust.store.password}")
-    private String trustStorePassword;
-
-    public String getStockPrice(String stockCode) throws IOException, CertificateException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
-
-        SSLContext sslContext = new SSLContextBuilder()
-                .loadTrustMaterial(trustStore.getURL(),trustStorePassword.toCharArray()).build();
-        SSLConnectionSocketFactory sslConFactory = new SSLConnectionSocketFactory(sslContext);
-
-        CloseableHttpClient httpClient = HttpClients.custom().setSSLSocketFactory(sslConFactory).build();
-        ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
+    public String getStockPrice(String stockCode) throws SSLException {
         String requestUri = uri + "?serviceKey=" + key + "&resultType=json&likeSrtnCd=" + stockCode;
-        RestTemplate restTemplate = new RestTemplate(requestFactory);
-        ResponseEntity<String> result = restTemplate.getForEntity(requestUri,String.class);
-        return result.toString();
+
+//        String requestUri = uri + "?serviceKey=" + key;
+        SslContext context = SslContextBuilder.forClient()
+                .trustManager(InsecureTrustManagerFactory.INSTANCE)
+                .build();
+
+        HttpClient httpClient = HttpClient.create().secure(t -> t.sslContext(context));
+
+        WebClient wc = WebClient
+                .builder()
+                .baseUrl(requestUri)
+                .clientConnector(new ReactorClientHttpConnector(httpClient)).build();
+        Mono<String> hello = wc.get()
+                .retrieve()
+                .bodyToMono(String.class);
+        return hello.block();
     }
 }
+
