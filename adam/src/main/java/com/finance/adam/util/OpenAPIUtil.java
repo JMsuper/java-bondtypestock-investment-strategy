@@ -15,35 +15,28 @@ import java.util.zip.ZipInputStream;
 @Component
 public class OpenAPIUtil {
 
-    public String fetchData(String url){
-        String result = "";
+    public String fetchZipData(String url){
         RestTemplate restTemplate = new RestTemplate();
 
-        ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
+        ResponseEntity<byte[]> response = restTemplate.getForEntity(url, byte[].class);
 
-        if (response.getStatusCode().is2xxSuccessful()) {
-            result = response.getBody();
-        } else {
+        if (!response.getStatusCode().is2xxSuccessful()) {
             System.err.println("Request failed with status code: " + response.getStatusCode());
         }
-        return result;
-    }
-
-    public String ConvertStringToZipFile(String response){
-        byte[] byteData = response.getBytes();
+        byte[] fileData = response.getBody();
         // 응답 본문을 zip 파일로 저장
-        String filePath = "response.zip";
-        try{
-            OutputStream outputStream = new FileOutputStream(filePath);
-            outputStream.write(byteData);
-            outputStream.close();
-            return filePath;
-        }catch(IOException e){
+        String fileName = "response.zip";
+        try {
+            FileOutputStream outputStream = new FileOutputStream(fileName);
+            outputStream.write(fileData);
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        return fileName;
     }
 
-    public String[] unzip(String zipFilePath) throws IOException {
+
+    public String unzip(String zipFilePath) throws IOException {
         byte[] buffer = new byte[1024];
         ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(zipFilePath));
         ZipEntry entry = zipInputStream.getNextEntry();
@@ -67,7 +60,7 @@ public class OpenAPIUtil {
 
         zipInputStream.closeEntry();
         zipInputStream.close();
-        return unzipFilePath.toArray(new String[0]);
+        return unzipFilePath.get(0);
     }
 
     public void parseXML(String xmlPath){
@@ -97,9 +90,6 @@ public class OpenAPIUtil {
                     // 엘리먼트 텍스트 내용 가져오기
                     String elementText = element.getTextContent();
 
-                    // 필요한 작업 수행
-                    System.out.println("Element Name: " + elementName);
-                    System.out.println("Element Text: " + elementText);
                 }
             }
         } catch (Exception e) {

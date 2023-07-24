@@ -1,18 +1,11 @@
 package com.finance.adam.service;
 
 import com.finance.adam.util.OpenAPIUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.stream.Collectors;
-
 @Service
 public class KoreaFinanceService implements FinanceServiceInterface{
 
@@ -31,19 +24,19 @@ public class KoreaFinanceService implements FinanceServiceInterface{
     @Override
     public String[] getStockCodeList() {
         OpenAPIUtil openAPIUtil = new OpenAPIUtil();
-        String zipString = openAPIUtil.fetchData(url + corpCode + "?crtfc_key=" + api_key);
-        String zipFilePath = openAPIUtil.ConvertStringToZipFile(zipString);
-        String[] unzipFilePathList;
+        String zipFilePath = openAPIUtil.fetchZipData(url + corpCode + "?crtfc_key=" + api_key);
+        String unzipXmlFilePath;
         try {
-            unzipFilePathList = openAPIUtil.unzip(zipFilePath);
+            unzipXmlFilePath = openAPIUtil.unzip(zipFilePath);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        openAPIUtil.parseXML(unzipFilePathList[0]);
+        openAPIUtil.parseXML(unzipXmlFilePath);
 
         return new String[0];
     }
 
+    // 총 자본, 발행 주식수, 당기순이익
     @Override
     public Map<String, Integer> getFinancialData(String stockCode) {
         return null;
