@@ -1,6 +1,8 @@
 package com.finance.adam.service;
 
 import com.finance.adam.util.OpenAPIUtil;
+import com.finance.adam.util.Scrapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -18,12 +20,13 @@ public class KoreaFinanceService implements FinanceServiceInterface{
     @Value("${opendart.corp_code}")
     String corpCode;
 
-//    @Autowired
-//    private OpenAPIUtil openAPIUtil;
+    @Autowired
+    private OpenAPIUtil openAPIUtil;
+    @Autowired
+    private Scrapper scrapper;
 
     @Override
-    public String[] getStockCodeList() {
-        OpenAPIUtil openAPIUtil = new OpenAPIUtil();
+    public Map<String, String> getStockCodeList() {
         String zipFilePath = openAPIUtil.fetchZipData(url + corpCode + "?crtfc_key=" + api_key);
         String unzipXmlFilePath;
         try {
@@ -31,15 +34,26 @@ public class KoreaFinanceService implements FinanceServiceInterface{
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        openAPIUtil.parseXML(unzipXmlFilePath);
+        Map<String,String> codeMap = openAPIUtil.parseXML(unzipXmlFilePath);
 
-        return new String[0];
+        return codeMap;
     }
+
+//    public void saveStockListToDB(){
+//        Connection connection = dataSource.getConnection();
+//        Map<String,String> codeList = koreaFinanceService.getStockCodeList();
+//        for(String key : codeList.keySet()){
+//            String code = key;
+//            String name = codeList.get(code);
+//            String sql = "insert into corp_code(code,name) values("+code+",\""+name+"\");";
+//            jdbcTemplate.execute(sql);
+//        }
+//    }
 
     // 총 자본, 발행 주식수, 당기순이익
     @Override
-    public Map<String, Integer> getFinancialData(String stockCode) {
-        return null;
+    public Map<String, String> getFinancialData(String stockCode) {
+        return scrapper.getFinancialData(stockCode);
     }
 
     @Override

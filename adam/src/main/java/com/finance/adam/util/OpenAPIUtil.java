@@ -9,6 +9,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -63,7 +65,8 @@ public class OpenAPIUtil {
         return unzipFilePath.get(0);
     }
 
-    public void parseXML(String xmlPath){
+    public Map<String, String> parseXML(String xmlPath){
+        Map<String,String> retMap = new HashMap<>();
         try {
             File xmlFile = new File(xmlPath);
 
@@ -75,25 +78,32 @@ public class OpenAPIUtil {
             Element root = document.getDocumentElement();
 
             // 엘리먼트 노드 리스트 가져오기
-            NodeList nodeList = root.getChildNodes();
+            NodeList nodeList = root.getElementsByTagName("list");
 
             // 엘리먼트 노드 리스트 순회
             for (int i = 0; i < nodeList.getLength(); i++) {
+//            for (int i = 0; i < 10; i++) {
                 Node node = nodeList.item(i);
 
                 if (node.getNodeType() == Node.ELEMENT_NODE) {
                     Element element = (Element) node;
-
-                    // 엘리먼트 이름 가져오기
-                    String elementName = element.getNodeName();
-
                     // 엘리먼트 텍스트 내용 가져오기
-                    String elementText = element.getTextContent();
-
+                    String corpName = getValue("corp_name",element);
+                    String stockCode = getValue("stock_code",element);
+                    if(stockCode.length() > 1){
+                        retMap.put(stockCode,corpName);
+                    }
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return retMap;
+    }
+
+    private String getValue(String tag, Element element) {
+        NodeList nodes = element.getElementsByTagName(tag).item(0).getChildNodes();
+        Node node = (Node) nodes.item(0);
+        return node.getNodeValue();
     }
 }

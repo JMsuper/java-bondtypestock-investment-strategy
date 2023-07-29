@@ -5,11 +5,11 @@ import java.util.Map;
 public interface FinanceServiceInterface {
 
     // get stock code List in korea stock market
-    public String[] getStockCodeList();
+    public Map<String, String> getStockCodeList();
 
     // get financial data from stock code
     // return Map<String, String> : key = name, value = value
-    public Map<String, Integer> getFinancialData(String stockCode);
+    public Map<String, String> getFinancialData(String stockCode);
 
     // get stock price from stock code
     public int getStockPrice(String stockCode);
