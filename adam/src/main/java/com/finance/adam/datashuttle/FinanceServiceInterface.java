@@ -8,6 +8,9 @@ public interface FinanceServiceInterface {
     // get stock code List in korea stock market
     public Map<String, String> getStockCodeList();
 
+    public List getStockCodeListFromDB();
+
+    // DB에 재무정보 적재
     public boolean updateAllFinancialInfo();
 
     // get financial data from stock code

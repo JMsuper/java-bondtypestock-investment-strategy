@@ -42,6 +42,11 @@ public class KoreaFinanceService implements FinanceServiceInterface {
     }
 
     @Override
+    public List getStockCodeListFromDB() {
+        return null;
+    }
+
+    @Override
     public boolean updateAllFinancialInfo() {
         return false;
     }
