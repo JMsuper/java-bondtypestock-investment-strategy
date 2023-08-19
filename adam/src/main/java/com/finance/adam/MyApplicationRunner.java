@@ -1,7 +1,7 @@
 package com.finance.adam;
 
-import com.finance.adam.dao.CorpCode;
-import com.finance.adam.service.KoreaFinanceService;
+import com.finance.adam.datashuttle.dao.CorpCode;
+import com.finance.adam.datashuttle.KoreaFinanceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;

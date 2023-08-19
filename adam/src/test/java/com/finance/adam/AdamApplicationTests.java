@@ -1,18 +1,9 @@
 package com.finance.adam;
 
-import com.finance.adam.service.KoreaFinanceService;
-import com.finance.adam.util.FinancialCalculations;
-import com.finance.adam.util.OpenAPIUtil;
-import com.finance.adam.util.Scrapper;
+import com.finance.adam.datashuttle.KoreaFinanceService;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.io.IOException;
-import java.util.Iterator;
-import java.util.Map;
 
 @SpringBootTest
 class AdamApplicationTests {
