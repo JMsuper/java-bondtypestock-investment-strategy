@@ -25,7 +25,6 @@ public class Scrapper {
         Map<String, String> returnMap = new HashMap<>();
         returnMap.put("EPS","0");
         returnMap.put("ROE","0");
-        returnMap.put("배당수익률","0");
         try{
             doc = Jsoup.connect(url).get();
             Elements elements = doc.select(".um_table#svdMainGrid10D table tbody tr");
