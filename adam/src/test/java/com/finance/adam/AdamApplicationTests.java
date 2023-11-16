@@ -1,5 +1,7 @@
 package com.finance.adam;
 
+import com.finance.adam.calculator.FinancialCalculator;
+import com.finance.adam.core.FinanceCore;
 import com.finance.adam.datashuttle.CorpListGenerator;
 import com.finance.adam.datashuttle.Scrapper;
 import org.junit.jupiter.api.Test;
@@ -12,6 +14,16 @@ import java.util.Map;
 @SpringBootTest
 class AdamApplicationTests {
 
+	@Test
+	void sampleTest(){
+		System.out.println("24.2".matches("^[0-9.]*"));
+		System.out.println("dfdf".matches("^[0-9]*"));
+	}
+
+	@Test
+	void coreTest(){
+		new FinanceCore().coreFunc();
+	}
 
 	@Test
 	void test() {
@@ -36,4 +48,15 @@ class AdamApplicationTests {
 		CorpListGenerator.generate();
 	}
 
+	@Test
+	void calculateTest(){
+		FinancialCalculator.calculateExpectedReturn(
+				FinancialCalculator.calculateBPS(8057,17.07),17.07,72200
+		);
+	}
+
+	@Test
+	void getPriceTest(){
+		new Scrapper().getPrice("005930");
+	}
 }

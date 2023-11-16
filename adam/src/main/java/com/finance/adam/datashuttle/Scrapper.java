@@ -7,12 +7,35 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
 @Component
 public class Scrapper {
+
+
+    public String getPrice(String stockCode){
+        Document doc;
+        String price = "0";
+        String url = "https://comp.fnguide.com/SVO2/ASP/SVD_main.asp?gicode=A" + stockCode;
+        try {
+            doc = Jsoup.connect(url).get();
+            Elements elements = doc.select("#svdMainChartTxt11");
+
+
+            Iterator<Element> ie1 = elements.iterator();
+            while(ie1.hasNext()) {
+                Element e = ie1.next();
+                price = e.text().replaceAll(",","");
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return  price;
+    }
+
     /*
     return :
       1. EPS
@@ -51,6 +74,10 @@ public class Scrapper {
                     }
                 }
             }
+            if(!returnMap.get("ROE").matches("^[0-9.-]*")){
+                returnMap.put("ROE","0");
+            }
+
             double EPS = Double.valueOf(returnMap.get("EPS"));
             double ROE = Double.valueOf(returnMap.get("ROE"));
             if(EPS != 0){
