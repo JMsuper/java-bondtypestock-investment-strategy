@@ -1,10 +1,10 @@
-package com.finance.adam.openapi;
+package com.finance.adam.openapi.publicdataportal;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.finance.adam.openapi.vo.KrxItemInfo;
-import com.finance.adam.openapi.vo.KrxResponseBody;
-import com.finance.adam.openapi.vo.KrxResponseHeader;
+import com.finance.adam.openapi.publicdataportal.vo.KrxItemInfo;
+import com.finance.adam.openapi.publicdataportal.vo.KrxResponseBody;
+import com.finance.adam.openapi.publicdataportal.vo.KrxResponseHeader;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
