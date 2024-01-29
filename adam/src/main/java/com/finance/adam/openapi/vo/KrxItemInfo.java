@@ -1,18 +1,14 @@
 package com.finance.adam.openapi.vo;
 
-import lombok.Data;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 
 /**
- * url : https://www.data.go.kr/tcs/dss/selectApiDataDetailView.do?publicDataPk=15094775
- * 금융위원회_KRX 상장종목정보 API 명세 기준
- * (24-01-29)
+ * * 공공데이터포털 API <br>
+ * - 금융위원회_KRX 상장종목정보<br>
+ * - (24-01-29)
  */
-@Data
-public class KrxItemInfoVO {
+@Getter
+public class KrxItemInfo {
 
     /**
      * YYYYMMDD 조회의 기준일, 통상 거래일
