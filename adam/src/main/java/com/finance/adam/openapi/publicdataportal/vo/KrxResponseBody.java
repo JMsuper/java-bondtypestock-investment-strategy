@@ -1,4 +1,4 @@
-package com.finance.adam.openapi.vo;
+package com.finance.adam.openapi.publicdataportal.vo;
 
 import java.util.HashMap;
 import java.util.List;

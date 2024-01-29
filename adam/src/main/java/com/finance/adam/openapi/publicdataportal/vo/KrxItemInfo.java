@@ -1,4 +1,4 @@
-package com.finance.adam.openapi.vo;
+package com.finance.adam.openapi.publicdataportal.vo;
 
 import lombok.Getter;
 
