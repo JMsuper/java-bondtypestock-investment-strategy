@@ -5,6 +5,7 @@ import com.finance.adam.core.FinanceCore;
 import com.finance.adam.datashuttle.CorpListGenerator;
 import com.finance.adam.datashuttle.Scrapper;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
@@ -14,11 +15,8 @@ import java.util.Map;
 @SpringBootTest
 class AdamApplicationTests {
 
-	@Test
-	void sampleTest(){
-		System.out.println("24.2".matches("^[0-9.]*"));
-		System.out.println("dfdf".matches("^[0-9]*"));
-	}
+	@Autowired
+	CorpListGenerator corpListGenerator;
 
 	@Test
 	void coreTest(){
@@ -28,7 +26,7 @@ class AdamApplicationTests {
 	@Test
 	void test() {
 		// 종목코드 리스트 가져오기
-		List<List<String>> arr = CorpListGenerator.generate();
+		List<List<String>> arr = corpListGenerator.generate();
 		Scrapper scrapper = new Scrapper();
 		// 종목코드 종목명
 		for(int i = 0 ; i < arr.size() ; i++){
@@ -45,7 +43,7 @@ class AdamApplicationTests {
 
 	@Test
 	void getCorpListTest(){
-		CorpListGenerator.generate();
+		corpListGenerator.generate();
 	}
 
 	@Test
