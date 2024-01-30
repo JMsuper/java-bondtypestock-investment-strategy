@@ -22,7 +22,7 @@ public class TestOpenDartAPI {
     @DisplayName("Open Dart 단일기업 재무정보 조회 확인")
     void test1(){
 
-        String corpCode = "00126380";
+        String corpCode = "00113261";
         String bsnsYear = "2022";
 
         List<OpenDartFinancialInfo> result = openDartAPI.getCorpFinancialInfo(corpCode,bsnsYear);
