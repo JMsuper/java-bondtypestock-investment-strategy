@@ -29,6 +29,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.util.*;
+import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 @Component
@@ -124,23 +125,22 @@ public class OpenDartAPI {
         File tempFile = null;
         File corpCodeFile = null;
 
-//        try {
-//            tempFile = File.createTempFile("corpCode",".zip");
-//            corpCodeFile = File.createTempFile("corpCode",".xml");
+        try {
+            tempFile = File.createTempFile("corpCode",".zip");
+            corpCodeFile = File.createTempFile("corpCode",".xml");
+            tempFile.deleteOnExit();
+            corpCodeFile.deleteOnExit();
 
-            tempFile = new File("corpCode.zip");
-            corpCodeFile = new File("corpCode.xml");
-
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         try (FileOutputStream outputStream1 = new FileOutputStream(tempFile);
             ZipInputStream zipInputStream = new ZipInputStream(Files.newInputStream(tempFile.toPath()));
             FileOutputStream outputStream2 = new FileOutputStream(corpCodeFile)
         ){
-
             StreamUtils.copy(Objects.requireNonNull(response.getBody()),outputStream1);
+            zipInputStream.getNextEntry();
 
             int length;
             byte[] buffer = new byte[1024];
