@@ -8,22 +8,41 @@ import com.finance.adam.openapi.dart.vo.OpenDartFinancialInfoResponse;
 import com.finance.adam.util.MultiValueMapConverter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
 @Component
 @Slf4j
 public class OpenDartAPI {
 
     @Value("${open-dart.financial-info-url}")
-    private String url;
+    private String financialInfoUrl;
+    @Value("${open-dart.corp-code-url}")
+    private String corpCodeUrl;
     @Value("${open-dart.service-key}")
     private String serviceKey;
     @Value("${open-dart.report-code}")
@@ -47,7 +66,7 @@ public class OpenDartAPI {
                 .reprtCode(reprtCode)
                 .build();
 
-        String urlTemplate = UriComponentsBuilder.fromHttpUrl(url)
+        String urlTemplate = UriComponentsBuilder.fromHttpUrl(financialInfoUrl)
                 .queryParams(MultiValueMapConverter.convert(objectMapper, params))
                 .encode()
                 .toUriString();
@@ -79,5 +98,103 @@ public class OpenDartAPI {
 
         List<OpenDartFinancialInfo> financialInfoList = response.getList();
         return financialInfoList;
+    }
+
+    public Map<String, String> getCorpCodeMap(){
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Arrays.asList(MediaType.ALL));
+        HttpEntity<?> httpEntity = new HttpEntity<>(headers);
+
+        String urlTemplate = UriComponentsBuilder.fromHttpUrl(corpCodeUrl)
+                .queryParam("crtfc_key",serviceKey)
+                .encode()
+                .toUriString();
+
+        URI uri;
+        try {
+            uri = new URI(urlTemplate);
+        } catch (URISyntaxException e) {
+            throw new RuntimeException("URI 생성 중 오류가 발생하였습니다.",e);
+        }
+
+        HttpEntity<byte[]> response = restTemplate.exchange(uri, HttpMethod.GET ,httpEntity, byte[].class);
+
+        File corpCodeFile;
+        try {
+            File tempFile = File.createTempFile("corpCode",".zip");
+//            File tempFile = new File("corpCode.zip");
+            FileOutputStream outputStream1 = new FileOutputStream(tempFile);
+            StreamUtils.copy(response.getBody(),outputStream1);
+
+
+            ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(tempFile));
+            ZipEntry zipEntry = zipInputStream.getNextEntry();
+
+            corpCodeFile = File.createTempFile("corpCode",".xml");
+//            File unzipFile = new File("corpCode.xml");
+
+            FileOutputStream outputStream2 = new FileOutputStream(corpCodeFile);
+            int length;
+            byte[] buffer = new byte[1024];
+            while ( (length = zipInputStream.read(buffer)) > 0){
+                outputStream2.write(buffer, 0, length);
+            }
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        Map<String, String> corpCodeMap = new HashMap<>();
+
+        try {
+            DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            Document doc = builder.parse(corpCodeFile);
+            doc.getDocumentElement().normalize();
+
+            NodeList nodeList = doc.getElementsByTagName("list");
+
+            for(int i = 0; i < nodeList.getLength(); i++){
+                Node child = nodeList.item(i);
+                NodeList items = child.getChildNodes();
+
+                String corpCode = " ";
+                String stockCode = " ";
+
+                Node current;
+                for(int j = 0; j < items.getLength(); j++){
+                    current = items.item(j);
+                    if(current.getNodeType() == Node.ELEMENT_NODE){
+
+                        String nodeName = current.getNodeName();
+                        String nodeValue = current.getTextContent();
+
+                        if(nodeName.equals("corp_code")){
+                            corpCode = nodeValue;
+                        }else if(nodeName.equals("stock_code")){
+                            if(nodeValue.equals(" ")){
+                                break;
+                            }
+                            stockCode = nodeValue;
+                        }
+                    }
+                    if(corpCode != null && !corpCode.equals(" ") && stockCode != null && !stockCode.equals(" ")){
+                        corpCodeMap.put(stockCode,corpCode);
+                        break;
+                    }
+                }
+            }
+
+
+        } catch (ParserConfigurationException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (SAXException e) {
+            throw new RuntimeException(e);
+        }
+
+        return corpCodeMap;
     }
 }
