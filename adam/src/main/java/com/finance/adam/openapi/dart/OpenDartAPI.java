@@ -27,13 +27,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.zip.ZipEntry;
+import java.nio.file.Files;
+import java.util.*;
 import java.util.zip.ZipInputStream;
-import java.util.zip.ZipOutputStream;
 
 @Component
 @Slf4j
@@ -48,7 +44,9 @@ public class OpenDartAPI {
     @Value("${open-dart.report-code}")
     private String reprtCode;
 
-    private final String ERROR_MSG = "재무정보를 가져오는데 실패하였습니다.";
+    private final String ERROR_MSG_FINANCIAL_INFO = "(Open Dart)재무정보를 가져오는데 실패하였습니다.";
+    private final String ERROR_MSG_CORP_CODE = "(Open Dart)기업코드를 가져오는데 실패하였습니다.";
+    private final String ERROR_MSG_XML = "XML 파일 처리에 실패하였습니다.";
 
     private ObjectMapper objectMapper;
 
@@ -80,7 +78,7 @@ public class OpenDartAPI {
         ResponseEntity<String> rawResponse = restTemplate.getForEntity(uri,String.class);
         if(rawResponse.getStatusCode() != HttpStatus.OK){
             log.warn(rawResponse.toString());
-            throw new RuntimeException(ERROR_MSG);
+            throw new RuntimeException(ERROR_MSG_FINANCIAL_INFO);
         }
 
         OpenDartFinancialInfoResponse response;
@@ -88,12 +86,12 @@ public class OpenDartAPI {
             response =  objectMapper.readValue(rawResponse.getBody(), OpenDartFinancialInfoResponse.class);
         } catch (JsonProcessingException e) {
             log.warn(rawResponse.toString());
-            throw new RuntimeException(ERROR_MSG,e);
+            throw new RuntimeException(ERROR_MSG_FINANCIAL_INFO,e);
         }
 
         if(!response.getStatus().equals("000")){
             log.warn(response.toString());
-            throw new RuntimeException(ERROR_MSG);
+            throw new RuntimeException(ERROR_MSG_FINANCIAL_INFO);
         }
 
         List<OpenDartFinancialInfo> financialInfoList = response.getList();
@@ -116,41 +114,58 @@ public class OpenDartAPI {
         try {
             uri = new URI(urlTemplate);
         } catch (URISyntaxException e) {
+            log.warn("URI 생성 전 URL = {}",urlTemplate);
+            log.warn(ERROR_MSG_CORP_CODE,e);
             throw new RuntimeException("URI 생성 중 오류가 발생하였습니다.",e);
         }
 
         HttpEntity<byte[]> response = restTemplate.exchange(uri, HttpMethod.GET ,httpEntity, byte[].class);
 
-        File corpCodeFile;
-        try {
-            File tempFile = File.createTempFile("corpCode",".zip");
-//            File tempFile = new File("corpCode.zip");
-            FileOutputStream outputStream1 = new FileOutputStream(tempFile);
-            StreamUtils.copy(response.getBody(),outputStream1);
+        File tempFile = null;
+        File corpCodeFile = null;
 
+//        try {
+//            tempFile = File.createTempFile("corpCode",".zip");
+//            corpCodeFile = File.createTempFile("corpCode",".xml");
 
-            ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(tempFile));
-            ZipEntry zipEntry = zipInputStream.getNextEntry();
+            tempFile = new File("corpCode.zip");
+            corpCodeFile = new File("corpCode.xml");
 
-            corpCodeFile = File.createTempFile("corpCode",".xml");
-//            File unzipFile = new File("corpCode.xml");
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
 
-            FileOutputStream outputStream2 = new FileOutputStream(corpCodeFile);
+        try (FileOutputStream outputStream1 = new FileOutputStream(tempFile);
+            ZipInputStream zipInputStream = new ZipInputStream(Files.newInputStream(tempFile.toPath()));
+            FileOutputStream outputStream2 = new FileOutputStream(corpCodeFile)
+        ){
+
+            StreamUtils.copy(Objects.requireNonNull(response.getBody()),outputStream1);
+
             int length;
             byte[] buffer = new byte[1024];
-            while ( (length = zipInputStream.read(buffer)) > 0){
+
+            while ( (length = zipInputStream.read(buffer)) >= 0){
                 outputStream2.write(buffer, 0, length);
             }
 
         } catch (IOException e) {
+            log.warn(ERROR_MSG_CORP_CODE,e);
             throw new RuntimeException(e);
         }
 
+
+        Map<String, String> corpCodeMap = xmlToCorpCodeMap(corpCodeFile);
+
+        return corpCodeMap;
+    }
+
+    public Map<String, String> xmlToCorpCodeMap(File xmlFile){
         Map<String, String> corpCodeMap = new HashMap<>();
 
         try {
             DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-            Document doc = builder.parse(corpCodeFile);
+            Document doc = builder.parse(xmlFile);
             doc.getDocumentElement().normalize();
 
             NodeList nodeList = doc.getElementsByTagName("list");
@@ -188,13 +203,15 @@ public class OpenDartAPI {
 
 
         } catch (ParserConfigurationException e) {
+            log.warn(ERROR_MSG_XML,e);
             throw new RuntimeException(e);
         } catch (IOException e) {
+            log.warn(ERROR_MSG_XML,e);
             throw new RuntimeException(e);
         } catch (SAXException e) {
+            log.warn(ERROR_MSG_XML,e);
             throw new RuntimeException(e);
         }
-
         return corpCodeMap;
     }
 }
