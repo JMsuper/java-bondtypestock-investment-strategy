@@ -1,5 +1,6 @@
 package com.finance.adam.service;
 
+import com.finance.adam.dto.KrxCorpListResponse;
 import com.finance.adam.openapi.dart.OpenDartAPI;
 import com.finance.adam.openapi.publicdataportal.PublicDataPortalOpenAPI;
 import com.finance.adam.openapi.publicdataportal.vo.KrxItemInfo;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -24,6 +26,17 @@ public class FinanceDataService {
         this.openDartAPI = openDartAPI;
         this.publicDataPortalOpenAPI = publicDataPortalOpenAPI;
         this.corpRepository = corpRepository;
+    }
+
+    public List<KrxCorpListResponse> getKrxCorpInfo(){
+        List<CorpInfo> corpInfos = corpRepository.findAll();
+        return corpInfos.stream()
+                .map((corpInfo -> KrxCorpListResponse.fromCorpInfo(corpInfo)))
+                .collect(Collectors.toList());
+    }
+
+    public void financialInfo(String corpCode, String bsnsYear){
+         openDartAPI.getCorpFinancialInfo(corpCode,bsnsYear);
     }
 
     @Transactional

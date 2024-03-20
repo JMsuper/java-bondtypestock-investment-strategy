@@ -11,7 +11,9 @@ import lombok.ToString;
 public class OpenDartFinancialInfo {
 
     /**
-     * 접수번호(14자리)
+     * 접수번호(14자리)<br>
+     * ※ 공시뷰어 연결에 이용예시<br>
+     * - PC용 : https://dart.fss.or.kr/dsaf001/main.do?rcpNo=접수번호
      */
     private String rceptNo;
 

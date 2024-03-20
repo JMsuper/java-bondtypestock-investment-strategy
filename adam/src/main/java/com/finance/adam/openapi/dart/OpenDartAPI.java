@@ -174,6 +174,7 @@ public class OpenDartAPI {
                 Node child = nodeList.item(i);
                 NodeList items = child.getChildNodes();
 
+                // 다트 Open API 에서 null 값을 " " 으로 표현함
                 String corpCode = " ";
                 String stockCode = " ";
 
