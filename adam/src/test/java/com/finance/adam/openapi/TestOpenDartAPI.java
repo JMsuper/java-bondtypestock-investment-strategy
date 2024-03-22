@@ -23,7 +23,7 @@ public class TestOpenDartAPI {
     void test1(){
 
         String corpCode = "00113261";
-        String bsnsYear = "2022";
+        String bsnsYear = "2024";
 
         List<OpenDartFinancialInfo> result = openDartAPI.getCorpFinancialInfo(corpCode,bsnsYear);
         assertNotNull(result);

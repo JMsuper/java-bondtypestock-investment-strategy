@@ -1,64 +1,41 @@
 package com.finance.adam.util;
 
-import lombok.Getter;
+public enum FnInfoName {
+    CURRENT_ASSET("유동자산"),
+    NON_CURRENT_ASSETS("비유동자산"),
+    TOTAL_ASSET("자산총계"),
+    CURRENT_LIABILITIES("유동부채"),
+    NON_LIABILITIES("비유동부채"),
+    TOTAL_LIABILITIES("부채총계"),
+    CAPITAL("자본금"),
+    RETAINED_EARNINGS("이익잉여금"),
+    TOTAL_CAPITAL("자본총계"),
+    REVENUE("매출액"),
+    OPERATING_PROFIT("영업이익"),
+    EARNINGS_BEFORE_TAX("법인세차감전 순이익"),
+    NET_INCOME("당기순이익"),
+    NET_LOSS("당기순이익(손실)");
 
-@Getter
-public final class FnInfoName {
-    /**
-     * 유동자산
-     */
-    static final String CURRENT_ASSET = "CURRENT_ASSET";
-    /**
-     * 비유동자산
-     */
-    static final String NON_CURRENT_ASSETS = "ON_CURRENT_ASSETS";
-    /**
-     * 자산총계
-     */
-    static final String TOTAL_ASSET = "TOTAL_ASSET";
-    /**
-     * 유동부채
-     */
-    static final String CURRENT_LIABILITIES = "CURRENT_LIABILITIES";
-    /**
-     * 비유동부채
-     */
-    static final String NON_LIABILITIES = "NON_LIABILITIES";
-    /**
-     * 부채총계
-     */
-    static final String TOTAL_LIABILITIES = "TOTAL_LIABILITIES";
-    /**
-     * 자본금
-     */
-    static final String CAPITAL = "CAPITAL";
-    /**
-     * 이익잉여금
-     */
-    static final String RETAINED_EARNINGS = "RETAINED_EARNINGS";
-    /**
-     * 자본총계
-     */
-    static final String TOTAL_CAPITAL = "TOTAL_CAPITAL";
-    /**
-     * 매출액
-     */
-    static final String REVENUE = "REVENUE";
-    /**
-     * 영업이익
-     */
-    static final String OPERATING_PROFIT = "OPERATING_PROFIT";
-    /**
-     * 법인세차감전 순이익
-     */
-    static final String EARNINGS_BEFORE_TAX = "EARNINGS_BEFORE_TAX";
-    /**
-     * 당기순이익
-     */
-    static final String NET_INCOME = "NET_INCOME";
-    /**
-     * 당기순이익(손실)<br>
-     * ※ 아직은 당기순이익과 차이를 모르겠음
-     */
-    static final String NET_LOSS = "NET_LOSS";
+    private String value;
+
+    FnInfoName(String value) {
+        this.value = value;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public static FnInfoName fromValue(String value) {
+        for (FnInfoName fn : values()) {
+            if (fn.getValue().equals(value)) {
+                return fn;
+            }
+        }
+        throw new IllegalArgumentException("No constant with value " + value);
+    }
+
+    public static FnInfoName fromName(String name) {
+        return Enum.valueOf(FnInfoName.class, name);
+    }
 }
