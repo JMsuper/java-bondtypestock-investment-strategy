@@ -56,6 +56,10 @@ public class OpenDartAPI {
     }
 
     public List<OpenDartFinancialInfo> getCorpFinancialInfo(String corpCode, String bsnsYear){
+        if(corpCode == "00137809"){
+            System.out.println();
+        }
+
         RestTemplate restTemplate = new RestTemplate();
 
         OpenDartFinancialInfoRequest params = OpenDartFinancialInfoRequest.builder()
@@ -88,6 +92,12 @@ public class OpenDartAPI {
         } catch (JsonProcessingException e) {
             log.warn(rawResponse.toString());
             throw new RuntimeException(ERROR_MSG_FINANCIAL_INFO,e);
+        }
+
+        if(response.getStatus().equals("013")){
+            log.info(response.toString());
+            log.info("corpCode : " + corpCode + ", bsnsYear : " + bsnsYear);
+            return null;
         }
 
         if(!response.getStatus().equals("000")){

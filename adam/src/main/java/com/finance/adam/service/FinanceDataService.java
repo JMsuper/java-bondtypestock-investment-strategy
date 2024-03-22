@@ -44,38 +44,81 @@ public class FinanceDataService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * - 연결 재무제표일 경우, CFS 라는 key 를 갖음(value는 0L) <br>
+     * - 재무제표일 경우, OFS 라는 key 를 갖음(value는 0L)
+     */
     public Map<String, Long> getFinancialInfo(String corpCode, String bsnsYear){
         List<OpenDartFinancialInfo> corpFinancialInfoList = openDartAPI.getCorpFinancialInfo(corpCode, bsnsYear);
-        Map<String,Long> accountInfo = new HashMap<>();
+        if(corpFinancialInfoList == null){
+            return null;
+        }
+
+        // 연결 재무제표
+        Map<String,Long> CFS = new HashMap<>();
+        CFS.put("CFS",0L);
+
+        // 재무제표
+        Map<String,Long> OFS = new HashMap<>();
+        OFS.put("OFS",0L);
 
         for(int i = 0; i < corpFinancialInfoList.size(); i++){
             OpenDartFinancialInfo info = corpFinancialInfoList.get(i);
-            if(!info.getFsNm().equals("연결재무제표")){
-                continue;
+            Map<String, Long> currentFs;
+            if(info.getFsNm().equals("연결재무제표")){
+                currentFs = CFS;
+            }else{
+                currentFs = OFS;
             }
 
             String name = info.getAccountNm();
-            Long amount = Long.parseLong(info.getThstrmAmount().replaceAll(",",""));
-            accountInfo.put(name, amount);
+
+            try{
+                Long amount = Long.parseLong(info.getThstrmAmount().replaceAll(",",""));
+                currentFs.put(name, amount);
+            }catch (NumberFormatException e){
+                log.info(e.getMessage());
+                log.info("corpCode : " + corpCode + ", bsnsYear : " + bsnsYear + ", AccountNm : " + name);
+            }
+
         }
 
-        return accountInfo;
+        if(CFS.size() == 1){
+            return OFS;
+        }
+        return CFS;
     }
 
-    @Transactional
     public void renewFinancialInfo(){
         List<CorpInfo> corpInfos = corpRepository.findAll();
-//        for(int i = 0; i < corpInfos.size(); i++){
-            CorpInfo corpInfo = corpInfos.get(0);
+        for(int i = 0; i < corpInfos.size(); i++){
+            CorpInfo corpInfo = corpInfos.get(i);
             String corpCode = corpInfo.getCorpCode();
 
-            for(int j = 0; j < 3; j++){
-                int year = 2023 - j;
+            if(corpCode.equals("00137809")){
+                System.out.println();
+            }
+
+            for(int j = 0; j < 2; j++){
+                int year = 2020 - j;
                 Map<String, Long> info = getFinancialInfo(corpCode,String.valueOf(year));
+
+                if(info == null){
+                    continue;
+                }
+
+
                 FinanceInfo financeInfo = FinanceInfo.fromMap(info);
+                if(info.containsKey("CFS")){
+                    financeInfo.setFsDiv("연결재무제표");
+                }else{
+                    financeInfo.setFsDiv("재무제표");
+                }
+                financeInfo.setYear(year);
+                financeInfo.setCorpInfo(corpInfo);
                 financeInfoRepository.save(financeInfo);
             }
-//        }
+        }
     }
 
     @Transactional

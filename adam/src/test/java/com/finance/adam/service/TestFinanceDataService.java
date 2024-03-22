@@ -27,9 +27,9 @@ public class TestFinanceDataService {
             Map<String, Long> result = financeDataService.getFinancialInfo(corpCode,bsnsYear);
             System.out.println(result);
 
-            Long totalCapital = result.get(FnInfoName.TOTAL_CAPITAL);
-            Long netIncome = result.get(FnInfoName.NET_INCOME);
-            Long netLoss = result.get(FnInfoName.NET_LOSS);
+            Long totalCapital = result.get(FnInfoName.totalCapital);
+            Long netIncome = result.get(FnInfoName.netIncome);
+            Long netLoss = result.get(FnInfoName.netLoss);
             float ROE = (float)netIncome / totalCapital;
             System.out.println(bsnsYear);
             System.out.println(ROE);

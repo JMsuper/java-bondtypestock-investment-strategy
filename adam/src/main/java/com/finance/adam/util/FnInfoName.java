@@ -1,20 +1,24 @@
 package com.finance.adam.util;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public enum FnInfoName {
-    CURRENT_ASSET("유동자산"),
-    NON_CURRENT_ASSETS("비유동자산"),
-    TOTAL_ASSET("자산총계"),
-    CURRENT_LIABILITIES("유동부채"),
-    NON_LIABILITIES("비유동부채"),
-    TOTAL_LIABILITIES("부채총계"),
-    CAPITAL("자본금"),
-    RETAINED_EARNINGS("이익잉여금"),
-    TOTAL_CAPITAL("자본총계"),
-    REVENUE("매출액"),
-    OPERATING_PROFIT("영업이익"),
-    EARNINGS_BEFORE_TAX("법인세차감전 순이익"),
-    NET_INCOME("당기순이익"),
-    NET_LOSS("당기순이익(손실)");
+    currentAsset("유동자산"),
+    nonCurrentAsset("비유동자산"),
+    totalAsset("자산총계"),
+    currentLiabilities("유동부채"),
+    nonLiabilities("비유동부채"),
+    totalLiabilities("부채총계"),
+    capital("자본금"),
+    retainedEarnings("이익잉여금"),
+    totalCapital("자본총계"),
+    revenue("매출액"),
+    operatingProfit("영업이익"),
+    earningsBeforeTax("법인세차감전 순이익"),
+    netIncome("당기순이익"),
+    netLoss("당기순이익(손실)"),
+    comprehensiveIncome("총포괄손익");
 
     private String value;
 
@@ -32,7 +36,8 @@ public enum FnInfoName {
                 return fn;
             }
         }
-        throw new IllegalArgumentException("No constant with value " + value);
+        log.info("No constant with value " + value);
+        return null;
     }
 
     public static FnInfoName fromName(String name) {

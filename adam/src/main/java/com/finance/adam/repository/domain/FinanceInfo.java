@@ -12,13 +12,14 @@ import java.util.Set;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class FinanceInfo {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
@@ -28,13 +29,17 @@ public class FinanceInfo {
     private Integer year;
 
     /**
+     * 재무제표 종류 : CFS(연결 재무제표), OFS(재무제표)
+     */
+    private String fsDiv;
+    /**
      * 유동자산
      */
-    private Long currentAssets;
+    private Long currentAsset;
     /**
      * 비유동자산
      */
-    private Long non_currentAssets;
+    private Long nonCurrentAsset;
     /**
      * 자산총계
      */
@@ -83,12 +88,21 @@ public class FinanceInfo {
      * 당기순이익(손실)
      */
     private Long netLoss;
+    /**
+     * 총포괄손익
+     */
+    private Long comprehensiveIncome;
 
     public static FinanceInfo fromMap(Map<String, Long> map){
         FinanceInfo financeInfo = new FinanceInfo();
         Set<String> keySet = map.keySet();
         for(String key : keySet){
-            String accountNm = FnInfoName.fromValue(key).name();
+            FnInfoName fnInfoName = FnInfoName.fromValue(key);
+            if(fnInfoName == null){
+                continue;
+            }
+            String accountNm = fnInfoName.name();
+
             Long value = map.get(key);
             try {
                 Field field = financeInfo.getClass().getDeclaredField(accountNm);

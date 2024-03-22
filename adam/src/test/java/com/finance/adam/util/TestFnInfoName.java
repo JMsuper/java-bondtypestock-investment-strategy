@@ -8,7 +8,7 @@ public class TestFnInfoName {
 
     @Test
     void test(){
-        String enumName = FnInfoName.NON_CURRENT_ASSETS.toString();
+        String enumName = FnInfoName.nonCurrentAsset.name();
         assertEquals("NON_CURRENT_ASSETS",enumName);
     }
 }
