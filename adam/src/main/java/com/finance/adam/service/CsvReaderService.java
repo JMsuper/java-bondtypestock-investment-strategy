@@ -122,7 +122,7 @@ public class CsvReaderService {
 
     public void saveOrUpdateStockPrices(List<StockPriceInfoDTO> stockPriceInfoDTOList) {
         for (StockPriceInfoDTO stockPriceInfoDTO : stockPriceInfoDTOList) {
-            Optional<CorpInfo> corpInfo = corpRepository.findById(stockPriceInfoDTO.getStockCode());
+            Optional<CorpInfo> corpInfo = corpRepository.findByStockCode(stockPriceInfoDTO.getStockCode());
             if (!corpInfo.isPresent()) {
                 log.error("corpInfo is null");
                 log.error("stockCode = {}", stockPriceInfoDTO.getStockCode());

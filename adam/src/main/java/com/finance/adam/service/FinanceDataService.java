@@ -2,14 +2,17 @@ package com.finance.adam.service;
 
 import com.finance.adam.dto.FinanceInfoDTO;
 import com.finance.adam.dto.KrxCorpListResponse;
+import com.finance.adam.dto.StockPriceInfoResponseDTO;
 import com.finance.adam.openapi.dart.OpenDartAPI;
 import com.finance.adam.openapi.dart.vo.OpenDartFinancialInfo;
 import com.finance.adam.openapi.publicdataportal.PublicDataPortalOpenAPI;
 import com.finance.adam.openapi.publicdataportal.vo.KrxItemInfo;
 import com.finance.adam.repository.CorpRepository;
 import com.finance.adam.repository.FinanceInfoRepository;
+import com.finance.adam.repository.StockPriceRepository;
 import com.finance.adam.repository.domain.CorpInfo;
 import com.finance.adam.repository.domain.FinanceInfo;
+import com.finance.adam.repository.domain.StockPrice;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -21,19 +24,21 @@ import java.util.stream.Collectors;
 @Service
 public class FinanceDataService {
 
-    private OpenDartAPI openDartAPI;
-    private PublicDataPortalOpenAPI publicDataPortalOpenAPI;
-    private CorpRepository corpRepository;
-    private FinanceInfoRepository financeInfoRepository;
+    private final OpenDartAPI openDartAPI;
+    private final PublicDataPortalOpenAPI publicDataPortalOpenAPI;
+    private final CorpRepository corpRepository;
+    private final FinanceInfoRepository financeInfoRepository;
+    private final StockPriceRepository stockPriceRepository;
 
     public FinanceDataService(OpenDartAPI openDartAPI,
                               PublicDataPortalOpenAPI publicDataPortalOpenAPI,
                               CorpRepository corpRepository,
-                              FinanceInfoRepository financeInfoRepository){
+                              FinanceInfoRepository financeInfoRepository, StockPriceRepository stockPriceRepository){
         this.openDartAPI = openDartAPI;
         this.publicDataPortalOpenAPI = publicDataPortalOpenAPI;
         this.corpRepository = corpRepository;
         this.financeInfoRepository = financeInfoRepository;
+        this.stockPriceRepository = stockPriceRepository;
     }
 
     public List<KrxCorpListResponse> getKrxCorpInfo(){
@@ -43,15 +48,24 @@ public class FinanceDataService {
                 .collect(Collectors.toList());
     }
 
-//    // TODO: 현재가 가져오는 API 추가필요
-//    public int getPriceOfStock(String stockCode){
-//
-//    }
+    public StockPriceInfoResponseDTO getStockPriceInfo(String stockCode){
+        StockPrice stockPrice = stockPriceRepository.findByCorpInfoStockCode(stockCode);
+        if(stockPrice == null){
+            return null;
+        }
+        StockPriceInfoResponseDTO dto = StockPriceInfoResponseDTO.builder()
+                .closingPrice(stockPrice.getClosingPrice())
+                .difference(stockPrice.getDifference())
+                .fluctuationRate(stockPrice.getFluctuationRate())
+                .openingPrice(stockPrice.getOpeningPrice())
+                .build();
+        return dto;
+    }
 
-    public List<FinanceInfoDTO> getFinanceInfos(String stockCode, int startYear, int endYear){
+    public List<FinanceInfoDTO> getFinanceInfos(String corpCode, int startYear, int endYear){
         List<FinanceInfoDTO> financeInfoDTOs = new ArrayList<>();
         for (int year = startYear; year <= endYear; year++) {
-            Optional<FinanceInfo> financeInfo = financeInfoRepository.findByCorpInfoStockCodeAndYear(stockCode, year);
+            Optional<FinanceInfo> financeInfo = financeInfoRepository.findByCorpInfoCorpCodeAndYear(corpCode, year);
             if (financeInfo.isPresent()) {
                 FinanceInfoDTO financeInfoDTO = FinanceInfoDTO.fromFinanceInfo(financeInfo.get());
                 financeInfoDTOs.add(financeInfoDTO);

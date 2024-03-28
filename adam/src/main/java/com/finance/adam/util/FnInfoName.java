@@ -36,7 +36,6 @@ public enum FnInfoName {
                 return fn;
             }
         }
-        log.info("No constant with value " + value);
         return null;
     }
 

@@ -25,10 +25,10 @@ public class FinanceDataController {
         return financeDataService.getKrxCorpInfo();
     }
 
-    @GetMapping("/financeInfo/{stockCode}")
-    public List<FinanceInfoDTO> getFinanceInfos(@PathVariable String stockCode, @RequestParam int startYear, @RequestParam int endYear){
-        List<FinanceInfoDTO> result = financeDataService.getFinanceInfos(stockCode, startYear, endYear);
-        System.out.println(stockCode + " " + startYear + " " + endYear);
+    @GetMapping("/financeInfo/{corpCode}")
+    public List<FinanceInfoDTO> getFinanceInfos(@PathVariable String corpCode, @RequestParam int startYear, @RequestParam int endYear){
+        List<FinanceInfoDTO> result = financeDataService.getFinanceInfos(corpCode, startYear, endYear);
+        System.out.println(corpCode + " " + startYear + " " + endYear);
         return result;
     }
 }

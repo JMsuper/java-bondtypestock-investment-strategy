@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import java.util.List;
 
 @Entity
@@ -20,11 +21,11 @@ import java.util.List;
 public class CorpInfo {
 
     @Id
-    private String stockCode;
+    private String corpCode;
 
     private String name;
 
-    private String corpCode;
+    private String stockCode;
 
     private String market;
 
@@ -32,6 +33,9 @@ public class CorpInfo {
 
     @OneToMany(mappedBy = "corpInfo")
     private List<FinanceInfo> financeInfos;
+
+    @OneToOne(mappedBy = "corpInfo")
+    private StockPrice stockPrice;
 
 
     public String getParsedStockCode(){
