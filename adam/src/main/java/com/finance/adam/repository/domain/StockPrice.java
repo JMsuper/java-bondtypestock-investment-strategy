@@ -19,7 +19,7 @@ import java.util.List;
 public class StockPrice {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     /**
