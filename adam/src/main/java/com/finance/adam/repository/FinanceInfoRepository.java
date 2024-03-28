@@ -4,6 +4,9 @@ import com.finance.adam.repository.domain.CorpInfo;
 import com.finance.adam.repository.domain.FinanceInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface FinanceInfoRepository extends JpaRepository<FinanceInfo,Long> {
+import java.util.Optional;
 
+public interface FinanceInfoRepository extends JpaRepository<FinanceInfo,Long> {
+    Optional<FinanceInfo> findByCorpInfoStockCodeAndYear(String stockCode, int year);
+    Optional<FinanceInfo> findByCorpInfoCorpCodeAndYear(String corpCode, int year);
 }

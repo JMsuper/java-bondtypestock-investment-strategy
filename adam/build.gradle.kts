@@ -22,20 +22,20 @@ repositories {
 }
 
 dependencies {
+	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-mail")
 	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
 	implementation("org.springframework.boot:spring-boot-starter-web")
-	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-jdbc
 	implementation("org.springframework.boot:spring-boot-starter-jdbc")
-	compileOnly("org.projectlombok:lombok")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
-	runtimeOnly("com.h2database:h2")
-	annotationProcessor("org.projectlombok:lombok")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
-	// https://mvnrepository.com/artifact/org.jsoup/jsoup
-	implementation("org.jsoup:jsoup:1.16.1")
-	// https://mvnrepository.com/artifact/mysql/mysql-connector-java
+	compileOnly("org.projectlombok:lombok")
+	annotationProcessor("org.projectlombok:lombok")
 	implementation("mysql:mysql-connector-java:8.0.33")
+	// https://mvnrepository.com/artifact/com.opencsv/opencsv
+	implementation("com.opencsv:opencsv:5.7.1")
+	// https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient
+	implementation("org.apache.httpcomponents:httpclient:4.5.13")
 
 }
 

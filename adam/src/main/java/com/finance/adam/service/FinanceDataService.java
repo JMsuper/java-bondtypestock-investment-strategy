@@ -1,5 +1,6 @@
 package com.finance.adam.service;
 
+import com.finance.adam.dto.FinanceInfoDTO;
 import com.finance.adam.dto.KrxCorpListResponse;
 import com.finance.adam.openapi.dart.OpenDartAPI;
 import com.finance.adam.openapi.dart.vo.OpenDartFinancialInfo;
@@ -13,9 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -44,11 +43,28 @@ public class FinanceDataService {
                 .collect(Collectors.toList());
     }
 
+//    // TODO: 현재가 가져오는 API 추가필요
+//    public int getPriceOfStock(String stockCode){
+//
+//    }
+
+    public List<FinanceInfoDTO> getFinanceInfos(String stockCode, int startYear, int endYear){
+        List<FinanceInfoDTO> financeInfoDTOs = new ArrayList<>();
+        for (int year = startYear; year <= endYear; year++) {
+            Optional<FinanceInfo> financeInfo = financeInfoRepository.findByCorpInfoStockCodeAndYear(stockCode, year);
+            if (financeInfo.isPresent()) {
+                FinanceInfoDTO financeInfoDTO = FinanceInfoDTO.fromFinanceInfo(financeInfo.get());
+                financeInfoDTOs.add(financeInfoDTO);
+            }
+        }
+        return financeInfoDTOs;
+    }
+
     /**
      * - 연결 재무제표일 경우, CFS 라는 key 를 갖음(value는 0L) <br>
      * - 재무제표일 경우, OFS 라는 key 를 갖음(value는 0L)
      */
-    public Map<String, Long> getFinancialInfo(String corpCode, String bsnsYear){
+    public Map<String, Long> getFinancialInfoFromDart(String corpCode, String bsnsYear){
         List<OpenDartFinancialInfo> corpFinancialInfoList = openDartAPI.getCorpFinancialInfo(corpCode, bsnsYear);
         if(corpFinancialInfoList == null){
             return null;
@@ -95,25 +111,25 @@ public class FinanceDataService {
             CorpInfo corpInfo = corpInfos.get(i);
             String corpCode = corpInfo.getCorpCode();
 
-            if(corpCode.equals("00137809")){
-                System.out.println();
-            }
-
-            for(int j = 0; j < 2; j++){
-                int year = 2020 - j;
-                Map<String, Long> info = getFinancialInfo(corpCode,String.valueOf(year));
+            for(int j = 0; j < 3; j++){
+                int year = 2023 - j;
+                Map<String, Long> info = getFinancialInfoFromDart(corpCode,String.valueOf(year));
 
                 if(info == null){
                     continue;
                 }
 
-
+                Optional<FinanceInfo> v = financeInfoRepository.findByCorpInfoCorpCodeAndYear(corpCode, year);
+                if(v.isPresent()){
+                    continue;
+                }
                 FinanceInfo financeInfo = FinanceInfo.fromMap(info);
                 if(info.containsKey("CFS")){
                     financeInfo.setFsDiv("연결재무제표");
                 }else{
                     financeInfo.setFsDiv("재무제표");
                 }
+
                 financeInfo.setYear(year);
                 financeInfo.setCorpInfo(corpInfo);
                 financeInfoRepository.save(financeInfo);

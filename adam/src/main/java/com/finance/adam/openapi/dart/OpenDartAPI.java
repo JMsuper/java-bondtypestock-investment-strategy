@@ -56,10 +56,6 @@ public class OpenDartAPI {
     }
 
     public List<OpenDartFinancialInfo> getCorpFinancialInfo(String corpCode, String bsnsYear){
-        if(corpCode == "00137809"){
-            System.out.println();
-        }
-
         RestTemplate restTemplate = new RestTemplate();
 
         OpenDartFinancialInfoRequest params = OpenDartFinancialInfoRequest.builder()
