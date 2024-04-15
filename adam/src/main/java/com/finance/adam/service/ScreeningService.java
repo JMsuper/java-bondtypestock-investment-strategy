@@ -46,20 +46,21 @@ public class ScreeningService {
     public List<StepOneStockInfoDTO> getStepOneStockInfoList() {
         List<StepOneStockInfoDTO> stepOneStockInfoDTOList = new ArrayList<>();
 
-        List<CorpInfo> corpInfoList = corpRepository.findAll();
+        List<CorpInfo> corpInfoList = corpRepository.findAllWithStockPriceAndFinanceInfos();
         for (CorpInfo corpInfo : corpInfoList) {
             StepOneStockInfoDTO stockInfoDTO = new StepOneStockInfoDTO();
             stockInfoDTO.setStockName(corpInfo.getName());
             stockInfoDTO.setStockCd(corpInfo.getStockCode());
 
             StockPrice stockPrice = corpInfo.getStockPrice();
+            stockInfoDTO.setOpeningPrice(stockPrice.getOpeningPrice());
             stockInfoDTO.setShares(stockPrice.getListedShares());
 
             List<FinanceInfo> financeInfoList = corpInfo.getFinanceInfos();
             List<StepOneFinanceInfoDTO> financeInfoDTOList = new ArrayList<>();
 
             for (FinanceInfo financeInfo : financeInfoList) {
-                if(financeInfo.getNetIncome() == null){
+                if(financeInfo.getNetIncome() == null || financeInfo.getTotalCapital() == null){
                     continue;
                 }
                 StepOneFinanceInfoDTO financeInfoDTO = StepOneFinanceInfoDTO.builder()
@@ -74,7 +75,9 @@ public class ScreeningService {
                 financeInfoDTOList.add(financeInfoDTO);
             }
 
-            if(financeInfoDTOList.size() < 3){
+            // 4년치 이상의 재무정보가 없는 경우 제외
+            // 3개년 ROE 를 계산하기 위해 4개년 이상의 재무정보가 필요함
+            if(financeInfoDTOList.size() < 4){
                 continue;
             }
 

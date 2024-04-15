@@ -42,10 +42,11 @@ public class FinanceDataService {
     }
 
     public List<KrxCorpListResponse> getKrxCorpInfo(){
-        List<CorpInfo> corpInfos = corpRepository.findAll();
-        return corpInfos.stream()
+        List<CorpInfo> corpInfos = corpRepository.findAllWithStockPrice();
+        List<KrxCorpListResponse> result = corpInfos.stream()
                 .map((corpInfo -> KrxCorpListResponse.fromCorpInfo(corpInfo)))
                 .collect(Collectors.toList());
+        return result;
     }
 
     public StockPriceInfoResponseDTO getStockPriceInfo(String stockCode){
@@ -125,8 +126,8 @@ public class FinanceDataService {
             CorpInfo corpInfo = corpInfos.get(i);
             String corpCode = corpInfo.getCorpCode();
 
-            for(int j = 0; j < 3; j++){
-                int year = 2023 - j;
+            for(int j = 0; j < 1; j++){
+                int year = 2020 - j;
                 Map<String, Long> info = getFinancialInfoFromDart(corpCode,String.valueOf(year));
 
                 if(info == null){
