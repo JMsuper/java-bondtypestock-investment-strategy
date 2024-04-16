@@ -9,6 +9,7 @@ import java.util.List;
 @Setter
 public class StepOneStockInfoDTO {
     private String stockName;
+    private String corpCd;
     private String stockCd;
     private Long shares;
     private Long openingPrice;

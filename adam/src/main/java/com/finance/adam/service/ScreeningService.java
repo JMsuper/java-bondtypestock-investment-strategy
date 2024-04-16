@@ -50,6 +50,7 @@ public class ScreeningService {
         for (CorpInfo corpInfo : corpInfoList) {
             StepOneStockInfoDTO stockInfoDTO = new StepOneStockInfoDTO();
             stockInfoDTO.setStockName(corpInfo.getName());
+            stockInfoDTO.setCorpCd(corpInfo.getCorpCode());
             stockInfoDTO.setStockCd(corpInfo.getStockCode());
 
             StockPrice stockPrice = corpInfo.getStockPrice();
