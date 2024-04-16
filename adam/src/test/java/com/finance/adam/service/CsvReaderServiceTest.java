@@ -25,5 +25,12 @@ class CsvReaderServiceTest {
         csvReaderService.saveOrUpdateStockPrices(stockPriceInfoDTOList);
     }
 
+    @Test
+    void test2(){
+        File result = csvReaderService.getKrxStockPriceCsvFile();
+        String filePath = result.getPath();
+        Map<String, StockPriceInfoDTO> stockPriceInfoDTOList = csvReaderService.readKrxPriceCsvFile(filePath);
+    }
+
 
 }

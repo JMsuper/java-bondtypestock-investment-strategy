@@ -115,11 +115,23 @@ public class CsvReaderService {
         return outputFile;
     }
 
+    private InputStreamReader createInputStreamReader(String filePath) {
+        try {
+            FileInputStream fileInputStream = new FileInputStream(filePath);
+            return new InputStreamReader(fileInputStream, "x-windows-949");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException("Unsupported encoding", e);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public Map<String, StockPriceInfoDTO> readKrxPriceCsvFile(String filePath) {
         Map<String ,StockPriceInfoDTO> stockPriceInfoMap = new HashMap<>();
 
-        try (CSVReader reader = new CSVReaderBuilder(new FileReader(filePath)).withSkipLines(1).build()) {
+        try (CSVReader reader = new CSVReaderBuilder(createInputStreamReader(filePath)).build()) {
             String[] line;
+            boolean isFirstLine = true;
             while ((line = reader.readNext()) != null) {
                 /**
                  * CSV 파일의 컬럼순서에 의존함
@@ -140,6 +152,24 @@ public class CsvReaderService {
                  * 12 : 시가총액
                  * 13 : 상장주식수
                  */
+                if(isFirstLine){
+                    isFirstLine = false;
+
+                    String[] columnNameList = {
+                            "종목코드","종목명","시장구분","소속부","종가","대비","등락률","시가","고가","저가","거래량","거래대금","시가총액","상장주식수"
+                    };
+
+                    for(int i = 0; i < line.length; i++){
+                        String columnName = line[i];
+                        log.info("CSV 파일의 " + i + "번째 컬럼 : " + columnName);
+                        if(!columnName.equals(columnNameList[i])){
+                            log.error("CSV 파일의 컬럼 순서가 일치하지 않습니다. " + columnName + " : " + columnNameList[i]);
+                            return null;
+                        }
+                    }
+                    continue;
+                }
+
                 StockPriceInfoDTO stockInfo = new StockPriceInfoDTO();
                 stockInfo.setStockCode(line[0]);
                 stockInfo.setStockName(line[1]);
