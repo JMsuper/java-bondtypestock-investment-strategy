@@ -17,10 +17,14 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
+
+/**
+ * 한국거래소 KRX 정보데이터 시스템 크롤링 API
+ */
 @Service
 @Slf4j
 public class CsvReaderService {
@@ -33,27 +37,37 @@ public class CsvReaderService {
         this.stockPriceRepository = stockPriceRepository;
     }
 
+    // 주식 시세 정보 CSV 파일을 다운로드하기 위한 OTP 코드를 가져오는 메소드
     public String getKrxStockPriceOTPCode() {
+        // RestTemplate 은 스프링에서 제공하는 HTTP 통신을 위한 클래스
         RestTemplate restTemplate = new RestTemplate();
+        // HttpComponentsClientHttpRequestFactory 를 사용함으로써, 더 세밀하게 HTTP 통신을 다룰 수 있음
         restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
+        LocalDate currentDate = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        String formattedDate = currentDate.format(formatter);
+
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
         map.add("locale", "ko_KR");
         map.add("mktId", "ALL");
-        map.add("trdDd", "20240328");
+        map.add("trdDd", formattedDate);
         map.add("share", "1");
         map.add("money", "1");
         map.add("csvxls_isNo", "false");
         map.add("name", "fileDown");
         map.add("url", "dbms/MDC/STAT/standard/MDCSTAT01501");
 
+        // HttpEntity 는 HTTP 요청을 위한 클래스로, 요청 헤더와 요청 바디를 설정할 수 있음
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
 
+        // postForEntity 메서드는 POST 요청을 보내고, 응답을 ResponseEntity 객체로 받음
+        // 아래 POST 요청은 Http Body 에 OTP 코드를 담아 반환하는 요청
+        // EX) HTTP BODY : lksjdofevxlkjg
         ResponseEntity<String> response = restTemplate.postForEntity("http://data.krx.co.kr/comm/fileDn/GenerateOTP/generate.cmd", request, String.class);
-        System.out.println("response = " + response);
         return response.getBody();
     }
 
@@ -66,7 +80,6 @@ public class CsvReaderService {
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
 
-
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
@@ -75,6 +88,20 @@ public class CsvReaderService {
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
 
         ResponseEntity<byte[]> response = restTemplate.postForEntity("http://data.krx.co.kr/comm/fileDn/download_csv/download.cmd", request, byte[].class);
+
+        /***
+         * Content-Disposition은 HTTP 헤더 중 하나로, HTTP 응답 본문의 처리 방식을 정의하는 데 사용됩니다.
+         * 이 헤더는 주로 다운로드할 파일의 이름을 지정하거나, 브라우저가 응답을 어떻게 처리해야 하는지를 지시하는 데 사용됩니다.
+         * Content-Disposition 헤더에는 주로 두 가지 타입의 값이 사용됩니다:
+         *
+         * inline: 이 값은 브라우저가 응답 본문을 즉시 표시해야 함을 나타냅니다.
+         * 예를 들어, 이미지나 텍스트 파일과 같은 리소스를 브라우저에서 직접 열 수 있도록 합니다.
+         * attachment: 이 값은 브라우저가 응답 본문을 다운로드해야 함을 나타냅니다.
+         * 이때, filename 매개변수를 사용하여 다운로드될 파일의 이름을 지정할 수 있습니다.
+         *
+         * 예를 들어, Content-Disposition: attachment; filename="example.txt"라는 헤더는,
+         * 브라우저에게 응답 본문을 example.txt라는 이름의 파일로 다운로드하도록 지시합니다.
+         */
         String contentDisposition = response.getHeaders().get("Content-Disposition").toString();
         String fileName = contentDisposition.substring(contentDisposition.indexOf("filename=") + 9, contentDisposition.length() - 1);
 
@@ -88,14 +115,33 @@ public class CsvReaderService {
         return outputFile;
     }
 
-    public List<StockPriceInfoDTO> readKrxPriceCsvFile(String filePath) {
-        List<StockPriceInfoDTO> stockInfoList = new ArrayList<>();
+    public Map<String, StockPriceInfoDTO> readKrxPriceCsvFile(String filePath) {
+        Map<String ,StockPriceInfoDTO> stockPriceInfoMap = new HashMap<>();
 
         try (CSVReader reader = new CSVReaderBuilder(new FileReader(filePath)).withSkipLines(1).build()) {
             String[] line;
             while ((line = reader.readNext()) != null) {
+                /**
+                 * CSV 파일의 컬럼순서에 의존함
+                 * 따라서 아래의 순서와 다운로드 받은 CSV 파일의 컬럼 순서가 일치하지 않는다면,
+                 * 함수 실행을 멈추고, 에러를 반환해야함
+                 * 0 : 종목코드
+                 * 1 : 종목명
+                 * 2 : 시장구분
+                 * 3 : 소속부
+                 * 4 : 종가
+                 * 5 : 대비
+                 * 6 : 등락률
+                 * 7 : 시가
+                 * 8 : 고가
+                 * 9 : 저가
+                 * 10 : 거래량
+                 * 11 : 거래대금
+                 * 12 : 시가총액
+                 * 13 : 상장주식수
+                 */
                 StockPriceInfoDTO stockInfo = new StockPriceInfoDTO();
-                stockInfo.setStockCode("A"+line[0]);
+                stockInfo.setStockCode(line[0]);
                 stockInfo.setStockName(line[1]);
                 stockInfo.setMarketType(line[2]);
                 stockInfo.setDepartment(line[3]);
@@ -109,7 +155,7 @@ public class CsvReaderService {
                 stockInfo.setTradingValue(Long.parseLong(line[11]));
                 stockInfo.setMarketCap(Long.parseLong(line[12]));
                 stockInfo.setListedShares(Long.parseLong(line[13]));
-                stockInfoList.add(stockInfo);
+                stockPriceInfoMap.put(line[0], stockInfo);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -117,37 +163,40 @@ public class CsvReaderService {
             e.printStackTrace();
         }
 
-        return stockInfoList;
+        return stockPriceInfoMap;
     }
 
-    public void saveOrUpdateStockPrices(List<StockPriceInfoDTO> stockPriceInfoDTOList) {
-        for (StockPriceInfoDTO stockPriceInfoDTO : stockPriceInfoDTOList) {
-            Optional<CorpInfo> corpInfo = corpRepository.findByStockCode(stockPriceInfoDTO.getStockCode());
-            if (!corpInfo.isPresent()) {
-                log.error("corpInfo is null");
-                log.error("stockCode = {}", stockPriceInfoDTO.getStockCode());
-                continue;
+    public void saveOrUpdateStockPrices(Map<String, StockPriceInfoDTO> stockPriceInfoMap) {
+            log.info(System.currentTimeMillis() + " : corpRepository.findAllWithStockPrice() start");
+            List<CorpInfo> corpInfo = corpRepository.findAllWithStockPrice();
+            log.info(System.currentTimeMillis() + " : corpRepository.findAllWithStockPrice() end");
+
+            for(CorpInfo corp : corpInfo){
+                log.info(System.currentTimeMillis() + " : corp : " + corp.getName() + " start");
+                StockPrice stockPrice = corp.getStockPrice();
+                if (stockPrice == null) {
+                    stockPrice = new StockPrice();
+                    stockPrice.setCorpInfo(corp);
+                }
+
+                StockPriceInfoDTO stockPriceInfoDTO = stockPriceInfoMap.get(corp.getParsedStockCode());
+                if(stockPriceInfoDTO == null){
+                    log.warn("StockPriceInfoDTO is null. corpCode : " + corp.getParsedStockCode());
+                    continue;
+                }
+                stockPrice.setClosingPrice(stockPriceInfoDTO.getClosingPrice());
+                stockPrice.setDifference(stockPriceInfoDTO.getDifference());
+                stockPrice.setFluctuationRate(stockPriceInfoDTO.getFluctuationRate());
+                stockPrice.setOpeningPrice(stockPriceInfoDTO.getOpeningPrice());
+                stockPrice.setHighPrice(stockPriceInfoDTO.getHighPrice());
+                stockPrice.setLowPrice(stockPriceInfoDTO.getLowPrice());
+                stockPrice.setVolume(stockPriceInfoDTO.getVolume());
+                stockPrice.setTradingValue(stockPriceInfoDTO.getTradingValue());
+                stockPrice.setMarketCap(stockPriceInfoDTO.getMarketCap());
+                stockPrice.setListedShares(stockPriceInfoDTO.getListedShares());
+
+                stockPriceRepository.saveAndFlush(stockPrice);
+                log.info(System.currentTimeMillis() + " : corp : " + corp.getName() + " end");
             }
-
-            StockPrice stockPrice = stockPriceRepository.findByCorpInfo(corpInfo.get());
-            if (stockPrice == null) {
-                stockPrice = new StockPrice();
-                stockPrice.setCorpInfo(corpInfo.get());
-            }
-
-            stockPrice.setClosingPrice(stockPriceInfoDTO.getClosingPrice());
-            stockPrice.setDifference(stockPriceInfoDTO.getDifference());
-            stockPrice.setFluctuationRate(stockPriceInfoDTO.getFluctuationRate());
-            stockPrice.setOpeningPrice(stockPriceInfoDTO.getOpeningPrice());
-            stockPrice.setHighPrice(stockPriceInfoDTO.getHighPrice());
-            stockPrice.setLowPrice(stockPriceInfoDTO.getLowPrice());
-            stockPrice.setVolume(stockPriceInfoDTO.getVolume());
-            stockPrice.setTradingValue(stockPriceInfoDTO.getTradingValue());
-            stockPrice.setMarketCap(stockPriceInfoDTO.getMarketCap());
-            stockPrice.setListedShares(stockPriceInfoDTO.getListedShares());
-
-            stockPriceRepository.save(stockPrice);
-
-        }
     }
 }

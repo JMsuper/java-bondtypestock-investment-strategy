@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -20,7 +21,7 @@ class CsvReaderServiceTest {
     void test1(){
         File result = csvReaderService.getKrxStockPriceCsvFile();
         String filePath = result.getPath();
-        List<StockPriceInfoDTO> stockPriceInfoDTOList = csvReaderService.readKrxPriceCsvFile(filePath);
+        Map<String, StockPriceInfoDTO> stockPriceInfoDTOList = csvReaderService.readKrxPriceCsvFile(filePath);
         csvReaderService.saveOrUpdateStockPrices(stockPriceInfoDTOList);
     }
 
