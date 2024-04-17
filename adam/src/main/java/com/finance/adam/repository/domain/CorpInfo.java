@@ -2,15 +2,15 @@ package com.finance.adam.repository.domain;
 
 
 import com.finance.adam.openapi.publicdataportal.vo.KrxItemInfo;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -21,15 +21,29 @@ import java.util.List;
 public class CorpInfo {
 
     @Id
+    @Setter
     private String corpCode;
 
     private String name;
 
+    @Setter
     private String stockCode;
 
     private String market;
 
     private String baseDt;
+
+    /**
+     * 상장폐지 여부
+     */
+    @Setter
+    private boolean deListed = false;
+
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "corpInfo")
     private List<FinanceInfo> financeInfos;
@@ -40,10 +54,6 @@ public class CorpInfo {
 
     public String getParsedStockCode(){
         return this.stockCode.substring(1);
-    }
-
-    public void setCorpCode(String corpCode) {
-        this.corpCode = corpCode;
     }
 
     public static CorpInfo fromKrxItemInfo(KrxItemInfo krxItemInfo){

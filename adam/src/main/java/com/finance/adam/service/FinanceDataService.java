@@ -43,10 +43,19 @@ public class FinanceDataService {
 
     public List<KrxCorpListResponse> getKrxCorpInfo(){
         List<CorpInfo> corpInfos = corpRepository.findAllWithStockPrice();
-        List<KrxCorpListResponse> result = corpInfos.stream()
+        List<CorpInfo> nullCheckedCorpInfos = new ArrayList<>();
+        for(CorpInfo corpInfo : corpInfos){
+            if(corpInfo.getStockPrice() == null){
+                log.error("StockPrice is null");
+                log.error("corpCode: {}, stockCode : {}", corpInfo.getCorpCode(), corpInfo.getStockCode());
+            }
+            else{
+                nullCheckedCorpInfos.add(corpInfo);
+            }
+        }
+        return nullCheckedCorpInfos.stream()
                 .map((corpInfo -> KrxCorpListResponse.fromCorpInfo(corpInfo)))
                 .collect(Collectors.toList());
-        return result;
     }
 
     public StockPriceInfoResponseDTO getStockPriceInfo(String stockCode){
@@ -54,13 +63,12 @@ public class FinanceDataService {
         if(stockPrice == null){
             return null;
         }
-        StockPriceInfoResponseDTO dto = StockPriceInfoResponseDTO.builder()
+        return StockPriceInfoResponseDTO.builder()
                 .closingPrice(stockPrice.getClosingPrice())
                 .difference(stockPrice.getDifference())
                 .fluctuationRate(stockPrice.getFluctuationRate())
                 .openingPrice(stockPrice.getOpeningPrice())
                 .build();
-        return dto;
     }
 
     public List<FinanceInfoDTO> getFinanceInfos(String corpCode, int startYear, int endYear){
@@ -120,53 +128,87 @@ public class FinanceDataService {
         return CFS;
     }
 
+    @Transactional
     public void renewFinancialInfo(){
         List<CorpInfo> corpInfos = corpRepository.findAll();
-        for(int i = 0; i < corpInfos.size(); i++){
-            CorpInfo corpInfo = corpInfos.get(i);
+        for (CorpInfo corpInfo : corpInfos) {
             String corpCode = corpInfo.getCorpCode();
 
-            for(int j = 0; j < 1; j++){
-                int year = 2020 - j;
-                Map<String, Long> info = getFinancialInfoFromDart(corpCode,String.valueOf(year));
+            int year = Calendar.getInstance().get(Calendar.YEAR) - 1;
+            Map<String, Long> info = getFinancialInfoFromDart(corpCode, String.valueOf(year));
 
-                if(info == null){
-                    continue;
-                }
-
-                Optional<FinanceInfo> v = financeInfoRepository.findByCorpInfoCorpCodeAndYear(corpCode, year);
-                if(v.isPresent()){
-                    continue;
-                }
-                FinanceInfo financeInfo = FinanceInfo.fromMap(info);
-                if(info.containsKey("CFS")){
-                    financeInfo.setFsDiv("연결재무제표");
-                }else{
-                    financeInfo.setFsDiv("재무제표");
-                }
-
-                financeInfo.setYear(year);
-                financeInfo.setCorpInfo(corpInfo);
-                financeInfoRepository.save(financeInfo);
+            if (info == null) {
+                continue;
             }
+
+            Optional<FinanceInfo> v = financeInfoRepository.findByCorpInfoCorpCodeAndYear(corpCode, year);
+            if (v.isPresent()) {
+                continue;
+            }
+            FinanceInfo financeInfo = FinanceInfo.fromMap(info);
+            if (info.containsKey("CFS")) {
+                financeInfo.setFsDiv("연결재무제표");
+            } else {
+                financeInfo.setFsDiv("재무제표");
+            }
+
+            financeInfo.setYear(year);
+            financeInfo.setCorpInfo(corpInfo);
+            financeInfoRepository.save(financeInfo);
+            log.info("renewFinancialInfo - " + corpInfo.getName() + " " + year + "년도 재무정보 저장");
         }
     }
 
+
+    /**
+     * 수행하는 기능
+     * 1. DB 에는 있지만 거래소에서 퇴출된 기업 -> 상장폐지 여부를 true로 변경
+     * 2. 종목코드가 변경된 기업 -> 종목코드를 변경
+     * 3. DB에 없는 신규 상장 기업 -> DB에 추가
+     */
     @Transactional
-    public void renewKrxStockList(){
-        List<KrxItemInfo> krxItemInfos = publicDataPortalOpenAPI.getKrxItemInfoList();
+    public void renewCorpInfoWithKrxList(){
+        Map<String, KrxItemInfo> krxItemInfoMap = publicDataPortalOpenAPI.getKrxItemInfoMap();
         Map<String,String> corpCodeMap = openDartAPI.getCorpCodeMap();
+        List<CorpInfo> corpInfoList = corpRepository.findAll();
 
-        for(KrxItemInfo info : krxItemInfos){
-            CorpInfo corpInfo = CorpInfo.fromKrxItemInfo(info);
-            String corpCode = corpCodeMap.get(corpInfo.getParsedStockCode());
+        for(CorpInfo corpInfo : corpInfoList){
+            String parsedStockCode = corpInfo.getParsedStockCode();
+            String corpCode = corpInfo.getCorpCode();
 
-            if(corpCode == null || corpCode.isEmpty()){
-                log.warn("종목코드와 매핑된 공시 기업코드가 없습니다. Open Dart API를 확인하세요.");
-            }else {
-                corpInfo.setCorpCode(corpCode);
+            // 1. DB 에는 있지만 거래소에서 퇴출된 기업
+            KrxItemInfo krxItemInfo = krxItemInfoMap.get(parsedStockCode);
+            if(krxItemInfo == null){
+                corpInfo.setDeListed(true);
+                corpRepository.saveAndFlush(corpInfo);
+                log.info("renewCorpInfoWithKrxList - deListed (거래소 퇴출) : " + corpInfo.getName());
             }
-            corpRepository.save(corpInfo);
+
+            // 2. 종목코드가 변경된 기업
+            if(corpCodeMap.containsKey(corpCode)){
+                String newStockCode = corpCodeMap.get(corpCode);
+                if(!parsedStockCode.equals(newStockCode)){
+                    corpInfo.setStockCode(newStockCode);
+                    corpRepository.saveAndFlush(corpInfo);
+                    log.info("renewCorpInfoWithKrxList - stockCode 변경 : " + corpInfo.getName());
+                    log.info("renewCorpInfoWithKrxList - stockCode 변경 : before " + corpInfo.getStockCode());
+                    log.info("renewCorpInfoWithKrxList - stockCode 변경 : after " + newStockCode);
+                }
+            }
+        }
+
+        // 3. DB에 없는 신규 상장 기업
+        for(KrxItemInfo krxItemInfo : krxItemInfoMap.values()){
+            String stockCode = krxItemInfo.getSrtnCd();
+            boolean isExist = corpInfoList.stream()
+                    .anyMatch((corpInfo -> corpInfo.getParsedStockCode().equals(stockCode)));
+            if(!isExist){
+                CorpInfo corpInfo = CorpInfo.fromKrxItemInfo(krxItemInfo);
+                String corpCode = corpCodeMap.get(corpInfo.getParsedStockCode());
+                corpInfo.setCorpCode(corpCode);
+                corpRepository.saveAndFlush(corpInfo);
+                log.info("renewCorpInfoWithKrxList - 신규 상장 기업 추가 : " + corpInfo.getName());
+            }
         }
     }
 }

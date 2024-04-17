@@ -26,10 +26,6 @@ public class KrxCorpListResponse {
     private StockPriceInfoResponseDTO stockPriceInfo;
 
     public static KrxCorpListResponse fromCorpInfo(CorpInfo corpInfo){
-            if(corpInfo.getStockPrice() == null){
-                log.error("StockPrice is null");
-                log.error("corpCode: {}, stockCode : {}", corpInfo.getCorpCode(), corpInfo.getStockCode());
-            }
             return KrxCorpListResponse.builder()
                     .searchTime(corpInfo.getStockPrice().getUpdatedAt())
                     .corpCd(corpInfo.getCorpCode())

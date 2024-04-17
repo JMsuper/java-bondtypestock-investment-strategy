@@ -17,6 +17,8 @@ import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 공공데이터포털 Open API
@@ -40,8 +42,11 @@ public class PublicDataPortalOpenAPI {
         this.objectMapper = objectMapper;
     }
 
-
-    public List<KrxItemInfo> getKrxItemInfoList() {
+    /**
+     * 공공데이터포털 Open API를 통해 상장된 기업의 정보를 가져온다.
+     * key : stockCode(ex. 005930)
+     */
+    public Map<String,KrxItemInfo> getKrxItemInfoMap() {
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
@@ -79,9 +84,19 @@ public class PublicDataPortalOpenAPI {
             throw new RuntimeException(ERROR_MSG);
         }
 
-        return krxResponseBody.getItems();
+        List<KrxItemInfo> listOfDuplicatedData = krxResponseBody.getItems();
+        Map<String, KrxItemInfo> distinctMap = new HashMap<>();
+        for (KrxItemInfo krxItemInfo : listOfDuplicatedData) {
+            distinctMap.put(krxItemInfo.getSrtnCd(), krxItemInfo);
+        }
+        return distinctMap;
     }
 
+    /**
+     * 2024-04-17 기준, 거래소 상장 종목의 총 개수는 약 2,600개 이다.
+     * numOfRows 가 총 개수보다 클 경우, 중복된 종목을 추가하여 numOfRows 만큼의 데이터를 반환한다.
+     * 즉, 데이터 중복이 존재한다.
+     */
     private URI createURI() throws URISyntaxException {
         String urlTemplate = UriComponentsBuilder.fromHttpUrl(corpListUrl)
                 .queryParam("numOfRows",numOfRows)
