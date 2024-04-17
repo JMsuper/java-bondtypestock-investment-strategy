@@ -8,6 +8,7 @@ import com.finance.adam.repository.StockPriceRepository;
 import com.finance.adam.repository.domain.CorpInfo;
 import com.finance.adam.repository.domain.FinanceInfo;
 import com.finance.adam.repository.domain.StockPrice;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Service
 public class ScreeningService {
 
@@ -54,6 +56,11 @@ public class ScreeningService {
             stockInfoDTO.setStockCd(corpInfo.getStockCode());
 
             StockPrice stockPrice = corpInfo.getStockPrice();
+            if(stockPrice == null){
+                log.error("StockPrice is null");
+                log.error("corpCode: {}, stockCode : {}", corpInfo.getCorpCode(), corpInfo.getStockCode());
+                continue;
+            }
             stockInfoDTO.setOpeningPrice(stockPrice.getOpeningPrice());
             stockInfoDTO.setShares(stockPrice.getListedShares());
 
