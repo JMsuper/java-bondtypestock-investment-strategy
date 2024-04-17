@@ -34,6 +34,6 @@ public class TestFinanceDataService {
     @Test
     @DisplayName("renewKrxStockList")
     void renewFinanceStockList(){
-        financeDataService.renewKrxStockList();
+        financeDataService.renewCorpInfoWithKrxList();
     }
 }
