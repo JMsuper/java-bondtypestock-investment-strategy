@@ -32,5 +32,11 @@ class CsvReaderServiceTest {
         Map<String, StockPriceInfoDTO> stockPriceInfoDTOList = csvReaderService.readKrxPriceCsvFile(filePath);
     }
 
+    @Test
+    void test3(){
+        String code = csvReaderService.getKrxStockPriceOTPCode();
+        System.out.println(code);
+    }
+
 
 }

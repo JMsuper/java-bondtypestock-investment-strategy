@@ -17,7 +17,10 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -100,12 +103,30 @@ public class CsvReaderService {
          * 이때, filename 매개변수를 사용하여 다운로드될 파일의 이름을 지정할 수 있습니다.
          *
          * 예를 들어, Content-Disposition: attachment; filename="example.txt"라는 헤더는,
-         * 브라우저에게 응답 본문을 example.txt라는 이름의 파일로 다운로드하도록 지시합니다.
+         * 브라우저에게 응답 본문을 example.txt 라는 이름의 파일로 다운로드하도록 지시합니다.
          */
         String contentDisposition = response.getHeaders().get("Content-Disposition").toString();
         String fileName = contentDisposition.substring(contentDisposition.indexOf("filename=") + 9, contentDisposition.length() - 1);
 
-        File outputFile = new File(fileName);
+        LocalDateTime currentDate = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd-HH_mm_ss");
+        String formattedDate = currentDate.format(formatter);
+
+        Path directoryPath = Paths.get(".", "price-data");
+        File directory = directoryPath.toFile();
+        if(!directory.exists()){
+            directory.mkdir();
+        }
+
+        Path filePath = Paths.get(directoryPath.toString(),formattedDate+ "-" + fileName);
+
+        File outputFile = filePath.toFile();
+        try {
+            outputFile.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         try (FileOutputStream fos = new FileOutputStream(outputFile)) {
             fos.write(response.getBody());
         } catch (IOException e) {
@@ -161,7 +182,6 @@ public class CsvReaderService {
 
                     for(int i = 0; i < line.length; i++){
                         String columnName = line[i];
-                        log.info("CSV 파일의 " + i + "번째 컬럼 : " + columnName);
                         if(!columnName.equals(columnNameList[i])){
                             log.error("CSV 파일의 컬럼 순서가 일치하지 않습니다. " + columnName + " : " + columnNameList[i]);
                             return null;
@@ -170,21 +190,7 @@ public class CsvReaderService {
                     continue;
                 }
 
-                StockPriceInfoDTO stockInfo = new StockPriceInfoDTO();
-                stockInfo.setStockCode(line[0]);
-                stockInfo.setStockName(line[1]);
-                stockInfo.setMarketType(line[2]);
-                stockInfo.setDepartment(line[3]);
-                stockInfo.setClosingPrice(Long.parseLong(line[4]));
-                stockInfo.setDifference(Long.parseLong(line[5]));
-                stockInfo.setFluctuationRate(Double.parseDouble(line[6]));
-                stockInfo.setOpeningPrice(Long.parseLong(line[7]));
-                stockInfo.setHighPrice(Long.parseLong(line[8]));
-                stockInfo.setLowPrice(Long.parseLong(line[9]));
-                stockInfo.setVolume(Long.parseLong(line[10]));
-                stockInfo.setTradingValue(Long.parseLong(line[11]));
-                stockInfo.setMarketCap(Long.parseLong(line[12]));
-                stockInfo.setListedShares(Long.parseLong(line[13]));
+                StockPriceInfoDTO stockInfo = getStockPriceInfoDTO(line);
                 stockPriceInfoMap.put(line[0], stockInfo);
             }
         } catch (IOException e) {
@@ -196,13 +202,29 @@ public class CsvReaderService {
         return stockPriceInfoMap;
     }
 
+    private StockPriceInfoDTO getStockPriceInfoDTO(String[] line) {
+        StockPriceInfoDTO stockInfo = new StockPriceInfoDTO();
+        stockInfo.setStockCode(line[0]);
+        stockInfo.setStockName(line[1]);
+        stockInfo.setMarketType(line[2]);
+        stockInfo.setDepartment(line[3]);
+        stockInfo.setClosingPrice(Long.parseLong(line[4]));
+        stockInfo.setDifference(Long.parseLong(line[5]));
+        stockInfo.setFluctuationRate(Double.parseDouble(line[6]));
+        stockInfo.setOpeningPrice(Long.parseLong(line[7]));
+        stockInfo.setHighPrice(Long.parseLong(line[8]));
+        stockInfo.setLowPrice(Long.parseLong(line[9]));
+        stockInfo.setVolume(Long.parseLong(line[10]));
+        stockInfo.setTradingValue(Long.parseLong(line[11]));
+        stockInfo.setMarketCap(Long.parseLong(line[12]));
+        stockInfo.setListedShares(Long.parseLong(line[13]));
+        return stockInfo;
+    }
+
     public void saveOrUpdateStockPrices(Map<String, StockPriceInfoDTO> stockPriceInfoMap) {
-            log.info(System.currentTimeMillis() + " : corpRepository.findAllWithStockPrice() start");
             List<CorpInfo> corpInfo = corpRepository.findAllWithStockPrice();
-            log.info(System.currentTimeMillis() + " : corpRepository.findAllWithStockPrice() end");
 
             for(CorpInfo corp : corpInfo){
-                log.info(System.currentTimeMillis() + " : corp : " + corp.getName() + " start");
                 StockPrice stockPrice = corp.getStockPrice();
                 if (stockPrice == null) {
                     stockPrice = new StockPrice();
@@ -226,7 +248,6 @@ public class CsvReaderService {
                 stockPrice.setListedShares(stockPriceInfoDTO.getListedShares());
 
                 stockPriceRepository.saveAndFlush(stockPrice);
-                log.info(System.currentTimeMillis() + " : corp : " + corp.getName() + " end");
             }
     }
 }
