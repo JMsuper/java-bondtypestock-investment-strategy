@@ -173,11 +173,11 @@ public class FinanceDataService {
         List<CorpInfo> corpInfoList = corpRepository.findAll();
 
         for(CorpInfo corpInfo : corpInfoList){
-            String parsedStockCode = corpInfo.getParsedStockCode();
+            String stockCode = corpInfo.getStockCode();
             String corpCode = corpInfo.getCorpCode();
 
             // 1. DB 에는 있지만 거래소에서 퇴출된 기업
-            KrxItemInfo krxItemInfo = krxItemInfoMap.get(parsedStockCode);
+            KrxItemInfo krxItemInfo = krxItemInfoMap.get(stockCode);
             if(krxItemInfo == null){
                 corpInfo.setDeListed(true);
                 corpRepository.saveAndFlush(corpInfo);
@@ -187,8 +187,8 @@ public class FinanceDataService {
             // 2. 종목코드가 변경된 기업
             if(corpCodeMap.containsKey(corpCode)){
                 String newStockCode = corpCodeMap.get(corpCode);
-                if(!parsedStockCode.equals(newStockCode)){
-                    corpInfo.setStockCode(newStockCode);
+                if(!stockCode.equals(newStockCode)){
+                    corpInfo.setStockCode("A" + newStockCode);
                     corpRepository.saveAndFlush(corpInfo);
                     log.info("renewCorpInfoWithKrxList - stockCode 변경 : " + corpInfo.getName());
                     log.info("renewCorpInfoWithKrxList - stockCode 변경 : before " + corpInfo.getStockCode());
@@ -201,7 +201,7 @@ public class FinanceDataService {
         for(KrxItemInfo krxItemInfo : krxItemInfoMap.values()){
             String stockCode = krxItemInfo.getSrtnCd();
             boolean isExist = corpInfoList.stream()
-                    .anyMatch((corpInfo -> corpInfo.getParsedStockCode().equals(stockCode)));
+                    .anyMatch((corpInfo -> corpInfo.getStockCode().equals(stockCode)));
             if(!isExist){
                 CorpInfo corpInfo = CorpInfo.fromKrxItemInfo(krxItemInfo);
                 String corpCode = corpCodeMap.get(corpInfo.getParsedStockCode());

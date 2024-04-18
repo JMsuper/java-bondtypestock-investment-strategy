@@ -1,4 +1,4 @@
-package com.finance.adam.service;
+package com.finance.adam.scheduler;
 
 import com.finance.adam.dto.StockPriceInfoDTO;
 import com.finance.adam.repository.CorpRepository;

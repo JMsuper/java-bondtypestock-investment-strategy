@@ -1,7 +1,6 @@
 package com.finance.adam.scheduler;
 
 import com.finance.adam.dto.StockPriceInfoDTO;
-import com.finance.adam.service.CsvReaderService;
 import com.finance.adam.service.FinanceDataService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -29,7 +28,7 @@ public class ScheduledTasks {
     //
     // *        *        *        *        *        *        *
     //초       분        시       일       월      요일    년도(생략가능)
-    @Scheduled(cron = "* 0/20 8-18 * * MON-FRI")
+    @Scheduled(cron = "0 0,20,40 8-17 * * MON-FRI")
     public void stockPriceUpdate() {
         log.info("ScheduledTasks.stockPriceUpdate() start : {}", dateFormat.format(System.currentTimeMillis()));
         File result = csvReaderService.getKrxStockPriceCsvFile();

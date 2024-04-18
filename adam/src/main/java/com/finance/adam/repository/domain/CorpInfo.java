@@ -37,6 +37,7 @@ public class CorpInfo {
      * 상장폐지 여부
      */
     @Setter
+    @Builder.Default
     private boolean deListed = false;
 
     @CreationTimestamp
