@@ -3,9 +3,9 @@ package com.finance.adam.repository.domain;
 
 import com.finance.adam.openapi.publicdataportal.vo.KrxItemInfo;
 import com.finance.adam.util.FnInfoName;
+import jakarta.persistence.*;
 import lombok.*;
 
-import javax.persistence.*;
 import java.lang.reflect.Field;
 import java.util.Map;
 import java.util.Set;

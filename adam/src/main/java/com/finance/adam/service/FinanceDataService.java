@@ -15,8 +15,8 @@ import com.finance.adam.repository.domain.FinanceInfo;
 import com.finance.adam.repository.domain.StockPrice;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 

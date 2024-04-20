@@ -2,14 +2,14 @@ package com.finance.adam.repository.domain;
 
 
 import com.finance.adam.openapi.publicdataportal.vo.KrxItemInfo;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import java.time.LocalDateTime;
 import java.util.List;
 
