@@ -26,7 +26,7 @@ public class AccountContext implements UserDetails {
     }
     @Override
     public String getUsername() {
-        return accountDto.getUsername();
+        return accountDto.getId();
     }
     @Override
     public boolean isAccountNonExpired() {

@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service("userDetailsService")
 @RequiredArgsConstructor
@@ -23,12 +24,14 @@ public class RestUserDetailsService implements UserDetailsService {
     private final UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
 
-        Account account = userRepository.findByUsername(username);
-        if (account == null) {
-            throw new UsernameNotFoundException("No user found with username: " + username);
+        Optional<Account> optionalAccount = userRepository.findById(id);
+        if (!optionalAccount.isPresent()) {
+            throw new UsernameNotFoundException("No user found with id: " + id);
         }
+        Account account = optionalAccount.get();
+
         List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(account.getRoles()));
         ModelMapper mapper = new ModelMapper();
         AccountDto accountDto = mapper.map(account, AccountDto.class);

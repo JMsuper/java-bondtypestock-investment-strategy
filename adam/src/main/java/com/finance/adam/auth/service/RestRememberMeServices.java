@@ -23,17 +23,14 @@ public class RestRememberMeServices extends TokenBasedRememberMeServices {
     public void onLoginSuccess(HttpServletRequest request, HttpServletResponse response,
                                Authentication successfulAuthentication) {
         AccountDto principal = (AccountDto) successfulAuthentication.getPrincipal();
-        String username = principal.getUsername();
+        String username = principal.getId();
         String password = retrievePassword(successfulAuthentication);
-        // If unable to find a username and password, just abort as
-        // TokenBasedRememberMeServices is
-        // unable to construct a valid token in this case.
+
         if (!StringUtils.hasLength(username)) {
             this.logger.debug("Unable to retrieve username");
             return;
         }
         if (!StringUtils.hasLength(password)) {
-//            String parsedUsername = username
             UserDetails user = getUserDetailsService().loadUserByUsername(username);
             password = user.getPassword();
             if (!StringUtils.hasLength(password)) {
@@ -43,7 +40,7 @@ public class RestRememberMeServices extends TokenBasedRememberMeServices {
         }
         int tokenLifetime = calculateLoginLifetime(request, successfulAuthentication);
         long expiryTime = System.currentTimeMillis();
-        // SEC-949
+
         expiryTime += 1000L * ((tokenLifetime < 0) ? TWO_WEEKS_S : tokenLifetime);
         String signatureValue = makeTokenSignature(expiryTime, username, password, RememberMeTokenAlgorithm.SHA256);
         setCookie(new String[] { username, Long.toString(expiryTime), RememberMeTokenAlgorithm.SHA256.name(), signatureValue },

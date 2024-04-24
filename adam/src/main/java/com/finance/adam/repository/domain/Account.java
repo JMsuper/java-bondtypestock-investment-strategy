@@ -3,19 +3,27 @@ package com.finance.adam.repository.domain;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
 @Entity
 @Data
+@NoArgsConstructor
 public class Account implements Serializable {
 
     @Id
-    @GeneratedValue
-    private Long id;
-    private String username;
+    private String id;
+    private String email;
     private String password;
     private String roles;
-    private int age;
+
+    public Account(String id, String email, String password, String roleUser) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.roles = roleUser;
+    }
 }
