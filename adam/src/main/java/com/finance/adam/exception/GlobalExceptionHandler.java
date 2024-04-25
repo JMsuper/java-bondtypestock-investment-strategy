@@ -1,5 +1,6 @@
 package com.finance.adam.exception;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -34,5 +35,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity handleHttpMessageNotReadableException() {
         return ErrorResponseEntity.toResponseEntity(ErrorCode.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(JsonParseException.class)
+    public ResponseEntity handleJsonParseException() {
+        return ErrorResponseEntity.toResponseEntity(ErrorCode.JSON_PARSE_ERROR);
     }
 }

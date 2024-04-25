@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 @Getter
 @Builder
 @AllArgsConstructor
-@Slf4j
 public class KrxCorpListResponse {
     private LocalDateTime searchTime;
 

@@ -18,4 +18,5 @@ public interface CorpRepository extends JpaRepository<CorpInfo,String> {
     @EntityGraph(attributePaths = {"stockPrice", "financeInfos"})
     @Query("select c from CorpInfo c")
     List<CorpInfo> findAllWithStockPriceAndFinanceInfos();
+
 }
