@@ -1,14 +1,17 @@
 package com.finance.adam.auth.service;
 
+import com.finance.adam.auth.dto.AccountContext;
 import com.finance.adam.auth.dto.AccountDto;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.security.authentication.RememberMeAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
+import org.springframework.security.core.authority.mapping.NullAuthoritiesMapper;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.Date;
@@ -18,6 +21,8 @@ public class RestRememberMeServices extends TokenBasedRememberMeServices {
     public RestRememberMeServices(UserDetailsService userDetailsService) {
         super("rememberme", userDetailsService);
     }
+
+    private GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
 
     @Override
     public void onLoginSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -49,6 +54,16 @@ public class RestRememberMeServices extends TokenBasedRememberMeServices {
             this.logger
                     .debug("Added remember-me cookie for user '" + username + "', expiry: '" + new Date(expiryTime) + "'");
         }
+    }
+
+    @Override
+    protected Authentication createSuccessfulAuthentication(HttpServletRequest request, UserDetails user) {
+        AccountContext accountContext = (AccountContext) user;
+        AccountDto accountDto = accountContext.getAccountDto();
+        RememberMeAuthenticationToken auth = new RememberMeAuthenticationToken(this.getKey(), accountDto,
+                authoritiesMapper.mapAuthorities(user.getAuthorities()));
+        auth.setDetails(getAuthenticationDetailsSource().buildDetails(request));
+        return auth;
     }
 
 }
