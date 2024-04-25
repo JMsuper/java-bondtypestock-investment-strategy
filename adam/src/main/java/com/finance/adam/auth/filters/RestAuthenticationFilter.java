@@ -1,5 +1,6 @@
 package com.finance.adam.auth.filters;
 
+import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.finance.adam.auth.dto.AccountDto;
 import com.finance.adam.auth.token.RestAuthenticationToken;
@@ -12,7 +13,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
-import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.context.DelegatingSecurityContextRepository;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.security.web.context.RequestAttributeSecurityContextRepository;
@@ -49,8 +49,12 @@ public class RestAuthenticationFilter extends AbstractAuthenticationProcessingFi
         if (!HttpMethod.POST.name().equals(request.getMethod()) || !WebUtil.isAjax(request)) {
             throw new IllegalArgumentException("Authentication method not supported");
         }
-
-        AccountDto accountDto = objectMapper.readValue(request.getReader(), AccountDto.class);
+        AccountDto accountDto;
+        try{
+            accountDto = objectMapper.readValue(request.getReader(), AccountDto.class);
+        } catch (JacksonException e) {
+            throw new AuthenticationServiceException("Invalid request body");
+        }
 
         if (!StringUtils.hasText(accountDto.getId()) || !StringUtils.hasText(accountDto.getPassword())) {
             throw new AuthenticationServiceException("Username or Password not provided");
