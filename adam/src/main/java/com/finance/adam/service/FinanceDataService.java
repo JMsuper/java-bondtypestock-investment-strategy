@@ -13,15 +13,19 @@ import com.finance.adam.repository.StockPriceRepository;
 import com.finance.adam.repository.domain.CorpInfo;
 import com.finance.adam.repository.domain.FinanceInfo;
 import com.finance.adam.repository.domain.StockPrice;
+import com.finance.adam.util.FinanceCalculator;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.swing.text.html.Option;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class FinanceDataService {
 
     private final OpenDartAPI openDartAPI;
@@ -29,17 +33,7 @@ public class FinanceDataService {
     private final CorpRepository corpRepository;
     private final FinanceInfoRepository financeInfoRepository;
     private final StockPriceRepository stockPriceRepository;
-
-    public FinanceDataService(OpenDartAPI openDartAPI,
-                              PublicDataPortalOpenAPI publicDataPortalOpenAPI,
-                              CorpRepository corpRepository,
-                              FinanceInfoRepository financeInfoRepository, StockPriceRepository stockPriceRepository){
-        this.openDartAPI = openDartAPI;
-        this.publicDataPortalOpenAPI = publicDataPortalOpenAPI;
-        this.corpRepository = corpRepository;
-        this.financeInfoRepository = financeInfoRepository;
-        this.stockPriceRepository = stockPriceRepository;
-    }
+    private final FinanceCalculator financeCalculator;
 
     public List<KrxCorpListResponse> getKrxCorpInfo(){
         List<CorpInfo> corpInfos = corpRepository.findAllWithStockPrice();
@@ -210,5 +204,55 @@ public class FinanceDataService {
                 log.info("renewCorpInfoWithKrxList - 신규 상장 기업 추가 : " + corpInfo.getName());
             }
         }
+    }
+
+    public Long getBPS(FinanceInfo financeInfo, StockPrice stockPrice){
+        long totalCapital = financeInfo.getTotalCapital();
+        long listedShares = stockPrice.getListedShares();
+
+        // 자본총계가 0이거나 상장주식수가 0이면 계산 불가
+        if(totalCapital == 0 || listedShares == 0){
+            log.error("getBPS - totalCapital or listedShares is 0");
+            log.error("corpCode : {}" ,financeInfo.getCorpInfo().getCorpCode());
+            return 0L;
+        }
+
+        return financeCalculator.calculateBPS(totalCapital, listedShares);
+    }
+
+    /**
+     * 소숫점 3자리까지 계산
+     */
+    public Optional<Float> getThreeYearAverageROE(List<FinanceInfo> financeInfoList){
+        // 4개 재무정보가 없으면 계산 불가
+        if(financeInfoList.size() < 4){
+            return Optional.empty();
+        }
+
+        float[] roeList = new float[3];
+
+        for(int i = 0; i < 3; i++){
+            FinanceInfo thisYearfinanceInfo = financeInfoList.get(i);
+            FinanceInfo lastYearfinanceInfo = financeInfoList.get(i + 1);
+
+            if(thisYearfinanceInfo.getNetIncome() == null || lastYearfinanceInfo.getTotalCapital() == null){
+                return Optional.empty();
+            }
+
+            long netIncome = thisYearfinanceInfo.getNetIncome();
+            long lastTotalCapital = lastYearfinanceInfo.getTotalCapital();
+
+            // 당기순이익이 0이거나 자본총계가 0이면 계산 불가
+            if(netIncome == 0 || lastTotalCapital == 0){
+                return Optional.empty();
+            }
+
+            float roe = financeCalculator.calculateROE(netIncome, lastTotalCapital);
+            roeList[i] = roe;
+        }
+
+        float threeYearAverageROE = (roeList[0] + roeList[1] + roeList[2]) / 3;
+        threeYearAverageROE = Math.round(threeYearAverageROE * 1000) / 1000.0f;
+        return Optional.of(threeYearAverageROE);
     }
 }
