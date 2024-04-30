@@ -1,5 +1,7 @@
 package com.finance.adam.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.finance.adam.auth.dto.AccountDto;
 import com.finance.adam.dto.UserRegisterDTO;
 import com.finance.adam.service.UserService;
 import jakarta.servlet.http.Cookie;
@@ -7,7 +9,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;
@@ -18,11 +24,6 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final UserService userService;
-
-    @GetMapping("/test")
-    public String test(){
-        return "test";
-    }
 
     @PostMapping("/logout")
     public String logout(HttpServletRequest request, HttpServletResponse response){
@@ -52,6 +53,12 @@ public class AuthController {
 
         userService.saveUser(id, email, password);
         return "success";
+    }
+
+    @GetMapping("/auto-login")
+    public AccountDto autoLogin(@AuthenticationPrincipal AccountDto accountDto){
+        accountDto.setPassword(null);
+        return accountDto;
     }
 
 }
