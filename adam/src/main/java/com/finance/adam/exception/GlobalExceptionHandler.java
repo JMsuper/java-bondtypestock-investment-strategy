@@ -6,9 +6,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.server.MethodNotAllowedException;
 
 import java.util.HashMap;
 
@@ -30,6 +32,11 @@ public class GlobalExceptionHandler {
         }
 
         return new ResponseEntity<>(errMessage , HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity handleMethodNotAllowedException() {
+        return ErrorResponseEntity.toResponseEntity(ErrorCode.NOT_ALLOWED_METHOD);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
