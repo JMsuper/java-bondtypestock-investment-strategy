@@ -8,6 +8,11 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public enum ErrorCode {
 
+    NOT_ALLOWED_METHOD(HttpStatus.METHOD_NOT_ALLOWED, "NOT_ALLOWED_METHOD", "허용되지 않은 메소드입니다."),
+
+    DUP_USER_ID(HttpStatus.BAD_REQUEST, "DUP_USER_ID", "이미 사용중인 아이디입니다."),
+    NOT_FOUND_USER(HttpStatus.NOT_FOUND, "NOT_FOUND_USER", "사용자를 찾을 수 없습니다."),
+
     SAVE_CORP_MAX_COUNT(HttpStatus.BAD_REQUEST, "SAVE_CORP_MAX", "종목 저장 최대 개수(10개)를 초과하였습니다."),
     SAVE_CORP_INFO_DUPLICATED(HttpStatus.BAD_REQUEST, "SAVE_CORP_INFO_DUPLICATED", "이미 저장된 종목입니다."),
     SAVE_CORP_INFO_NOT_FOUND(HttpStatus.NOT_FOUND, "SAVE_CORP_INFO_NOT_FOUND", "저장된 종목을 찾을 수 없습니다."),
