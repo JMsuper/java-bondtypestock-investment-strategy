@@ -1,10 +1,7 @@
 package com.finance.adam.repository.domain;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -14,6 +11,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Setter
 @Getter
 public class SaveCorpInfo {
 
@@ -28,6 +26,11 @@ public class SaveCorpInfo {
     @ManyToOne
     @JoinColumn(name = "corp_info_id")
     private CorpInfo corpInfo;
+
+    @Builder.Default
+    private Float targetRate = 0.0f;
+
+    private Float afterTenYearsAverageROE;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
