@@ -40,7 +40,6 @@ public class SaveCorpInfoListResponse {
 
     private List<OpenDartReportExtractedDTO> reportList;
 
-        //TODO : bps를  entity에서 가져오도록 변경해야함
     public static SaveCorpInfoListResponse fromSaveCorpInfo(
             SaveCorpInfo saveCorpInfo,
             List<OpenDartReportExtractedDTO> reportList

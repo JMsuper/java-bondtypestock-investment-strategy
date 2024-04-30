@@ -2,6 +2,7 @@ package com.finance.adam.openapi;
 
 import com.finance.adam.openapi.dart.OpenDartAPI;
 import com.finance.adam.openapi.dart.vo.OpenDartFinancialInfo;
+import com.finance.adam.openapi.dart.vo.OpenDartReportDTO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,5 +40,15 @@ public class TestOpenDartAPI {
 
         assertTrue(map.size() > 3000);
         assertEquals(SAMSUNG_CORP_CODE,map.get(SAMSUNG_STOCK_CODE));
+    }
+
+    @Test
+    @DisplayName("Open Dart 공시 보고서 조회")
+    void test3(){
+        String corpCode = "00126380";
+        int pageCount = 5;
+
+        List<OpenDartReportDTO> result = openDartAPI.getRecentReportList(corpCode,pageCount);
+        assertNotNull(result);
     }
 }
