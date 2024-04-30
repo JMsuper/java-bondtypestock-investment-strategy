@@ -2,6 +2,7 @@ package com.finance.adam.auth.service;
 
 import com.finance.adam.auth.dto.AccountContext;
 import com.finance.adam.auth.dto.AccountDto;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.RememberMeAuthenticationToken;
@@ -18,8 +19,10 @@ import java.util.Date;
 
 @Component
 public class RestRememberMeServices extends TokenBasedRememberMeServices {
+
     public RestRememberMeServices(UserDetailsService userDetailsService) {
-        super("rememberme", userDetailsService);
+        super("remember-me", userDetailsService);
+        this.setUseSecureCookie(true);
     }
 
     private GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
@@ -54,6 +57,39 @@ public class RestRememberMeServices extends TokenBasedRememberMeServices {
             this.logger
                     .debug("Added remember-me cookie for user '" + username + "', expiry: '" + new Date(expiryTime) + "'");
         }
+    }
+
+    @Override
+    protected void setCookie(String[] tokens, int maxAge, HttpServletRequest request, HttpServletResponse response) {
+        String cookieValue = encodeCookie(tokens);
+        Cookie cookie = new Cookie(this.getCookieName(), cookieValue);
+        cookie.setMaxAge(maxAge);
+        cookie.setPath(getCookiePath(request));
+
+        cookie.setSecure(true);
+        cookie.setHttpOnly(true);
+        cookie.setAttribute("SameSite", "None");
+
+        response.addCookie(cookie);
+    }
+
+    @Override
+    protected void cancelCookie(HttpServletRequest request, HttpServletResponse response) {
+        this.logger.debug("Cancelling cookie");
+        Cookie cookie = new Cookie(this.getCookieName(), null);
+        cookie.setMaxAge(0);
+        cookie.setPath(getCookiePath(request));
+
+        cookie.setSecure(true);
+        cookie.setHttpOnly(true);
+        cookie.setAttribute("SameSite", "None");
+
+        response.addCookie(cookie);
+    }
+
+    private String getCookiePath(HttpServletRequest request) {
+        String contextPath = request.getContextPath();
+        return (contextPath.length() > 0) ? contextPath : "/";
     }
 
     @Override
