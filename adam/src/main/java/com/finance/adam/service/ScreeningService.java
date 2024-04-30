@@ -2,18 +2,16 @@ package com.finance.adam.service;
 
 import com.finance.adam.dto.StepOneFinanceInfoDTO;
 import com.finance.adam.dto.StepOneStockInfoDTO;
-import com.finance.adam.repository.CorpRepository;
-import com.finance.adam.repository.StockPriceRepository;
-import com.finance.adam.repository.domain.CorpInfo;
-import com.finance.adam.repository.domain.FinanceInfo;
-import com.finance.adam.repository.domain.StockPrice;
+import com.finance.adam.repository.corpinfo.CorpRepository;
+import com.finance.adam.repository.stockprice.StockPriceRepository;
+import com.finance.adam.repository.corpinfo.domain.CorpInfo;
+import com.finance.adam.repository.financeinfo.domain.FinanceInfo;
+import com.finance.adam.repository.stockprice.domain.StockPrice;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @Service

@@ -1,25 +1,24 @@
 package com.finance.adam.service;
 
-import com.finance.adam.dto.FinanceInfoDTO;
+import com.finance.adam.repository.financeinfo.dto.FinanceInfoDTO;
 import com.finance.adam.dto.KrxCorpListResponse;
-import com.finance.adam.dto.StockPriceInfoResponseDTO;
+import com.finance.adam.repository.stockprice.dto.StockPriceInfoResponseDTO;
 import com.finance.adam.openapi.dart.OpenDartAPI;
 import com.finance.adam.openapi.dart.vo.OpenDartFinancialInfo;
 import com.finance.adam.openapi.publicdataportal.PublicDataPortalOpenAPI;
 import com.finance.adam.openapi.publicdataportal.vo.KrxItemInfo;
-import com.finance.adam.repository.CorpRepository;
-import com.finance.adam.repository.FinanceInfoRepository;
-import com.finance.adam.repository.StockPriceRepository;
-import com.finance.adam.repository.domain.CorpInfo;
-import com.finance.adam.repository.domain.FinanceInfo;
-import com.finance.adam.repository.domain.StockPrice;
+import com.finance.adam.repository.corpinfo.CorpRepository;
+import com.finance.adam.repository.financeinfo.FinanceInfoRepository;
+import com.finance.adam.repository.stockprice.StockPriceRepository;
+import com.finance.adam.repository.corpinfo.domain.CorpInfo;
+import com.finance.adam.repository.financeinfo.domain.FinanceInfo;
+import com.finance.adam.repository.stockprice.domain.StockPrice;
 import com.finance.adam.util.FinanceCalculator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.swing.text.html.Option;
 import java.util.*;
 import java.util.stream.Collectors;
 

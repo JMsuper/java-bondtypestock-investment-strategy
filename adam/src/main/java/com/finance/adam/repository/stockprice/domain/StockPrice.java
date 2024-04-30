@@ -1,6 +1,7 @@
-package com.finance.adam.repository.domain;
+package com.finance.adam.repository.stockprice.domain;
 
 
+import com.finance.adam.repository.corpinfo.domain.CorpInfo;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;

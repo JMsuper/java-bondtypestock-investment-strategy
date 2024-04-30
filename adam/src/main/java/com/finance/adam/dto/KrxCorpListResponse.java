@@ -1,10 +1,10 @@
 package com.finance.adam.dto;
 
-import com.finance.adam.repository.domain.CorpInfo;
+import com.finance.adam.repository.corpinfo.domain.CorpInfo;
+import com.finance.adam.repository.stockprice.dto.StockPriceInfoResponseDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
 

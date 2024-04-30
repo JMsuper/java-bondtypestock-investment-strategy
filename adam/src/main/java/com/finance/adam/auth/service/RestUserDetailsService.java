@@ -1,10 +1,9 @@
 package com.finance.adam.auth.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.finance.adam.auth.dto.AccountContext;
 import com.finance.adam.auth.dto.AccountDto;
-import com.finance.adam.repository.UserRepository;
-import com.finance.adam.repository.domain.Account;
+import com.finance.adam.repository.account.UserRepository;
+import com.finance.adam.repository.account.domain.Account;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.GrantedAuthority;

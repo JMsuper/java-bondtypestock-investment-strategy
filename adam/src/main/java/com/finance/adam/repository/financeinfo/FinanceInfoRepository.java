@@ -1,7 +1,6 @@
-package com.finance.adam.repository;
+package com.finance.adam.repository.financeinfo;
 
-import com.finance.adam.repository.domain.CorpInfo;
-import com.finance.adam.repository.domain.FinanceInfo;
+import com.finance.adam.repository.financeinfo.domain.FinanceInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

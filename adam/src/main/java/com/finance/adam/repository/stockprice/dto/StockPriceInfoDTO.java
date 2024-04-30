@@ -1,4 +1,4 @@
-package com.finance.adam.dto;
+package com.finance.adam.repository.stockprice.dto;
 
 import lombok.Getter;
 import lombok.Setter;

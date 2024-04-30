@@ -1,7 +1,7 @@
-package com.finance.adam.repository.domain;
+package com.finance.adam.repository.financeinfo.domain;
 
 
-import com.finance.adam.openapi.publicdataportal.vo.KrxItemInfo;
+import com.finance.adam.repository.corpinfo.domain.CorpInfo;
 import com.finance.adam.util.FnInfoName;
 import jakarta.persistence.*;
 import lombok.*;

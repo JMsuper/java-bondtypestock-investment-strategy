@@ -1,10 +1,9 @@
 package com.finance.adam.controller;
 
 import com.finance.adam.auth.dto.AccountDto;
-import com.finance.adam.dto.KrxCorpListResponse;
-import com.finance.adam.dto.SaveCorpInfoListResponse;
-import com.finance.adam.dto.SaveCorpInfoRequestDTO;
-import com.finance.adam.dto.SaveCorpInfoUpdateDTO;
+import com.finance.adam.repository.savecorpinfo.dto.SaveCorpInfoListResponse;
+import com.finance.adam.repository.savecorpinfo.dto.SaveCorpInfoRequestDTO;
+import com.finance.adam.repository.savecorpinfo.dto.SaveCorpInfoUpdateDTO;
 import com.finance.adam.service.CorpInfoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

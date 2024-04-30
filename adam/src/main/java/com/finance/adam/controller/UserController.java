@@ -1,8 +1,8 @@
 package com.finance.adam.controller;
 
 import com.finance.adam.auth.dto.AccountDto;
-import com.finance.adam.dto.UserUpdateEmailDTO;
-import com.finance.adam.dto.UserUpdatePasswordDTO;
+import com.finance.adam.repository.account.dto.UserUpdateEmailDTO;
+import com.finance.adam.repository.account.dto.UserUpdatePasswordDTO;
 import com.finance.adam.exception.CustomException;
 import com.finance.adam.exception.ErrorCode;
 import com.finance.adam.service.UserService;

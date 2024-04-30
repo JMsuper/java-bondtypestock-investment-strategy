@@ -1,12 +1,12 @@
 package com.finance.adam.service;
 
 import com.finance.adam.auth.dto.AccountDto;
-import com.finance.adam.dto.UserUpdateEmailDTO;
-import com.finance.adam.dto.UserUpdatePasswordDTO;
+import com.finance.adam.repository.account.dto.UserUpdateEmailDTO;
+import com.finance.adam.repository.account.dto.UserUpdatePasswordDTO;
 import com.finance.adam.exception.CustomException;
 import com.finance.adam.exception.ErrorCode;
-import com.finance.adam.repository.UserRepository;
-import com.finance.adam.repository.domain.Account;
+import com.finance.adam.repository.account.UserRepository;
+import com.finance.adam.repository.account.domain.Account;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

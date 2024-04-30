@@ -1,10 +1,10 @@
 package com.finance.adam.scheduler;
 
-import com.finance.adam.dto.StockPriceInfoDTO;
-import com.finance.adam.repository.CorpRepository;
-import com.finance.adam.repository.StockPriceRepository;
-import com.finance.adam.repository.domain.CorpInfo;
-import com.finance.adam.repository.domain.StockPrice;
+import com.finance.adam.repository.stockprice.dto.StockPriceInfoDTO;
+import com.finance.adam.repository.corpinfo.CorpRepository;
+import com.finance.adam.repository.stockprice.StockPriceRepository;
+import com.finance.adam.repository.corpinfo.domain.CorpInfo;
+import com.finance.adam.repository.stockprice.domain.StockPrice;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvValidationException;

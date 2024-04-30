@@ -1,5 +1,6 @@
-package com.finance.adam.repository.domain;
+package com.finance.adam.repository.account.domain;
 
+import com.finance.adam.repository.savecorpinfo.domain.SaveCorpInfo;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;

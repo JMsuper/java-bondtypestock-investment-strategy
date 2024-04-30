@@ -1,6 +1,6 @@
-package com.finance.adam.dto;
+package com.finance.adam.repository.stockprice.dto;
 
-import com.finance.adam.repository.domain.StockPrice;
+import com.finance.adam.repository.stockprice.domain.StockPrice;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

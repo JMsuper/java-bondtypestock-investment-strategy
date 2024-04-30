@@ -1,7 +1,7 @@
-package com.finance.adam.repository;
+package com.finance.adam.repository.savecorpinfo;
 
-import com.finance.adam.repository.domain.Account;
-import com.finance.adam.repository.domain.SaveCorpInfo;
+import com.finance.adam.repository.account.domain.Account;
+import com.finance.adam.repository.savecorpinfo.domain.SaveCorpInfo;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

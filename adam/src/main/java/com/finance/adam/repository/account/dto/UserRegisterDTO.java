@@ -1,4 +1,4 @@
-package com.finance.adam.dto;
+package com.finance.adam.repository.account.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;

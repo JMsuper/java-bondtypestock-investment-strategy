@@ -1,7 +1,9 @@
-package com.finance.adam.repository.domain;
+package com.finance.adam.repository.corpinfo.domain;
 
 
 import com.finance.adam.openapi.publicdataportal.vo.KrxItemInfo;
+import com.finance.adam.repository.financeinfo.domain.FinanceInfo;
+import com.finance.adam.repository.stockprice.domain.StockPrice;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;

@@ -1,17 +1,13 @@
 package com.finance.adam.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.finance.adam.auth.dto.AccountDto;
-import com.finance.adam.dto.UserRegisterDTO;
+import com.finance.adam.repository.account.dto.UserRegisterDTO;
 import com.finance.adam.service.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;

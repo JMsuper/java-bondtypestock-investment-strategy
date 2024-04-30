@@ -1,6 +1,6 @@
 package com.finance.adam.service;
 
-import com.finance.adam.dto.StockPriceInfoDTO;
+import com.finance.adam.repository.stockprice.dto.StockPriceInfoDTO;
 import com.finance.adam.scheduler.CsvReaderService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

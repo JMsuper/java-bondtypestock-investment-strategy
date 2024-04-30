@@ -1,6 +1,7 @@
 package com.finance.adam.repository;
 
-import com.finance.adam.repository.domain.CorpInfo;
+import com.finance.adam.repository.corpinfo.CorpRepository;
+import com.finance.adam.repository.corpinfo.domain.CorpInfo;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

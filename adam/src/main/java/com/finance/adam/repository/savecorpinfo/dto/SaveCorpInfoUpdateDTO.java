@@ -1,4 +1,4 @@
-package com.finance.adam.dto;
+package com.finance.adam.repository.savecorpinfo.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;

@@ -1,28 +1,27 @@
 package com.finance.adam.service;
 
-import com.finance.adam.dto.KrxCorpListResponse;
-import com.finance.adam.dto.SaveCorpInfoListResponse;
-import com.finance.adam.dto.SaveCorpInfoRequestDTO;
-import com.finance.adam.dto.SaveCorpInfoUpdateDTO;
+import com.finance.adam.repository.savecorpinfo.dto.SaveCorpInfoListResponse;
+import com.finance.adam.repository.savecorpinfo.dto.SaveCorpInfoUpdateDTO;
 import com.finance.adam.exception.CustomException;
 import com.finance.adam.exception.ErrorCode;
 import com.finance.adam.openapi.dart.OpenDartAPI;
-import com.finance.adam.openapi.dart.vo.OpenDartReportDTO;
 import com.finance.adam.openapi.dart.vo.OpenDartReportExtractedDTO;
-import com.finance.adam.repository.CorpRepository;
-import com.finance.adam.repository.SaveCorpInfoRepository;
-import com.finance.adam.repository.UserRepository;
-import com.finance.adam.repository.domain.*;
+import com.finance.adam.repository.account.domain.Account;
+import com.finance.adam.repository.corpinfo.CorpRepository;
+import com.finance.adam.repository.corpinfo.domain.CorpInfo;
+import com.finance.adam.repository.financeinfo.domain.FinanceInfo;
+import com.finance.adam.repository.savecorpinfo.SaveCorpInfoRepository;
+import com.finance.adam.repository.account.UserRepository;
+import com.finance.adam.repository.savecorpinfo.domain.SaveCorpInfo;
+import com.finance.adam.repository.stockprice.domain.StockPrice;
 import com.finance.adam.util.FinanceCalculator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

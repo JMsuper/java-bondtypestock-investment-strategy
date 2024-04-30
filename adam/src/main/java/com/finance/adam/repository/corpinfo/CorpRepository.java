@@ -1,6 +1,6 @@
-package com.finance.adam.repository;
+package com.finance.adam.repository.corpinfo;
 
-import com.finance.adam.repository.domain.CorpInfo;
+import com.finance.adam.repository.corpinfo.domain.CorpInfo;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
