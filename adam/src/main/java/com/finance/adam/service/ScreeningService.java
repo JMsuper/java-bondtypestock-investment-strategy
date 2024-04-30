@@ -1,6 +1,5 @@
 package com.finance.adam.service;
 
-import com.finance.adam.dto.StepFiveStockPriceDTO;
 import com.finance.adam.dto.StepOneFinanceInfoDTO;
 import com.finance.adam.dto.StepOneStockInfoDTO;
 import com.finance.adam.repository.CorpRepository;
@@ -26,23 +25,6 @@ public class ScreeningService {
     public ScreeningService(CorpRepository corpRepository, StockPriceRepository stockPriceRepository) {
         this.corpRepository = corpRepository;
         this.stockPriceRepository = stockPriceRepository;
-    }
-
-    public StepFiveStockPriceDTO getStockOpeningPrice(List<String> stockCodeList) {
-        StepFiveStockPriceDTO resultDto = new StepFiveStockPriceDTO();
-        Map<String, Long> openingPriceMap = new HashMap<>();
-        stockCodeList.forEach(stockCode -> {
-            StockPrice stockPrice = stockPriceRepository.findByCorpInfoStockCode(stockCode);
-            if(stockPrice == null){
-                return;
-            }
-            if(resultDto.getSearchTime() == null){
-                resultDto.setSearchTime(stockPrice.getUpdatedAt());
-            }
-            openingPriceMap.put(stockCode, stockPrice.getOpeningPrice());
-        });
-        resultDto.setOpeningPriceMap(openingPriceMap);
-        return resultDto;
     }
 
     public List<StepOneStockInfoDTO> getStepOneStockInfoList() {
