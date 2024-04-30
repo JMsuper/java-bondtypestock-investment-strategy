@@ -2,9 +2,7 @@ package com.finance.adam.openapi.dart;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.finance.adam.openapi.dart.vo.OpenDartFinancialInfo;
-import com.finance.adam.openapi.dart.vo.OpenDartFinancialInfoRequest;
-import com.finance.adam.openapi.dart.vo.OpenDartFinancialInfoResponse;
+import com.finance.adam.openapi.dart.vo.*;
 import com.finance.adam.util.MultiValueMapConverter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,6 +38,10 @@ public class OpenDartAPI {
     private String financialInfoUrl;
     @Value("${open-dart.corp-code-url}")
     private String corpCodeUrl;
+
+    @Value("${open-dart.report-list-url}")
+    private String reportListUrl;
+
     @Value("${open-dart.service-key}")
     private String serviceKey;
     @Value("${open-dart.report-code}")
@@ -103,6 +105,74 @@ public class OpenDartAPI {
 
         List<OpenDartFinancialInfo> financialInfoList = response.getList();
         return financialInfoList;
+    }
+
+    public List<OpenDartReportDTO> getRecentReportList(String corpCode, int pageCount){
+        return getRecentReportList(corpCode, pageCount, null);
+    }
+
+    public List<OpenDartReportDTO> getRecentReportList(String corpCode, int pageCount, ReportType reportType){
+        RestTemplate restTemplate = new RestTemplate();
+
+        OpenDartReportListRequest params;
+
+        if(reportType == null){
+            params = OpenDartReportListRequest.builder()
+                    .crtfcKey(serviceKey)
+                    .corpCode(corpCode)
+                    .bgnDe("20000101")
+                    .pageCount(String.valueOf(pageCount))
+                    .build();
+        }else {
+            params = OpenDartReportListRequest.builder()
+                    .crtfcKey(serviceKey)
+                    .corpCode(corpCode)
+                    .bgnDe("20000101")
+                    .pageCount(String.valueOf(pageCount))
+                    .pblntfTy(reportType)
+                    .build();
+        }
+
+        String urlTemplate = UriComponentsBuilder.fromHttpUrl(reportListUrl)
+                .queryParams(MultiValueMapConverter.convertWithOutNull(objectMapper, params))
+                .encode()
+                .toUriString();
+        URI uri;
+        try {
+            uri = new URI(urlTemplate);
+        } catch (URISyntaxException e) {
+            throw new RuntimeException("URI 생성 중 오류가 발생하였습니다.",e);
+        }
+
+        ResponseEntity<String> rawResponse = restTemplate.getForEntity(uri,String.class);
+        if(rawResponse.getStatusCode() != HttpStatus.OK){
+            log.warn(rawResponse.toString());
+            throw new RuntimeException(ERROR_MSG_FINANCIAL_INFO);
+        }
+
+        OpenDartReportListResponse response;
+        try {
+            response =  objectMapper.readValue(rawResponse.getBody(), OpenDartReportListResponse.class);
+        } catch (JsonProcessingException e) {
+            log.warn(rawResponse.toString());
+            throw new RuntimeException(ERROR_MSG_FINANCIAL_INFO,e);
+        }
+
+        if(response.getStatus().equals("013") || response.getTotalCount() == 0 || response.getList() == null){
+            log.warn("corpCode : " + corpCode + ", 조회된 데이터가 없습니다.");
+            return null;
+        }
+
+        if(!response.getStatus().equals("000")){
+            log.error(response.toString());
+        }
+
+        List<OpenDartReportDTO> reportDTOList = response.getList();
+        for(OpenDartReportDTO reportDTO : reportDTOList){
+            String parsedReportName = reportDTO.getReportNm().trim();
+            reportDTO.setReportNm(parsedReportName);
+        }
+        return reportDTOList;
     }
 
     public Map<String, String> getCorpCodeMap(){
