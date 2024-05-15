@@ -13,8 +13,11 @@ public interface SaveCorpInfoRepository extends JpaRepository<SaveCorpInfo, Long
 
     Optional<SaveCorpInfo> findByCorpInfoCorpCodeAndAccountId(String corpCode, String id);
 
+    Optional<SaveCorpInfo> findByIdAndAccountId(Long saveCorpInfoId, String id);
+
+    //TODO : Memo Entity N + 1 문제 해결 필요
     @EntityGraph(attributePaths = {"corpInfo", "corpInfo.stockPrice", "corpInfo.financeInfos"})
-    @Query("select s from SaveCorpInfo s where s.account = :account")
+    @Query(value = "select s from SaveCorpInfo s where s.account = :account order by s.id")
     List<SaveCorpInfo> findAllByAccount(Account account);
 
     int countByAccountId(String id);

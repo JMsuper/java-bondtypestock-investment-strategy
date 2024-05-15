@@ -1,5 +1,6 @@
 package com.finance.adam.repository.savecorpinfo.dto;
 
+import com.finance.adam.repository.memo.dto.MemoDTO;
 import com.finance.adam.repository.stockprice.dto.StockPriceInfoResponseDTO;
 import com.finance.adam.openapi.dart.vo.OpenDartReportExtractedDTO;
 import com.finance.adam.repository.corpinfo.domain.CorpInfo;
@@ -17,6 +18,8 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 public class SaveCorpInfoListResponse {
+    private Long saveCorpInfoId;
+
     private LocalDateTime searchTime;
 
     private String stockCd;
@@ -41,6 +44,8 @@ public class SaveCorpInfoListResponse {
 
     private List<OpenDartReportExtractedDTO> reportList;
 
+    private List<MemoDTO> memoList;
+
     public static SaveCorpInfoListResponse fromSaveCorpInfo(
             SaveCorpInfo saveCorpInfo,
             List<OpenDartReportExtractedDTO> reportList
@@ -52,16 +57,18 @@ public class SaveCorpInfoListResponse {
         float parsedTargetRate = (float) ((int)(saveCorpInfo.getTargetRate() * 10000)) / 100;
 
         return SaveCorpInfoListResponse.builder()
-                    .searchTime(corpInfo.getStockPrice().getUpdatedAt())
-                    .corpCd(corpInfo.getCorpCode())
-                    .stockCd(corpInfo.getStockCode())
-                    .name(corpInfo.getName())
-                    .afterTenYearsAverageROE(saveCorpInfo.getAfterTenYearsAverageROE())
-                    .market(corpInfo.getMarket())
-                    .targetRate(parsedTargetRate)
-                    .stockPriceInfo(StockPriceInfoResponseDTO.fromStockPrice(corpInfo.getStockPrice()))
-                    .reportList(reportList)
-                    .build();
+                .saveCorpInfoId(saveCorpInfo.getId())
+                .searchTime(corpInfo.getStockPrice().getUpdatedAt())
+                .corpCd(corpInfo.getCorpCode())
+                .stockCd(corpInfo.getStockCode())
+                .name(corpInfo.getName())
+                .afterTenYearsAverageROE(saveCorpInfo.getAfterTenYearsAverageROE())
+                .market(corpInfo.getMarket())
+                .targetRate(parsedTargetRate)
+                .stockPriceInfo(StockPriceInfoResponseDTO.fromStockPrice(corpInfo.getStockPrice()))
+                .reportList(reportList)
+                .memoList(saveCorpInfo.getMemoList().stream().map(MemoDTO::from).toList())
+                .build();
     }
 
     public static SaveCorpInfoListResponse fromSaveCorpInfo(

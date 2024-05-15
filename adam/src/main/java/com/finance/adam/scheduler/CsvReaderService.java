@@ -44,8 +44,6 @@ public class CsvReaderService {
     public String getKrxStockPriceOTPCode() {
         // RestTemplate 은 스프링에서 제공하는 HTTP 통신을 위한 클래스
         RestTemplate restTemplate = new RestTemplate();
-        // HttpComponentsClientHttpRequestFactory 를 사용함으로써, 더 세밀하게 HTTP 통신을 다룰 수 있음
-        restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -81,7 +79,6 @@ public class CsvReaderService {
 
         // 파일 다운로드 url 호출하기
         RestTemplate restTemplate = new RestTemplate();
-        restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);

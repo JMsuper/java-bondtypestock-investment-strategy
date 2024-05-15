@@ -5,6 +5,8 @@ import com.finance.adam.repository.corpinfo.domain.CorpInfo;
 import com.finance.adam.repository.memo.domain.Memo;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -31,7 +33,9 @@ public class SaveCorpInfo {
     @JoinColumn(name = "corp_info_id")
     private CorpInfo corpInfo;
 
+    @Cascade(CascadeType.REMOVE)
     @OneToMany(mappedBy = "saveCorpInfo")
+    @OrderBy("createdAt desc")
     private List<Memo> memoList;
 
     @Builder.Default
