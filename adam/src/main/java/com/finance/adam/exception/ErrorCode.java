@@ -26,7 +26,7 @@ public enum ErrorCode {
 
     JSON_PARSE_ERROR(HttpStatus.BAD_REQUEST, "JSON_PARSE_ERROR", "잘못된 JSON 형식입니다."),
 
-    TARGET_PRICE_ALARM_NOT_FOUND(HttpStatus.BAD_REQUEST,"TARGET_PRICE_ALARM_NOT_FOUND","알람을 찾을 수 없습니다.");
+    ALARM_NOT_FOUND(HttpStatus.BAD_REQUEST,"ALARM_NOT_FOUND","알람을 찾을 수 없습니다.");
 
     private final HttpStatus httpStatus;
     private final String code;

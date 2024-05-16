@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface TargetPriceAlarmRepository extends JpaRepository<TargetPriceAlarm,Long> {
 
-    @EntityGraph(attributePaths = {"saveCorpInfo", "saveCorpInfo.account"})
+    @EntityGraph(attributePaths = {"saveCorpInfo", "saveCorpInfo.account", "saveCorpInfo.corpInfo"})
     @Query(value = "select t from TargetPriceAlarm t where t.saveCorpInfo.account = :account")
     List<TargetPriceAlarm> findAllByAccount(Account account);
 }

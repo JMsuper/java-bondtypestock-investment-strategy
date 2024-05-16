@@ -1,9 +1,14 @@
 package com.finance.adam.controller;
 
 import com.finance.adam.auth.dto.AccountDto;
+import com.finance.adam.repository.pricealarm.dto.CreatePriceAlarmDTO;
+import com.finance.adam.repository.pricealarm.dto.DeletePriceAlarmDTO;
+import com.finance.adam.repository.pricealarm.dto.PriceAlarmDTO;
+import com.finance.adam.repository.pricealarm.dto.UpdatePriceAlarmDTO;
 import com.finance.adam.repository.targetpricealarm.dto.CreateTargetPriceAlarmDTO;
 import com.finance.adam.repository.targetpricealarm.dto.DeleteTargetPriceAlarmDTO;
 import com.finance.adam.repository.targetpricealarm.dto.TargetPriceAlarmDTO;
+import com.finance.adam.repository.targetpricealarm.dto.UpdateTargetPriceAlarmDTO;
 import com.finance.adam.service.AlarmService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,8 +31,9 @@ public class AlarmController {
     }
 
     @GetMapping("/price")
-    public void getPriceAlarm(){
-
+    public List<PriceAlarmDTO> getPriceAlarm(@AuthenticationPrincipal AccountDto accountDto){
+        String userId = accountDto.getId();
+        return alarmService.getPriceAlarm(userId);
     }
 
     @PostMapping("/target-price")
@@ -37,9 +43,29 @@ public class AlarmController {
         alarmService.createTargetPriceAlarm(userId, createTargetPriceAlarmDTO);
     }
 
-    @PostMapping("/price")
-    public void createPriceAlarm(){
+    @PutMapping("/target-price/status")
+    public void updateTargetPriceAlarmStatus(@RequestBody @Valid UpdateTargetPriceAlarmDTO dto, @AuthenticationPrincipal AccountDto accountDto){
+        String userId = accountDto.getId();
+        Long targetPriceAlarmId = dto.getTargetPriceAlarmId();
+        boolean active = dto.isActive();
 
+        alarmService.updateTargetPriceAlarmStatus(userId, targetPriceAlarmId, active);
+    }
+
+    @PutMapping("/price/status")
+    public void updatePriceAlarmStatus(@RequestBody @Valid UpdatePriceAlarmDTO dto, @AuthenticationPrincipal AccountDto accountDto){
+        String userId = accountDto.getId();
+        Long priceAlarmId = dto.getPriceAlarmId();
+        boolean active = dto.isActive();
+
+        alarmService.updatePriceAlarmStatus(userId, priceAlarmId, active);
+    }
+
+    @PostMapping("/price")
+    public void createPriceAlarm(@RequestBody @Valid CreatePriceAlarmDTO createPriceAlarmDTO, @AuthenticationPrincipal AccountDto accountDto){
+        String userId = accountDto.getId();
+
+        alarmService.createPriceAlarm(userId, createPriceAlarmDTO);
     }
 
     @DeleteMapping("/target-price")
@@ -51,7 +77,11 @@ public class AlarmController {
     }
 
     @DeleteMapping("/price")
-    public void deletePriceAlarm(){
+    public void deletePriceAlarm(@RequestBody @Valid DeletePriceAlarmDTO dto, @AuthenticationPrincipal AccountDto accountDto){
+        String userId = accountDto.getId();
+        Long priceAlarmId = dto.getPriceAlarmId();
+
+        alarmService.deletePriceAlarm(userId, priceAlarmId);
 
     }
 }

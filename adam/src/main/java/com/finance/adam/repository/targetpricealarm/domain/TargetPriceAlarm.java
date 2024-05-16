@@ -53,6 +53,10 @@ public class TargetPriceAlarm {
         str = str.replace("[", "").replace("]", ""); // 대괄호 제거
         String[] strArray = str.split(","); // 쉼표를 기준으로 문자열 분리
 
+        if(strArray[0].equals("")){
+            return new ArrayList<>();
+        }
+
         int[] intArray = new int[strArray.length];
         for (int i = 0; i < strArray.length; i++) {
             intArray[i] = Integer.parseInt(strArray[i]); // 문자열을 정수로 변환
