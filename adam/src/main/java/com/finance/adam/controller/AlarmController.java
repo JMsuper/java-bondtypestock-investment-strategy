@@ -5,6 +5,9 @@ import com.finance.adam.repository.pricealarm.dto.CreatePriceAlarmDTO;
 import com.finance.adam.repository.pricealarm.dto.DeletePriceAlarmDTO;
 import com.finance.adam.repository.pricealarm.dto.PriceAlarmDTO;
 import com.finance.adam.repository.pricealarm.dto.UpdatePriceAlarmDTO;
+import com.finance.adam.repository.reportalarm.domain.ReportType;
+import com.finance.adam.repository.reportalarm.dto.ReportAlarmListDTO;
+import com.finance.adam.repository.reportalarm.dto.UpdateReportAlarmDTO;
 import com.finance.adam.repository.targetpricealarm.dto.CreateTargetPriceAlarmDTO;
 import com.finance.adam.repository.targetpricealarm.dto.DeleteTargetPriceAlarmDTO;
 import com.finance.adam.repository.targetpricealarm.dto.TargetPriceAlarmDTO;
@@ -23,6 +26,10 @@ import java.util.List;
 public class AlarmController {
 
     private final AlarmService alarmService;
+
+    /*
+     * 주가 알람 API
+     */
 
     @GetMapping("/target-price")
     public List<TargetPriceAlarmDTO> getTargetPriceAlarm(@AuthenticationPrincipal AccountDto accountDto){
@@ -82,6 +89,22 @@ public class AlarmController {
         Long priceAlarmId = dto.getPriceAlarmId();
 
         alarmService.deletePriceAlarm(userId, priceAlarmId);
+    }
 
+    /*
+     * 공시 알람 API
+     */
+
+    @GetMapping("/report")
+    public List<ReportAlarmListDTO> getReportAlarm(@AuthenticationPrincipal AccountDto accountDto){
+        String userId = accountDto.getId();
+        return alarmService.getReportAlarmList(userId);
+    }
+
+    @PutMapping("/report")
+    public ReportAlarmListDTO updateReportAlarm(@RequestBody @Valid UpdateReportAlarmDTO dto, @AuthenticationPrincipal AccountDto accountDto){
+        String userId = accountDto.getId();
+        ReportAlarmListDTO reportAlarmListDTO = alarmService.updateReportAlarm(userId, dto);
+        return reportAlarmListDTO;
     }
 }
