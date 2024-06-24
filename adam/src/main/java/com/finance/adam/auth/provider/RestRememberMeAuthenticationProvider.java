@@ -8,6 +8,6 @@ import org.springframework.stereotype.Component;
 public class RestRememberMeAuthenticationProvider extends RememberMeAuthenticationProvider {
 
     public RestRememberMeAuthenticationProvider() {
-        super("rememberme");
+        super("remember-me");
     }
 }

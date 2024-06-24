@@ -19,9 +19,10 @@ import java.util.Date;
 
 @Component
 public class RestRememberMeServices extends TokenBasedRememberMeServices {
+    static final String rememberMeKey = "remember-me";
 
     public RestRememberMeServices(UserDetailsService userDetailsService) {
-        super("remember-me", userDetailsService);
+        super(rememberMeKey, userDetailsService);
         this.setUseSecureCookie(true);
     }
 
