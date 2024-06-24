@@ -8,10 +8,6 @@ import org.hibernate.validator.constraints.Length;
 @Getter
 public class MemoUpdateDTO {
 
-    @NotNull
-    @Positive
-    private Long memoId;
-
     @Length(max = 500)
     private String content;
 }

@@ -44,8 +44,7 @@ public class MemoService {
         return MemoDTO.from(savedMemo);
     }
 
-    public MemoDTO updateMemo(String userId, MemoUpdateDTO memoUpdateDTO) {
-        Long memoId = memoUpdateDTO.getMemoId();
+    public MemoDTO updateMemo(String userId, Long memoId, MemoUpdateDTO memoUpdateDTO) {
         String content = memoUpdateDTO.getContent();
 
         Memo memo = memoRepository.findByIdAndAccountId(memoId, userId)

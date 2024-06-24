@@ -8,10 +8,11 @@ import com.finance.adam.service.MemoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/memo")
+@RequestMapping("/api/v1/memos")
 @RequiredArgsConstructor
 public class MemoController {
 
@@ -25,18 +26,22 @@ public class MemoController {
         return memoDTO;
     }
 
-    @PutMapping()
-    public MemoDTO updateMemo(@RequestBody @Valid MemoUpdateDTO memoUpdateDTO, @AuthenticationPrincipal AccountDto accountDto){
+    @PutMapping("/{memoId}")
+    public MemoDTO updateMemo(
+            @PathVariable Long memoId,
+            @RequestBody @Valid MemoUpdateDTO memoUpdateDTO,
+            @AuthenticationPrincipal AccountDto accountDto){
         String userId = accountDto.getId();
 
-        MemoDTO memoDTO = memoService.updateMemo(userId, memoUpdateDTO);
+        MemoDTO memoDTO = memoService.updateMemo(userId, memoId, memoUpdateDTO);
         return memoDTO;
     }
 
-    @DeleteMapping()
-    public void deleteMemo(@RequestBody @Valid MemoUpdateDTO memoUpdateDTO, @AuthenticationPrincipal AccountDto accountDto){
+    @DeleteMapping("/{memoId}")
+    public void deleteMemo(
+            @PathVariable Long memoId,
+            @AuthenticationPrincipal AccountDto accountDto){
         String userId = accountDto.getId();
-        Long memoId = memoUpdateDTO.getMemoId();
 
         memoService.deleteMemo(userId, memoId);
     }
