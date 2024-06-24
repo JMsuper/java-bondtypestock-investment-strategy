@@ -28,8 +28,8 @@ public class UserService {
         userRepository.save(newAccount);
     }
 
-    public AccountDto updateUserEmail(UserUpdateEmailDTO userUpdateEmailDTO) {
-        Optional<Account> optionalAccount = userRepository.findById(userUpdateEmailDTO.getId());
+    public AccountDto updateUserEmail(UserUpdateEmailDTO userUpdateEmailDTO, String userId) {
+        Optional<Account> optionalAccount = userRepository.findById(userId);
         if(!optionalAccount.isPresent()){
             throw new CustomException(ErrorCode.NOT_FOUND_USER);
         }
@@ -39,8 +39,8 @@ public class UserService {
         return new AccountDto(account.getId(), account.getEmail(),null,account.getRoles());
     }
 
-    public AccountDto updateUserPassword(UserUpdatePasswordDTO userUpdatePasswordDTO) {
-        Optional<Account> optionalAccount = userRepository.findById(userUpdatePasswordDTO.getId());
+    public AccountDto updateUserPassword(UserUpdatePasswordDTO userUpdatePasswordDTO, String userId) {
+        Optional<Account> optionalAccount = userRepository.findById(userId);
         if(!optionalAccount.isPresent()){
             throw new CustomException(ErrorCode.NOT_FOUND_USER);
         }

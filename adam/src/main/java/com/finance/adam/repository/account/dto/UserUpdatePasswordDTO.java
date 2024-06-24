@@ -5,13 +5,11 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+// jackson 은 직렬화를 수행할 때 기본생성자를 사용함.
 @Data
-@AllArgsConstructor
 public class UserUpdatePasswordDTO {
-
-    @NotBlank
-    private String id;
 
     @NotBlank
     @Size(min = 6, max = 10, message = "비밀번호는 6자 이상 20자 이하로 입력해주세요.")

@@ -12,31 +12,37 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
 
-    @PutMapping("/email")
-    public AccountDto updateUserEmail(@RequestBody @Valid UserUpdateEmailDTO userUpdateDTO, @AuthenticationPrincipal AccountDto accountDto){
-        String userId = accountDto.getId();
-        if(!userId.equals(userUpdateDTO.getId())){
+    @PutMapping("/{userId}/email")
+    public AccountDto updateUserEmail(
+            @PathVariable String userId,
+            @RequestBody @Valid UserUpdateEmailDTO userUpdateDTO,
+            @AuthenticationPrincipal AccountDto accountDto){
+        String id = accountDto.getId();
+        if(!id.equals(userId)){
             throw new CustomException(ErrorCode.UNAUTHORIZED);
         }
 
-        AccountDto updatedAccountDto = userService.updateUserEmail(userUpdateDTO);
+        AccountDto updatedAccountDto = userService.updateUserEmail(userUpdateDTO,userId);
         return updatedAccountDto;
     }
 
-    @PutMapping("/password")
-    public AccountDto updateUserPassword(@RequestBody @Valid UserUpdatePasswordDTO userUpdateDTO, @AuthenticationPrincipal AccountDto accountDto){
-        String userId = accountDto.getId();
-        if(!userId.equals(userUpdateDTO.getId())){
+    @PutMapping("/{userId}/password")
+    public AccountDto updateUserPassword(
+            @PathVariable String userId,
+            @RequestBody @Valid UserUpdatePasswordDTO userUpdateDTO,
+            @AuthenticationPrincipal AccountDto accountDto){
+        String id = accountDto.getId();
+        if(!id.equals(userId)){
             throw new CustomException(ErrorCode.UNAUTHORIZED);
         }
 
-        AccountDto updatedAccountDto = userService.updateUserPassword(userUpdateDTO);
+        AccountDto updatedAccountDto = userService.updateUserPassword(userUpdateDTO, userId);
         return updatedAccountDto;
     }
 }
