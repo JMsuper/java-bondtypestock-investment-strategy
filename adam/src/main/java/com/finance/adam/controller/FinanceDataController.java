@@ -14,12 +14,16 @@ import java.util.List;
 
 @RestController
 @Slf4j
-@RequiredArgsConstructor
 @RequestMapping("/api/v1/finances")
 public class FinanceDataController {
 
     private FinanceDataService financeDataService;
     private ScreeningService screeningService;
+
+    public FinanceDataController(FinanceDataService financeDataService, ScreeningService screeningService){
+        this.financeDataService = financeDataService;
+        this.screeningService = screeningService;
+    }
 
     @GetMapping("/screening")
     public List<StepOneStockInfoDTO> getStepOneStockInfoList(){
@@ -38,7 +42,7 @@ public class FinanceDataController {
         return result;
     }
 
-    @GetMapping("/reports/{corpCode}")
+    @GetMapping("/{corpCode}/reports")
     public List<OpenDartReportExtractedDTO> getReports(@PathVariable String corpCode){
         List<OpenDartReportExtractedDTO> result = financeDataService.getReports(corpCode);
         return result;
