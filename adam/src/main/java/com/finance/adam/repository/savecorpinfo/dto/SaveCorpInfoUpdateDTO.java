@@ -12,8 +12,6 @@ import org.hibernate.validator.constraints.Range;
 @Getter
 @Setter
 public class SaveCorpInfoUpdateDTO {
-    @NotBlank
-    private String corpCode;
 
     @Range(min = 0, max = 100)
     private Float targetRate;

@@ -135,8 +135,8 @@ public class CorpInfoService {
         saveCorpInfoRepository.saveAndFlush(saveCorpInfo);
     }
 
-    public void updateSaveCorpInfo(SaveCorpInfoUpdateDTO saveCorpInfoUpdateDTO, String userId) {
-        SaveCorpInfo saveCorpInfo = saveCorpInfoRepository.findByCorpInfoCorpCodeAndAccountId(saveCorpInfoUpdateDTO.getCorpCode(), userId)
+    public void updateSaveCorpInfo(String corpCode,SaveCorpInfoUpdateDTO saveCorpInfoUpdateDTO, String userId) {
+        SaveCorpInfo saveCorpInfo = saveCorpInfoRepository.findByCorpInfoCorpCodeAndAccountId(corpCode, userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.SAVE_CORP_INFO_NOT_FOUND));
 
         saveCorpInfo.setTargetRate(saveCorpInfoUpdateDTO.getTargetRate() / 100f);
