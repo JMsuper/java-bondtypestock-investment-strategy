@@ -1,6 +1,8 @@
 package com.finance.adam.controller;
 
 import com.finance.adam.auth.dto.AccountDto;
+import com.finance.adam.exception.CustomException;
+import com.finance.adam.exception.ErrorCode;
 import com.finance.adam.repository.account.dto.UserRegisterDTO;
 import com.finance.adam.service.UserService;
 import jakarta.servlet.http.Cookie;
@@ -15,7 +17,7 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 public class AuthController {
 
@@ -51,8 +53,9 @@ public class AuthController {
         return "success";
     }
 
-    @GetMapping("/auto-login")
+    @PostMapping("/auto-login")
     public AccountDto autoLogin(@AuthenticationPrincipal AccountDto accountDto){
+        if(accountDto == null) throw new CustomException(ErrorCode.UNAUTHORIZED);
         accountDto.setPassword(null);
         return accountDto;
     }
