@@ -1,4 +1,4 @@
-package com.finance.adam.scheduler;
+package com.finance.adam.openapi.krx;
 
 import com.finance.adam.repository.stockprice.dto.StockPriceInfoDTO;
 import com.finance.adam.repository.corpinfo.CorpRepository;

@@ -1,5 +1,6 @@
 package com.finance.adam.scheduler;
 
+import com.finance.adam.openapi.krx.CsvReaderService;
 import com.finance.adam.repository.stockprice.dto.StockPriceInfoDTO;
 import com.finance.adam.service.FinanceDataService;
 import lombok.extern.slf4j.Slf4j;
