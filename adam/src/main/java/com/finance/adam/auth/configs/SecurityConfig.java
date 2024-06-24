@@ -58,7 +58,8 @@ public class SecurityConfig {
         http
                 .securityMatcher("/api/**")
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/login","/api/logout","/api/register").permitAll()
+                        .requestMatchers("/api/v1/auth/**", "/api/v1/finances/**")
+                        .permitAll()
                         .anyRequest().authenticated())
                 .csrf(AbstractHttpConfigurer::disable)
                 .addFilterBefore(restAuthenticationFilter, UsernamePasswordAuthenticationFilter.class).authenticationManager(authenticationManager)
