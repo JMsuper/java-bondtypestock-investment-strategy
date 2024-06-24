@@ -1,5 +1,6 @@
 package com.finance.adam.service;
 
+import com.finance.adam.openapi.dart.vo.OpenDartReportExtractedDTO;
 import com.finance.adam.repository.financeinfo.dto.FinanceInfoDTO;
 import com.finance.adam.dto.KrxCorpListResponse;
 import com.finance.adam.repository.stockprice.dto.StockPriceInfoResponseDTO;
@@ -74,6 +75,14 @@ public class FinanceDataService {
             }
         }
         return financeInfoDTOs;
+    }
+
+
+    public List<OpenDartReportExtractedDTO> getReports(String corpCode){
+        List<OpenDartReportExtractedDTO> reportList = openDartAPI.getRecentReportList(corpCode, 5)
+                .stream().map((report) -> OpenDartReportExtractedDTO.from(report))
+                .toList();
+        return reportList;
     }
 
     /**
