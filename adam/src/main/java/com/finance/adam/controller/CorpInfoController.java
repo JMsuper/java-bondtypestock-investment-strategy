@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/corp-info")
+@RequestMapping("/api/v1/users/{userId}/saved-corps")
 @RequiredArgsConstructor
 public class CorpInfoController {
 
     private final CorpInfoService corpInfoService;
 
-    @GetMapping("/user")
+    @GetMapping
     public List<SaveCorpInfoListResponse> getSaveCorpInfoList(@AuthenticationPrincipal AccountDto accountDto) {
         String userId = accountDto.getId();
 
@@ -27,7 +27,7 @@ public class CorpInfoController {
         return result;
     }
 
-    @PostMapping("/user")
+    @PostMapping
     public String saveCorpInfoListWithUser(@RequestBody @Valid SaveCorpInfoRequestDTO saveCorpInfoRequestDTO,
                                            @AuthenticationPrincipal AccountDto accountDto) {
         String userId = accountDto.getId();
@@ -38,7 +38,7 @@ public class CorpInfoController {
         return "success";
     }
 
-    @PutMapping("/user")
+    @PutMapping
     public String updateCorpInfoListWithUser(@RequestBody @Valid SaveCorpInfoUpdateDTO saveCorpInfoUpdateDTO,
                                              @AuthenticationPrincipal AccountDto accountDto) {
         String userId = accountDto.getId();
@@ -48,7 +48,7 @@ public class CorpInfoController {
         return "success";
     }
 
-    @DeleteMapping("/user")
+    @DeleteMapping
     public String deleteSaveCorpInfo(@RequestBody @Valid SaveCorpInfoRequestDTO saveCorpInfoRequestDTO,
                                              @AuthenticationPrincipal AccountDto accountDto) {
         String userId = accountDto.getId();
