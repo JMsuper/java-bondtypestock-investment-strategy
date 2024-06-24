@@ -2,21 +2,15 @@ package com.finance.adam.controller;
 
 import com.finance.adam.auth.dto.AccountDto;
 import com.finance.adam.repository.pricealarm.dto.CreatePriceAlarmDTO;
-import com.finance.adam.repository.pricealarm.dto.DeletePriceAlarmDTO;
 import com.finance.adam.repository.pricealarm.dto.PriceAlarmDTO;
-import com.finance.adam.repository.pricealarm.dto.UpdatePriceAlarmDTO;
-import com.finance.adam.repository.reportalarm.domain.ReportType;
 import com.finance.adam.repository.reportalarm.dto.ReportAlarmListDTO;
 import com.finance.adam.repository.reportalarm.dto.UpdateReportAlarmDTO;
 import com.finance.adam.repository.targetpricealarm.dto.CreateTargetPriceAlarmDTO;
-import com.finance.adam.repository.targetpricealarm.dto.DeleteTargetPriceAlarmDTO;
 import com.finance.adam.repository.targetpricealarm.dto.TargetPriceAlarmDTO;
-import com.finance.adam.repository.targetpricealarm.dto.UpdateTargetPriceAlarmDTO;
 import com.finance.adam.service.AlarmService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
