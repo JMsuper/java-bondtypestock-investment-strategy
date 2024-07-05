@@ -34,12 +34,14 @@ public class PublicDataPortalOpenAPI {
     @Value(("${data-api.num-of-rows}"))
     private String numOfRows;
 
-    private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
+    private final RestTemplate restTemplate;
 
     private static final String ERROR_MSG = "공공데이터포털 OpenAPI 요청에 실패하였습니다.";
 
-    public PublicDataPortalOpenAPI(ObjectMapper objectMapper) {
+    public PublicDataPortalOpenAPI(ObjectMapper objectMapper, RestTemplate restTemplate) {
         this.objectMapper = objectMapper;
+        this.restTemplate = restTemplate;
     }
 
     /**
@@ -47,8 +49,6 @@ public class PublicDataPortalOpenAPI {
      * key : stockCode(ex. 005930)
      */
     public Map<String,KrxItemInfo> getKrxItemInfoMap() {
-        RestTemplate restTemplate = new RestTemplate();
-
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         HttpEntity<?> httpEntity = new HttpEntity<>(headers);

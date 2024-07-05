@@ -10,7 +10,6 @@ import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvValidationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -34,17 +33,18 @@ public class CsvReaderService {
 
     private final CorpRepository corpRepository;
     private final StockPriceRepository stockPriceRepository;
+    private final RestTemplate restTemplate;
 
-    public CsvReaderService(CorpRepository corpRepository, StockPriceRepository stockPriceRepository) {
+    public CsvReaderService(CorpRepository corpRepository,
+                            StockPriceRepository stockPriceRepository,
+                            RestTemplate restTemplate) {
         this.corpRepository = corpRepository;
         this.stockPriceRepository = stockPriceRepository;
+        this.restTemplate = restTemplate;
     }
 
     // 주식 시세 정보 CSV 파일을 다운로드하기 위한 OTP 코드를 가져오는 메소드
     public String getKrxStockPriceOTPCode() {
-        // RestTemplate 은 스프링에서 제공하는 HTTP 통신을 위한 클래스
-        RestTemplate restTemplate = new RestTemplate();
-
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
@@ -76,9 +76,6 @@ public class CsvReaderService {
     public File getKrxStockPriceCsvFile() {
         // krx에서 code 값 가져오기
         String otpCode = getKrxStockPriceOTPCode();
-
-        // 파일 다운로드 url 호출하기
-        RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);

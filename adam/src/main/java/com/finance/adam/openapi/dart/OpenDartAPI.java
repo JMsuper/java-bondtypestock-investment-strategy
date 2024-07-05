@@ -50,15 +50,15 @@ public class OpenDartAPI {
     private final String ERROR_MSG_CORP_CODE = "(Open Dart)기업코드를 가져오는데 실패하였습니다.";
     private final String ERROR_MSG_XML = "XML 파일 처리에 실패하였습니다.";
 
-    private ObjectMapper objectMapper;
+    private final RestTemplate restTemplate;
+    private final ObjectMapper objectMapper;
 
-    public OpenDartAPI(ObjectMapper objectMapper){
+    public OpenDartAPI(RestTemplate restTemplate, ObjectMapper objectMapper){
+        this.restTemplate = restTemplate;
         this.objectMapper = objectMapper;
     }
 
     public List<OpenDartFinancialInfo> getCorpFinancialInfo(String corpCode, String bsnsYear){
-        RestTemplate restTemplate = new RestTemplate();
-
         OpenDartFinancialInfoRequest params = OpenDartFinancialInfoRequest.builder()
                 .crtfcKey(serviceKey)
                 .corpCode(corpCode)
@@ -111,8 +111,6 @@ public class OpenDartAPI {
     }
 
     public List<OpenDartReportDTO> getRecentReportList(String corpCode, int pageCount, ReportType reportType){
-        RestTemplate restTemplate = new RestTemplate();
-
         OpenDartReportListRequest params;
 
         if(reportType == null){
@@ -175,8 +173,6 @@ public class OpenDartAPI {
     }
 
     public Map<String, String> getCorpCodeMap(){
-        RestTemplate restTemplate = new RestTemplate();
-
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.ALL));
         HttpEntity<?> httpEntity = new HttpEntity<>(headers);
