@@ -8,7 +8,7 @@ import java.util.List;
 
 @Getter
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class OpenDartReportListResponse {
+public class DartReportListResponse {
 
     /**
      * 에러 및 정보 코드
@@ -42,5 +42,5 @@ public class OpenDartReportListResponse {
      */
     private int totalPage;
 
-    private List<OpenDartReportDTO> list;
+    private List<DartReportDTO> list;
 }

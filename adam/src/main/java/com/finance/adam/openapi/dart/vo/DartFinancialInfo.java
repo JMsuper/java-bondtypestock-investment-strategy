@@ -8,7 +8,7 @@ import lombok.ToString;
 @Getter
 @ToString
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class OpenDartFinancialInfo {
+public class DartFinancialInfo {
 
     /**
      * 접수번호(14자리)<br>

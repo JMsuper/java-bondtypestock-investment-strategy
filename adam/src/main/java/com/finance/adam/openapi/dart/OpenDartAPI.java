@@ -37,10 +37,8 @@ public class OpenDartAPI {
     private String financialInfoUrl;
     @Value("${open-dart.corp-code-url}")
     private String corpCodeUrl;
-
     @Value("${open-dart.report-list-url}")
     private String reportListUrl;
-
     @Value("${open-dart.service-key}")
     private String serviceKey;
     @Value("${open-dart.report-code}")
@@ -58,24 +56,15 @@ public class OpenDartAPI {
         this.objectMapper = objectMapper;
     }
 
-    public List<OpenDartFinancialInfo> getCorpFinancialInfo(String corpCode, String bsnsYear){
-        OpenDartFinancialInfoRequest params = OpenDartFinancialInfoRequest.builder()
+    public List<DartFinancialInfo> getCorpFinancialInfo(String corpCode, String bsnsYear){
+        DartFinancialInfoRequest params = DartFinancialInfoRequest.builder()
                 .crtfcKey(serviceKey)
                 .corpCode(corpCode)
                 .bsnsYear(bsnsYear)
                 .reprtCode(reprtCode)
                 .build();
 
-        String urlTemplate = UriComponentsBuilder.fromHttpUrl(financialInfoUrl)
-                .queryParams(MultiValueMapConverter.convert(objectMapper, params))
-                .encode()
-                .toUriString();
-        URI uri;
-        try {
-            uri = new URI(urlTemplate);
-        } catch (URISyntaxException e) {
-            throw new RuntimeException("URI 생성 중 오류가 발생하였습니다.",e);
-        }
+        URI uri = getUriWithQueryParams(financialInfoUrl,params);
 
         ResponseEntity<String> rawResponse = restTemplate.getForEntity(uri,String.class);
         if(rawResponse.getStatusCode() != HttpStatus.OK){
@@ -83,9 +72,9 @@ public class OpenDartAPI {
             throw new RuntimeException(ERROR_MSG_FINANCIAL_INFO);
         }
 
-        OpenDartFinancialInfoResponse response;
+        DartFinancialInfoResponse response;
         try {
-            response =  objectMapper.readValue(rawResponse.getBody(), OpenDartFinancialInfoResponse.class);
+            response =  objectMapper.readValue(rawResponse.getBody(), DartFinancialInfoResponse.class);
         } catch (JsonProcessingException e) {
             log.warn(rawResponse.toString());
             throw new RuntimeException(ERROR_MSG_FINANCIAL_INFO,e);
@@ -102,26 +91,26 @@ public class OpenDartAPI {
             throw new RuntimeException(ERROR_MSG_FINANCIAL_INFO);
         }
 
-        List<OpenDartFinancialInfo> financialInfoList = response.getList();
+        List<DartFinancialInfo> financialInfoList = response.getList();
         return financialInfoList;
     }
 
-    public List<OpenDartReportDTO> getRecentReportList(String corpCode, int pageCount){
+    public List<DartReportDTO> getRecentReportList(String corpCode, int pageCount){
         return getRecentReportList(corpCode, pageCount, null);
     }
 
-    public List<OpenDartReportDTO> getRecentReportList(String corpCode, int pageCount, ReportType reportType){
-        OpenDartReportListRequest params;
+    public List<DartReportDTO> getRecentReportList(String corpCode, int pageCount, ReportType reportType){
+        DartReportListRequest params;
 
         if(reportType == null){
-            params = OpenDartReportListRequest.builder()
+            params = DartReportListRequest.builder()
                     .crtfcKey(serviceKey)
                     .corpCode(corpCode)
                     .bgnDe("20000101")
                     .pageCount(String.valueOf(pageCount))
                     .build();
         }else {
-            params = OpenDartReportListRequest.builder()
+            params = DartReportListRequest.builder()
                     .crtfcKey(serviceKey)
                     .corpCode(corpCode)
                     .bgnDe("20000101")
@@ -130,16 +119,7 @@ public class OpenDartAPI {
                     .build();
         }
 
-        String urlTemplate = UriComponentsBuilder.fromHttpUrl(reportListUrl)
-                .queryParams(MultiValueMapConverter.convertWithOutNull(objectMapper, params))
-                .encode()
-                .toUriString();
-        URI uri;
-        try {
-            uri = new URI(urlTemplate);
-        } catch (URISyntaxException e) {
-            throw new RuntimeException("URI 생성 중 오류가 발생하였습니다.",e);
-        }
+        URI uri = getUriWithQueryParams(reportListUrl,params);
 
         ResponseEntity<String> rawResponse = restTemplate.getForEntity(uri,String.class);
         if(rawResponse.getStatusCode() != HttpStatus.OK){
@@ -147,9 +127,9 @@ public class OpenDartAPI {
             throw new RuntimeException(ERROR_MSG_FINANCIAL_INFO);
         }
 
-        OpenDartReportListResponse response;
+        DartReportListResponse response;
         try {
-            response =  objectMapper.readValue(rawResponse.getBody(), OpenDartReportListResponse.class);
+            response =  objectMapper.readValue(rawResponse.getBody(), DartReportListResponse.class);
         } catch (JsonProcessingException e) {
             log.warn(rawResponse.toString());
             throw new RuntimeException(ERROR_MSG_FINANCIAL_INFO,e);
@@ -164,8 +144,8 @@ public class OpenDartAPI {
             log.error(response.toString());
         }
 
-        List<OpenDartReportDTO> reportDTOList = response.getList();
-        for(OpenDartReportDTO reportDTO : reportDTOList){
+        List<DartReportDTO> reportDTOList = response.getList();
+        for(DartReportDTO reportDTO : reportDTOList){
             String parsedReportName = reportDTO.getReportNm().trim();
             reportDTO.setReportNm(parsedReportName);
         }
@@ -177,19 +157,11 @@ public class OpenDartAPI {
         headers.setAccept(Arrays.asList(MediaType.ALL));
         HttpEntity<?> httpEntity = new HttpEntity<>(headers);
 
-        String urlTemplate = UriComponentsBuilder.fromHttpUrl(corpCodeUrl)
-                .queryParam("crtfc_key",serviceKey)
-                .encode()
-                .toUriString();
+        DartCorpCodeMapRequest params = DartCorpCodeMapRequest.builder()
+                .crtfcKey(serviceKey)
+                .build();
 
-        URI uri;
-        try {
-            uri = new URI(urlTemplate);
-        } catch (URISyntaxException e) {
-            log.warn("URI 생성 전 URL = {}",urlTemplate);
-            log.warn(ERROR_MSG_CORP_CODE,e);
-            throw new RuntimeException("URI 생성 중 오류가 발생하였습니다.",e);
-        }
+        URI uri = getUriWithQueryParams(corpCodeUrl,params);
 
         HttpEntity<byte[]> response = restTemplate.exchange(uri, HttpMethod.GET ,httpEntity, byte[].class);
 
@@ -285,5 +257,23 @@ public class OpenDartAPI {
             throw new RuntimeException(e);
         }
         return corpCodeMap;
+    }
+
+    /**
+        - params DTO 를 담아서, 쿼리 파라미터 형태의 URI 를 반환 <br/>
+        - URI 생성 오류시 RunTimeException 발생
+     */
+    private URI getUriWithQueryParams(String requestUrl, Object params) {
+        String urlTemplate = UriComponentsBuilder.fromHttpUrl(requestUrl)
+                .queryParams(MultiValueMapConverter.convert(objectMapper, params))
+                .encode()
+                .toUriString();
+        URI uri;
+        try {
+            uri = new URI(urlTemplate);
+        } catch (URISyntaxException e) {
+            throw new RuntimeException("URI 생성 중 오류가 발생하였습니다.",e);
+        }
+        return uri;
     }
 }

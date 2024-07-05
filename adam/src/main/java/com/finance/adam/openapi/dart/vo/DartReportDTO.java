@@ -10,7 +10,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class OpenDartReportDTO {
+public class DartReportDTO {
 
     /**
      * 법인구분 : Y(유가), K(코스닥), N(코넥스), E(기타)

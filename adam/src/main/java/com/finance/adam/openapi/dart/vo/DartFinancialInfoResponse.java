@@ -1,12 +1,11 @@
 package com.finance.adam.openapi.dart.vo;
 
 import lombok.Getter;
-import lombok.ToString;
 
 import java.util.List;
 
 @Getter
-public class OpenDartFinancialInfoResponse {
+public class DartFinancialInfoResponse {
 
     /**
      * 에러 및 정보 코드
@@ -24,5 +23,5 @@ public class OpenDartFinancialInfoResponse {
         return status + " " + message;
     }
 
-    private List<OpenDartFinancialInfo> list;
+    private List<DartFinancialInfo> list;
 }

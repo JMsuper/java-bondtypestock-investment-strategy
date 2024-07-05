@@ -20,7 +20,7 @@ public class OpenDartReportExtractedDTO {
 
     private String rm;
 
-    public static OpenDartReportExtractedDTO from(OpenDartReportDTO dto) {
+    public static OpenDartReportExtractedDTO from(DartReportDTO dto) {
         return OpenDartReportExtractedDTO.builder()
                 .corpName(dto.getCorpName())
                 .reportNm(dto.getReportNm())

@@ -5,7 +5,7 @@ import com.finance.adam.repository.financeinfo.dto.FinanceInfoDTO;
 import com.finance.adam.dto.KrxCorpListResponse;
 import com.finance.adam.repository.stockprice.dto.StockPriceInfoResponseDTO;
 import com.finance.adam.openapi.dart.OpenDartAPI;
-import com.finance.adam.openapi.dart.vo.OpenDartFinancialInfo;
+import com.finance.adam.openapi.dart.vo.DartFinancialInfo;
 import com.finance.adam.openapi.publicdataportal.PublicDataPortalOpenAPI;
 import com.finance.adam.openapi.publicdataportal.vo.KrxItemInfo;
 import com.finance.adam.repository.corpinfo.CorpRepository;
@@ -90,7 +90,7 @@ public class FinanceDataService {
      * - 재무제표일 경우, OFS 라는 key 를 갖음(value는 0L)
      */
     public Map<String, Long> getFinancialInfoFromDart(String corpCode, String bsnsYear){
-        List<OpenDartFinancialInfo> corpFinancialInfoList = openDartAPI.getCorpFinancialInfo(corpCode, bsnsYear);
+        List<DartFinancialInfo> corpFinancialInfoList = openDartAPI.getCorpFinancialInfo(corpCode, bsnsYear);
         if(corpFinancialInfoList == null){
             return null;
         }
@@ -104,7 +104,7 @@ public class FinanceDataService {
         OFS.put("OFS",0L);
 
         for(int i = 0; i < corpFinancialInfoList.size(); i++){
-            OpenDartFinancialInfo info = corpFinancialInfoList.get(i);
+            DartFinancialInfo info = corpFinancialInfoList.get(i);
             Map<String, Long> currentFs;
             if(info.getFsNm().equals("연결재무제표")){
                 currentFs = CFS;
