@@ -10,7 +10,7 @@ import java.lang.reflect.Type;
 import java.util.Map;
 
 @Slf4j
-public abstract class MultiValueMapConverter {
+public class MultiValueMapConverter {
 
     private MultiValueMapConverter(){}
 

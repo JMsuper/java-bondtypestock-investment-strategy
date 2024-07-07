@@ -27,6 +27,15 @@ public enum OpenDartResponseMsg {
         this.message = message;
     }
 
+    public static OpenDartResponseMsg findByCode(String code) {
+        for (OpenDartResponseMsg value : values()) {
+            if (value.code.equals(code)) {
+                return value;
+            }
+        }
+        throw new IllegalArgumentException("Unknown code: " + code);
+    }
+
     public String getCode() {
         return code;
     }
