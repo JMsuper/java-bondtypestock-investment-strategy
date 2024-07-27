@@ -3,6 +3,7 @@ package com.finance.adam.openapi.dart.dto.request;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.finance.adam.openapi.dart.SjDivType;
+import com.finance.adam.repository.reportalarm.domain.ReportType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,6 +22,8 @@ public class OpenDartBaseRequestDTO {
     private String corpCode;
     private String bsnsYear;
     private String reprtCode;
+    private String pageCount;
+    private ReportType pblntfTy;
     private String bgnDe;
     private String endDe;
     private String fsDiv;
