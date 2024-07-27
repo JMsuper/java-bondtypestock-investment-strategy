@@ -5,7 +5,7 @@ import com.finance.adam.repository.savecorpinfo.dto.SaveCorpInfoUpdateDTO;
 import com.finance.adam.exception.CustomException;
 import com.finance.adam.exception.ErrorCode;
 import com.finance.adam.openapi.dart.OpenDartAPI;
-import com.finance.adam.openapi.dart.vo.OpenDartReportExtractedDTO;
+import com.finance.adam.openapi.dart.dto.OpenDartReportExtractedDTO;
 import com.finance.adam.repository.account.domain.Account;
 import com.finance.adam.repository.corpinfo.CorpRepository;
 import com.finance.adam.repository.corpinfo.domain.CorpInfo;

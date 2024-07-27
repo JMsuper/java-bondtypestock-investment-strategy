@@ -1,12 +1,11 @@
 package com.finance.adam.controller;
 
 import com.finance.adam.dto.StepOneStockInfoDTO;
-import com.finance.adam.openapi.dart.vo.OpenDartReportExtractedDTO;
+import com.finance.adam.openapi.dart.dto.OpenDartReportExtractedDTO;
 import com.finance.adam.repository.financeinfo.dto.FinanceInfoDTO;
 import com.finance.adam.dto.KrxCorpListResponse;
 import com.finance.adam.service.FinanceDataService;
 import com.finance.adam.service.ScreeningService;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 

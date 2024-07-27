@@ -1,11 +1,11 @@
 package com.finance.adam.service;
 
-import com.finance.adam.openapi.dart.vo.OpenDartReportExtractedDTO;
+import com.finance.adam.openapi.dart.dto.OpenDartReportExtractedDTO;
 import com.finance.adam.repository.financeinfo.dto.FinanceInfoDTO;
 import com.finance.adam.dto.KrxCorpListResponse;
 import com.finance.adam.repository.stockprice.dto.StockPriceInfoResponseDTO;
 import com.finance.adam.openapi.dart.OpenDartAPI;
-import com.finance.adam.openapi.dart.vo.DartFinancialInfo;
+import com.finance.adam.openapi.dart.dto.DartFinancialInfo;
 import com.finance.adam.openapi.publicdataportal.PublicDataPortalOpenAPI;
 import com.finance.adam.openapi.publicdataportal.vo.KrxItemInfo;
 import com.finance.adam.repository.corpinfo.CorpRepository;

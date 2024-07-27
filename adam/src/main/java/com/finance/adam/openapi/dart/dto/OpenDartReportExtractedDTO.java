@@ -1,4 +1,4 @@
-package com.finance.adam.openapi.dart.vo;
+package com.finance.adam.openapi.dart.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

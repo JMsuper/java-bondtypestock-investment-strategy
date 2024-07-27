@@ -2,7 +2,7 @@ package com.finance.adam.repository.savecorpinfo.dto;
 
 import com.finance.adam.repository.memo.dto.MemoDTO;
 import com.finance.adam.repository.stockprice.dto.StockPriceInfoResponseDTO;
-import com.finance.adam.openapi.dart.vo.OpenDartReportExtractedDTO;
+import com.finance.adam.openapi.dart.dto.OpenDartReportExtractedDTO;
 import com.finance.adam.repository.corpinfo.domain.CorpInfo;
 import com.finance.adam.repository.savecorpinfo.domain.SaveCorpInfo;
 import lombok.AllArgsConstructor;

@@ -1,4 +1,4 @@
-package com.finance.adam.openapi.dart.vo;
+package com.finance.adam.openapi.dart.dto;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
