@@ -10,6 +10,8 @@ import java.util.List;
  */
 public class KrxResponseBody {
 
+    private int pageNo;
+
     /**
      * 한 페이지의 결과 수
      */
@@ -21,6 +23,8 @@ public class KrxResponseBody {
     private int totalCount;
 
     private HashMap<String,List<KrxItemInfo>> items;
+
+    public int getPageNo(){return pageNo;}
 
     public int getNumOfRows() {
         return numOfRows;
