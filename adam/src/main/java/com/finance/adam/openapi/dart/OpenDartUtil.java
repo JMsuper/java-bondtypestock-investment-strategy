@@ -18,8 +18,6 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
-
-// Bean 으로 등록해야함
 @Slf4j
 @Component
 public class OpenDartUtil {
