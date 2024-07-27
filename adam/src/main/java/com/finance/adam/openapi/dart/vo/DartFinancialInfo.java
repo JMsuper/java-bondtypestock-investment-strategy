@@ -23,6 +23,11 @@ public class DartFinancialInfo {
     private String bsnsYear;
 
     /**
+     *  전자공시 內 기업코드
+     */
+    private String corpCode;
+
+    /**
      * 상장회사의 종목코드(6자리)
      */
     private String stockCode;
