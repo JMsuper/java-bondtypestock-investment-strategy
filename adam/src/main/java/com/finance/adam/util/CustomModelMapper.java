@@ -11,7 +11,7 @@ import java.util.Map;
 @Slf4j
 public class CustomModelMapper {
 
-    private static ModelMapper modelMapper = new ModelMapper();
+    private static final ModelMapper modelMapper = new ModelMapper();
 
     static {
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
@@ -35,7 +35,7 @@ public class CustomModelMapper {
         StringBuilder result = new StringBuilder();
         String[] parts = snakeCase.split("_");
         for (String part : parts) {
-            if (result.length() == 0) {
+            if (result.isEmpty()) {
                 result.append(part.toLowerCase());
             } else {
                 result.append(part.substring(0, 1).toUpperCase())
