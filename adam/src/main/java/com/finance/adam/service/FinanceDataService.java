@@ -182,8 +182,7 @@ public class FinanceDataService {
             KrxItemInfo krxItemInfo = krxItemInfoMap.get(stockCode);
             if(krxItemInfo == null){
                 corpInfo.setDeListed(true);
-                corpRepository.saveAndFlush(corpInfo);
-                log.info("renewCorpInfoWithKrxList - deListed (거래소 퇴출) : " + corpInfo.getName());
+                log.info("거래소 퇴출: " + corpInfo.getName());
             }
 
             // 2. 종목코드가 변경된 기업
@@ -191,10 +190,7 @@ public class FinanceDataService {
                 String newStockCode = corpCodeMap.get(corpCode);
                 if(!stockCode.equals(newStockCode)){
                     corpInfo.setStockCode("A" + newStockCode);
-                    corpRepository.saveAndFlush(corpInfo);
-                    log.info("renewCorpInfoWithKrxList - stockCode 변경 : " + corpInfo.getName());
-                    log.info("renewCorpInfoWithKrxList - stockCode 변경 : before " + corpInfo.getStockCode());
-                    log.info("renewCorpInfoWithKrxList - stockCode 변경 : after " + newStockCode);
+                    log.info("종목코드 변경: " + corpInfo.getName() + " (before: " + stockCode + ", after: " + newStockCode + ")");
                 }
             }
         }
@@ -208,8 +204,8 @@ public class FinanceDataService {
                 CorpInfo corpInfo = CorpInfo.fromKrxItemInfo(krxItemInfo);
                 String corpCode = corpCodeMap.get(corpInfo.getParsedStockCode());
                 corpInfo.setCorpCode(corpCode);
-                corpRepository.saveAndFlush(corpInfo);
-                log.info("renewCorpInfoWithKrxList - 신규 상장 기업 추가 : " + corpInfo.getName());
+                corpRepository.save(corpInfo);
+                log.info("신규 상장 기업 추가 : " + corpInfo.getName() + ", 종목코드 : " + stockCode);
             }
         }
     }
