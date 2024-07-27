@@ -5,6 +5,7 @@ import com.finance.adam.openapi.dart.OpenDartAPI;
 import com.finance.adam.openapi.dart.OpenDartUtil;
 import com.finance.adam.openapi.dart.vo.DartFinancialInfo;
 import com.finance.adam.openapi.dart.vo.DartReportDTO;
+import com.finance.adam.repository.reportalarm.domain.ReportType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,12 +50,32 @@ public class TestOpenDartAPI {
     }
 
     @Test
-    @DisplayName("Open Dart 공시 보고서 조회")
+    @DisplayName("Open Dart 공시 보고서 조회 - 보고서유형 미지정")
     void test3(){
         String corpCode = "00126380";
         int pageCount = 5;
 
         List<DartReportDTO> result = openDartAPI.getRecentReportList(corpCode,pageCount);
         assertNotNull(result);
+        assertTrue(result.size() == 5);
+        for(DartReportDTO dto : result){
+            assertTrue(dto.getCorpCls().equals("Y"));
+            assertTrue(dto.getCorpName().equals("삼성전자"));
+        }
+    }
+
+    @Test
+    @DisplayName("Open Dart 공시 보고서 조회 - 보고서유형 지정")
+    void test4(){
+        String corpCode = "00126380";
+        int pageCount = 5;
+
+        List<DartReportDTO> result = openDartAPI.getRecentReportList(corpCode,pageCount, ReportType.A);
+        assertNotNull(result);
+        assertTrue(result.size() == 5);
+
+        for(DartReportDTO dto : result){
+            assertTrue(dto.getReportNm().contains("보고서"));
+        }
     }
 }

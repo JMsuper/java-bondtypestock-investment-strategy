@@ -61,15 +61,21 @@ public class OpenDartAPI {
         this.objectMapper = objectMapper;
     }
 
+    /**
+     * 정기보고서 재무정보 / 단일회사 주요계정
+     * @param corpCode 전자공시 기업코드
+     * @param bsnsYear 조회연도
+     * @return
+     */
     public List<DartFinancialInfo> getCorpFinancialInfo(String corpCode, String bsnsYear) {
-        String requestUrl = "api/fnlttSinglAcnt.json";
+        final String REQ_URL = "api/fnlttSinglAcnt.json";
 
         OpenDartBaseRequestDTO requestDTO = OpenDartBaseRequestDTO.builder()
                 .corpCode(corpCode)
                 .bsnsYear(bsnsYear)
                 .reprtCode(reprtCode)
                 .build();
-        List<Object> response = openDartUtil.apiRequest(requestUrl, requestDTO);
+        List<Object> response = openDartUtil.apiRequest(REQ_URL, requestDTO);
 
         List<DartFinancialInfo> list = new LinkedList<>();
         for(Object snakeCaseMap : response){
@@ -81,61 +87,37 @@ public class OpenDartAPI {
         return list;
     }
 
+
     public List<DartReportDTO> getRecentReportList(String corpCode, int pageCount){
         return getRecentReportList(corpCode, pageCount, null);
     }
 
+    /**
+     * 공시정보 / 공시검색
+     * @param corpCode 전자공시 기업코드
+     * @param pageCount 페이지 당 조회건수
+     * @param reportType 공시보고서 유형
+     * @return
+     */
     public List<DartReportDTO> getRecentReportList(String corpCode, int pageCount, ReportType reportType){
-        DartReportListRequest params;
+        final String REQ_URL = "api/list.json";
 
-        if(reportType == null){
-            params = DartReportListRequest.builder()
-                    .crtfcKey(serviceKey)
-                    .corpCode(corpCode)
-                    .bgnDe("20000101")
-                    .pageCount(String.valueOf(pageCount))
-                    .build();
-        }else {
-            params = DartReportListRequest.builder()
-                    .crtfcKey(serviceKey)
-                    .corpCode(corpCode)
-                    .bgnDe("20000101")
-                    .pageCount(String.valueOf(pageCount))
-                    .pblntfTy(reportType)
-                    .build();
+        OpenDartBaseRequestDTO requestDTO = OpenDartBaseRequestDTO.builder()
+                .corpCode(corpCode)
+                .bgnDe("20000101")
+                .pageCount(String.valueOf(pageCount))
+                .pblntfTy(reportType)
+                .build();
+        List<Object> response = openDartUtil.apiRequest(REQ_URL, requestDTO);
+
+        List<DartReportDTO> list = new LinkedList<>();
+        for(Object snakeCaseMap : response){
+            DartReportDTO dto = new DartReportDTO();
+            CustomModelMapper.convert((Map<String, String>) snakeCaseMap, dto, DartReportDTO.class);
+            list.add(dto);
         }
 
-        URI uri = getUriWithQueryParams(reportListUrl,params);
-
-        ResponseEntity<String> rawResponse = restTemplate.getForEntity(uri,String.class);
-        if(rawResponse.getStatusCode() != HttpStatus.OK){
-            log.warn(rawResponse.toString());
-            throw new RuntimeException(ERROR_MSG_FINANCIAL_INFO);
-        }
-
-        DartReportListResponse response;
-        try {
-            response =  objectMapper.readValue(rawResponse.getBody(), DartReportListResponse.class);
-        } catch (JsonProcessingException e) {
-            log.warn(rawResponse.toString());
-            throw new RuntimeException(ERROR_MSG_FINANCIAL_INFO,e);
-        }
-
-        if(response.getStatus().equals("013") || response.getTotalCount() == 0 || response.getList() == null){
-            log.warn("corpCode : " + corpCode + ", 조회된 데이터가 없습니다.");
-            return null;
-        }
-
-        if(!response.getStatus().equals("000")){
-            log.error(response.toString());
-        }
-
-        List<DartReportDTO> reportDTOList = response.getList();
-        for(DartReportDTO reportDTO : reportDTOList){
-            String parsedReportName = reportDTO.getReportNm().trim();
-            reportDTO.setReportNm(parsedReportName);
-        }
-        return reportDTOList;
+        return list;
     }
 
     public Map<String, String> getCorpCodeMap(){
