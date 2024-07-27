@@ -26,6 +26,12 @@ public class OpenDartUtil {
     private final ObjectMapper objectMapper;
     private final String baseUrl = "https://opendart.fss.or.kr/";
 
+    /**
+     * 분당 1,000회 이상 API 호출 시 서비스 이용 제한 규칙 적용 <br/>
+     * API 요청 시 기본으로 0.2초 시간 딜레이를 갖도록 수정
+     */
+    private final long DELAY_MILLI_SEC = 200;
+
     @Value("${open-dart.service-key}")
     private String apiKey;
 
@@ -77,6 +83,39 @@ public class OpenDartUtil {
     }
 
     /**
+     *
+     * @param path 요청 URL
+     * @param requestDTO 요청 Dto, crtfcKey 는 메서드에서 직접 지정해줌
+     * @return 성공시 파일의 byte[], 실패 시 길이가 0인 byte[] 배열
+     */
+    public byte[] download(
+            String path,
+            OpenDartBaseRequestDTO requestDTO
+    ){
+        // 1. 매개변수 유효성 검사
+        requestDTO.checkParams();
+
+        // 2. API KEY 추가
+        requestDTO.setCrtfcKey(apiKey);
+
+        // 2. URI 생성
+        URI uri = createUriWithQueryParams(baseUrl + path, requestDTO);
+        if(uri == null){
+            return new byte[0];
+        }
+
+        // 3. API 요청
+        ResponseEntity<byte[]> response = restTemplate.getForEntity(uri, byte[].class);
+        if(response.getStatusCode() != HttpStatus.OK){
+            log.warn(response.toString());
+            return new byte[0];
+        }
+
+        return response.getBody();
+    }
+
+
+    /**
      - params DTO 를 담아서, 쿼리 파라미터 형태의 URI 를 반환 <br/>
      */
     private URI createUriWithQueryParams(String requestUrl, Object params) {
@@ -95,6 +134,12 @@ public class OpenDartUtil {
     }
 
     private OpenDartBaseResponseDTO getRequest(URI uri){
+        if(DELAY_MILLI_SEC != 0){
+            try {
+                Thread.sleep(DELAY_MILLI_SEC);
+            } catch (InterruptedException e) {}
+        }
+
         ResponseEntity<OpenDartBaseResponseDTO> rawResponse = restTemplate.getForEntity(uri,OpenDartBaseResponseDTO.class);
         if(rawResponse.getStatusCode() != HttpStatus.OK){
             log.warn(rawResponse.toString());

@@ -34,7 +34,9 @@ public class TestOpenDartAPI {
         String bsnsYear = "2021";
 
         List<DartFinancialInfo> result = openDartAPI.getCorpFinancialInfo(corpCode,bsnsYear);
-        assertNotNull(result);
+        assertTrue(result != null);
+        assertTrue(result.size() > 0);
+        assertTrue(result.get(0).getCorpCode().equals(corpCode));
     }
 
     @Test

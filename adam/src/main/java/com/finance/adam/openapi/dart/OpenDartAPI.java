@@ -36,18 +36,13 @@ import java.util.Map;
 @Slf4j
 public class OpenDartAPI {
 
-    @Value("${open-dart.financial-info-url}")
-    private String financialInfoUrl;
     @Value("${open-dart.corp-code-url}")
     private String corpCodeUrl;
-    @Value("${open-dart.report-list-url}")
-    private String reportListUrl;
     @Value("${open-dart.service-key}")
     private String serviceKey;
     @Value("${open-dart.report-code}")
     private String reprtCode;
 
-    private final String ERROR_MSG_FINANCIAL_INFO = "(Open Dart)재무정보를 가져오는데 실패하였습니다.";
     private final String ERROR_MSG_CORP_CODE = "(Open Dart)기업코드를 가져오는데 실패하였습니다.";
     private final String ERROR_MSG_XML = "XML 파일 처리에 실패하였습니다.";
 
@@ -120,19 +115,23 @@ public class OpenDartAPI {
         return list;
     }
 
+    /**
+     * 공시정보 / 고유번호
+     * @return key : 주식 종목코드 , value : 전자공시 기업코드
+     */
     public Map<String, String> getCorpCodeMap(){
-        HttpHeaders headers = new HttpHeaders();
-        headers.setAccept(Arrays.asList(MediaType.ALL));
-        HttpEntity<?> httpEntity = new HttpEntity<>(headers);
+        final String REQ_URL = "api/corpCode.xml";
 
-        DartCorpCodeMapRequest params = DartCorpCodeMapRequest.builder()
-                .crtfcKey(serviceKey)
-                .build();
+        OpenDartBaseRequestDTO requestDTO = OpenDartBaseRequestDTO.builder().build();
+        byte[] response = openDartUtil.download(REQ_URL, requestDTO);
 
-        URI uri = getUriWithQueryParams(corpCodeUrl,params);
+        File xmlFile = zipFileToXmlFile(response);
+        Map<String, String> corpCodeMap = xmlToCorpCodeMap(xmlFile);
 
-        HttpEntity<byte[]> response = restTemplate.exchange(uri, HttpMethod.GET ,httpEntity, byte[].class);
+        return corpCodeMap;
+    }
 
+    private File zipFileToXmlFile(byte[] bytes){
         File tempFile = null;
         File corpCodeFile = null;
 
@@ -147,10 +146,10 @@ public class OpenDartAPI {
         }
 
         try (FileOutputStream outputStream1 = new FileOutputStream(tempFile);
-            ZipInputStream zipInputStream = new ZipInputStream(Files.newInputStream(tempFile.toPath()));
-            FileOutputStream outputStream2 = new FileOutputStream(corpCodeFile)
+             ZipInputStream zipInputStream = new ZipInputStream(Files.newInputStream(tempFile.toPath()));
+             FileOutputStream outputStream2 = new FileOutputStream(corpCodeFile)
         ){
-            StreamUtils.copy(Objects.requireNonNull(response.getBody()),outputStream1);
+            StreamUtils.copy(Objects.requireNonNull(bytes),outputStream1);
             zipInputStream.getNextEntry();
 
             int length;
@@ -165,13 +164,10 @@ public class OpenDartAPI {
             throw new RuntimeException(e);
         }
 
-
-        Map<String, String> corpCodeMap = xmlToCorpCodeMap(corpCodeFile);
-
-        return corpCodeMap;
+        return corpCodeFile;
     }
 
-    public Map<String, String> xmlToCorpCodeMap(File xmlFile){
+    private Map<String, String> xmlToCorpCodeMap(File xmlFile){
         Map<String, String> corpCodeMap = new HashMap<>();
 
         try {
@@ -214,34 +210,10 @@ public class OpenDartAPI {
             }
 
 
-        } catch (ParserConfigurationException e) {
-            log.warn(ERROR_MSG_XML,e);
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            log.warn(ERROR_MSG_XML,e);
-            throw new RuntimeException(e);
-        } catch (SAXException e) {
+        } catch (ParserConfigurationException | IOException | SAXException e) {
             log.warn(ERROR_MSG_XML,e);
             throw new RuntimeException(e);
         }
         return corpCodeMap;
-    }
-
-    /**
-        - params DTO 를 담아서, 쿼리 파라미터 형태의 URI 를 반환 <br/>
-        - URI 생성 오류시 RunTimeException 발생
-     */
-    private URI getUriWithQueryParams(String requestUrl, Object params) {
-        String urlTemplate = UriComponentsBuilder.fromHttpUrl(requestUrl)
-                .queryParams(MultiValueMapConverter.convert(objectMapper, params))
-                .encode()
-                .toUriString();
-        URI uri;
-        try {
-            uri = new URI(urlTemplate);
-        } catch (URISyntaxException e) {
-            throw new RuntimeException("URI 생성 중 오류가 발생하였습니다.",e);
-        }
-        return uri;
     }
 }

@@ -1,24 +1,35 @@
 package com.finance.adam.openapi.opendart;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.finance.adam.openapi.dart.dto.request.OpenDartBaseRequestDTO;
 import com.finance.adam.openapi.dart.dto.response.OpenDartBaseResponseDTO;
 import com.finance.adam.openapi.dart.OpenDartResponseMsg;
 import com.finance.adam.openapi.dart.OpenDartUtil;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.URI;
+import java.nio.file.Files;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
+import java.util.zip.ZipInputStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
+@SpringBootTest(classes = {
+        OpenDartUtil.class, RestTemplate.class,
+        ObjectMapper.class,
+})
 public class TestOpenDartUtil {
 
     @Autowired
@@ -40,6 +51,20 @@ public class TestOpenDartUtil {
         // then
         assertNotNull(result);
     }
+
+    // 단일 TEST 메서드 실행시에는 정상동작 하지만,
+    // 전체 TEST 실행시, 500 서버 에러 발생
+    // 동일한 key에 대해 다중 요청 시, 에러가 발생하는 것으로 유추됨
+//    @Test
+//    public void download(){
+//        OpenDartBaseRequestDTO requestDTO = OpenDartBaseRequestDTO.builder().build();
+//        String path = "api/corpCode.xml";
+//
+//        for(int i = 0; i < 10; i++){
+//            byte[] byteArr = openDartUtil.download(path,requestDTO);
+//            assertTrue(byteArr.length != 0);
+//        }
+//    }
 
     @Test
     public void createUriWithQueryParams() {
@@ -74,6 +99,18 @@ public class TestOpenDartUtil {
 
         // then
         assertNotNull(result);
+    }
+
+    @Test
+    @DisplayName("요청을 10번 수행했을 때, 소요시간이 1초 이상인지 테스트")
+    public void getRequest_Time(){
+        long start = System.currentTimeMillis();
+        for(int i = 0; i < 10 ; i++){
+            ReflectionTestUtils.invokeMethod(openDartUtil,"getRequest",URI.create("https://opendart.fss.or.kr/api/fnlttSinglAcnt.json?corp_code=00126380&bsns_year=2018&reprt_code=11011"));
+        }
+        long end = System.currentTimeMillis();
+
+        assertTrue( ( end - start ) > ( 1000 * 1 ) );
     }
 
     @Test
