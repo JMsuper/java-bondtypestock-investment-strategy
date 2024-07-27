@@ -1,19 +1,25 @@
 package com.finance.adam.openapi;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.finance.adam.openapi.dart.OpenDartAPI;
-import com.finance.adam.openapi.dart.vo.OpenDartFinancialInfo;
-import com.finance.adam.openapi.dart.vo.OpenDartReportDTO;
+import com.finance.adam.openapi.dart.OpenDartUtil;
+import com.finance.adam.openapi.dart.vo.DartFinancialInfo;
+import com.finance.adam.openapi.dart.vo.DartReportDTO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
+@SpringBootTest(classes = {
+        OpenDartAPI.class, OpenDartUtil.class,
+        RestTemplate.class, ObjectMapper.class
+})
 public class TestOpenDartAPI {
 
     @Autowired
@@ -24,9 +30,9 @@ public class TestOpenDartAPI {
     void test1(){
 
         String corpCode = "00113261";
-        String bsnsYear = "2024";
+        String bsnsYear = "2021";
 
-        List<OpenDartFinancialInfo> result = openDartAPI.getCorpFinancialInfo(corpCode,bsnsYear);
+        List<DartFinancialInfo> result = openDartAPI.getCorpFinancialInfo(corpCode,bsnsYear);
         assertNotNull(result);
     }
 
@@ -48,7 +54,7 @@ public class TestOpenDartAPI {
         String corpCode = "00126380";
         int pageCount = 5;
 
-        List<OpenDartReportDTO> result = openDartAPI.getRecentReportList(corpCode,pageCount);
+        List<DartReportDTO> result = openDartAPI.getRecentReportList(corpCode,pageCount);
         assertNotNull(result);
     }
 }

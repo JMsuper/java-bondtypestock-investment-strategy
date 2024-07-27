@@ -2,8 +2,10 @@ package com.finance.adam.openapi.dart;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.finance.adam.openapi.dart.dto.request.OpenDartBaseRequestDTO;
 import com.finance.adam.openapi.dart.vo.*;
 import com.finance.adam.repository.reportalarm.domain.ReportType;
+import com.finance.adam.util.CustomModelMapper;
 import com.finance.adam.util.MultiValueMapConverter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,6 +30,7 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.util.*;
 import java.util.zip.ZipInputStream;
+import java.util.Map;
 
 @Component
 @Slf4j
@@ -48,51 +51,34 @@ public class OpenDartAPI {
     private final String ERROR_MSG_CORP_CODE = "(Open Dart)기업코드를 가져오는데 실패하였습니다.";
     private final String ERROR_MSG_XML = "XML 파일 처리에 실패하였습니다.";
 
+    private final OpenDartUtil openDartUtil;
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
 
-    public OpenDartAPI(RestTemplate restTemplate, ObjectMapper objectMapper){
+    public OpenDartAPI(OpenDartUtil openDartUtil, RestTemplate restTemplate, ObjectMapper objectMapper){
+        this.openDartUtil = openDartUtil;
         this.restTemplate = restTemplate;
         this.objectMapper = objectMapper;
     }
 
-    public List<DartFinancialInfo> getCorpFinancialInfo(String corpCode, String bsnsYear){
-        DartFinancialInfoRequest params = DartFinancialInfoRequest.builder()
-                .crtfcKey(serviceKey)
+    public List<DartFinancialInfo> getCorpFinancialInfo(String corpCode, String bsnsYear) {
+        String requestUrl = "api/fnlttSinglAcnt.json";
+
+        OpenDartBaseRequestDTO requestDTO = OpenDartBaseRequestDTO.builder()
                 .corpCode(corpCode)
                 .bsnsYear(bsnsYear)
                 .reprtCode(reprtCode)
                 .build();
+        List<Object> response = openDartUtil.apiRequest(requestUrl, requestDTO);
 
-        URI uri = getUriWithQueryParams(financialInfoUrl,params);
-
-        ResponseEntity<String> rawResponse = restTemplate.getForEntity(uri,String.class);
-        if(rawResponse.getStatusCode() != HttpStatus.OK){
-            log.warn(rawResponse.toString());
-            throw new RuntimeException(ERROR_MSG_FINANCIAL_INFO);
+        List<DartFinancialInfo> list = new LinkedList<>();
+        for(Object snakeCaseMap : response){
+            DartFinancialInfo dto = new DartFinancialInfo();
+            CustomModelMapper.convert((Map<String, String>) snakeCaseMap, dto, DartFinancialInfo.class);
+            list.add(dto);
         }
 
-        DartFinancialInfoResponse response;
-        try {
-            response =  objectMapper.readValue(rawResponse.getBody(), DartFinancialInfoResponse.class);
-        } catch (JsonProcessingException e) {
-            log.warn(rawResponse.toString());
-            throw new RuntimeException(ERROR_MSG_FINANCIAL_INFO,e);
-        }
-
-        if(response.getStatus().equals("013")){
-            log.info(response.toString());
-            log.info("corpCode : " + corpCode + ", bsnsYear : " + bsnsYear);
-            return null;
-        }
-
-        if(!response.getStatus().equals("000")){
-            log.warn(response.toString());
-            throw new RuntimeException(ERROR_MSG_FINANCIAL_INFO);
-        }
-
-        List<DartFinancialInfo> financialInfoList = response.getList();
-        return financialInfoList;
+        return list;
     }
 
     public List<DartReportDTO> getRecentReportList(String corpCode, int pageCount){
