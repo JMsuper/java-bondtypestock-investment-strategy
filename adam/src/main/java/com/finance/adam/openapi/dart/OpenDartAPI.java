@@ -1,16 +1,16 @@
 package com.finance.adam.openapi.dart;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.finance.adam.openapi.dart.dto.DartFinancialInfo;
 import com.finance.adam.openapi.dart.dto.DartReportDTO;
 import com.finance.adam.openapi.dart.dto.request.OpenDartBaseRequestDTO;
+import com.finance.adam.repository.corpinfo.CorpRepository;
 import com.finance.adam.repository.reportalarm.domain.ReportType;
+import com.finance.adam.service.RedisService;
 import com.finance.adam.util.CustomModelMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StreamUtils;
-import org.springframework.web.client.RestTemplate;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -23,7 +23,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.zip.ZipInputStream;
 import java.util.Map;
 
@@ -31,6 +34,7 @@ import java.util.Map;
 @Slf4j
 public class OpenDartAPI {
 
+    private final CorpRepository corpRepository;
     @Value("${open-dart.corp-code-url}")
     private String corpCodeUrl;
     @Value("${open-dart.service-key}")
@@ -42,13 +46,14 @@ public class OpenDartAPI {
     private final String ERROR_MSG_XML = "XML 파일 처리에 실패하였습니다.";
 
     private final OpenDartUtil openDartUtil;
-    private final RestTemplate restTemplate;
-    private final ObjectMapper objectMapper;
+    private final RedisService redisService;
 
-    public OpenDartAPI(OpenDartUtil openDartUtil, RestTemplate restTemplate, ObjectMapper objectMapper){
+    private final DateTimeFormatter yyyyMMdd = DateTimeFormatter.ofPattern("yyyyMMdd");
+
+    public OpenDartAPI(OpenDartUtil openDartUtil, RedisService redisService, CorpRepository corpRepository){
         this.openDartUtil = openDartUtil;
-        this.restTemplate = restTemplate;
-        this.objectMapper = objectMapper;
+        this.redisService = redisService;
+        this.corpRepository = corpRepository;
     }
 
     /**
@@ -77,6 +82,24 @@ public class OpenDartAPI {
         return list;
     }
 
+    /**
+     * Redis에서 캐싱된 최근 공시를 조회.
+     * 직접 OpenDart API를 활용하는 것은 공시 갱신 스케줄러에서만 수행하도록 제한
+     * -> 관심사를 분리하기 위함
+     */
+    public List<DartReportDTO> getRecentReportListFive(String corpCode){
+        // 1. 레디스에서 종목코드에 해당하는 공시 5건 조회
+        List<Object> rawRepostList = redisService.getListRange(corpCode, 0, -1);
+
+        // 역직렬화에 의해 List 내부 객체는 DartReportDTO인 상태임 -> 타입 캐스팅만 수행
+        // 2. 조회된 Object 를 DartReportDTO 객체로 변환
+        List<DartReportDTO> reportList = rawRepostList.stream()
+                .map(obj -> (DartReportDTO) obj) // Object를 DartReportDTO로 캐스팅
+                .collect(Collectors.toList());
+
+        // 3. List<DartReportDTO를 반환
+        return reportList;
+    }
 
     public List<DartReportDTO> getRecentReportList(String corpCode, int pageCount){
         return getRecentReportList(corpCode, pageCount, null);
@@ -91,22 +114,112 @@ public class OpenDartAPI {
      */
     public List<DartReportDTO> getRecentReportList(String corpCode, int pageCount, ReportType reportType){
         final String REQ_URL = "api/list.json";
+        String bgnDe = "20000101";
+
+        if(corpCode == null){
+            // 오늘 날짜 기준으로 2일 전 계산
+            LocalDate oneMonthAgo = LocalDate.now().minusDays(2);
+            // "yyyyMMdd" 형태로 포맷팅
+            bgnDe = oneMonthAgo.format(yyyyMMdd);
+        }
 
         OpenDartBaseRequestDTO requestDTO = OpenDartBaseRequestDTO.builder()
                 .corpCode(corpCode)
-                .bgnDe("20000101")
+                .bgnDe(bgnDe)
                 .pageCount(String.valueOf(pageCount))
                 .pblntfTy(reportType)
                 .build();
         List<Object> response = openDartUtil.apiRequest(REQ_URL, requestDTO);
 
+        List<DartReportDTO> list = covertToDartReportDTO(response);
+
+        return list;
+    }
+
+    public int initRecentReportInRedis(List<String> corpCodeList){
+        int cnt = 0;
+
+        // 1. 종목코드명 리스트 순회
+        for(String corpCode : corpCodeList){
+            // 2. 종목코드에 해당하는 최근공시 5건 조회
+            List<DartReportDTO> recentRepotList = getRecentReportList(corpCode,5);
+
+            if(!recentRepotList.isEmpty()){
+                cnt++;
+            }else{
+                continue;
+            }
+
+            // 3. 레디스에 추가
+            for(DartReportDTO dto : recentRepotList){
+                redisService.pushToList(corpCode,dto);
+            }
+            // 4. 5건을 넘길 경우를 고려하여, 자르기
+            redisService.trimList(corpCode, 0, 4);
+        }
+
+        return cnt;
+    }
+
+    /**
+     * 공시유형별(ReportType)로 조회 -> why? dart API에서 공시유형을 알려주지 않음
+     */
+    public HashMap<ReportType, List<DartReportDTO>> updateRecentReportInRedis(){
+        // 0. 반환 Map 세팅
+        HashMap<ReportType, List<DartReportDTO>> reportTypeMap = new HashMap<>();
+        ReportType[] reportTypes = ReportType.values();
+        for(ReportType reportType : reportTypes){
+            reportTypeMap.put(reportType, new ArrayList<>());
+        }
+
+        Set<String> corpCodeSet = corpRepository.findAll().stream().map((item) -> item.getCorpCode()).collect(Collectors.toSet());
+
+        // 1. 공시유형별(ReportType) 조회
+        for(ReportType reportType : reportTypes){
+            List<DartReportDTO> dartReportDTOList = getRecentReportList(null, 100, reportType);
+
+            for(DartReportDTO dto : dartReportDTOList){
+                String corpCd = dto.getCorpCode();
+                String rceptNo = dto.getRceptNo();
+
+                // 2-0. 상장종목이 아닐경우 pass
+                if(!corpCodeSet.contains(corpCd)){
+                    continue;
+                }
+
+                List<DartReportDTO> redisList = redisService.getListRange(corpCd,0,-1)
+                        .stream().map((item)->(DartReportDTO)item).toList();
+
+                // 2-1. 레디스에 기업코드에 해당하는 key가 존재하지 않는 경우 -> key, list 추가
+                if(redisList.isEmpty()){
+                    redisService.pushToList(corpCd,dto);
+                    reportTypeMap.get(reportType).add(dto);
+                }
+
+                // 2-2. 레디스에 기업코드에 해당하는 key가 존재하지만, List에는 없는 경우 -> list에 추가
+                // + 공시번호가 작은 공시가 하나라도 있는 경우
+                else if(redisList.stream().noneMatch((targetDto) -> targetDto.getRceptNo().equals(rceptNo))
+                    && redisList.stream().anyMatch((targetDto) -> Long.parseLong(targetDto.getRceptNo()) < Long.parseLong(rceptNo))
+                ){
+                    redisService.pushToList(corpCd,dto);
+                    redisService.trimList(corpCd,0,4);
+                    reportTypeMap.get(reportType).add(dto);
+                }
+            }
+
+        }
+
+        // key : ReportType, value : 신규공시 담은 리스트 반환
+        return reportTypeMap;
+    }
+
+    private List<DartReportDTO> covertToDartReportDTO(List<Object> response) {
         List<DartReportDTO> list = new LinkedList<>();
         for(Object snakeCaseMap : response){
             DartReportDTO dto = new DartReportDTO();
             CustomModelMapper.convert((Map<String, String>) snakeCaseMap, dto, DartReportDTO.class);
             list.add(dto);
         }
-
         return list;
     }
 

@@ -51,7 +51,7 @@ public class CorpInfoService {
             List<FinanceInfo> financeInfoList = corpInfo.getFinanceInfos();
             StockPrice stockPrice = corpInfo.getStockPrice();
 
-            List<OpenDartReportExtractedDTO> reportList = openDartAPI.getRecentReportList(corpInfo.getCorpCode(), 5)
+            List<OpenDartReportExtractedDTO> reportList = openDartAPI.getRecentReportListFive(corpInfo.getCorpCode())
                     .stream().map((report) -> OpenDartReportExtractedDTO.from(report))
                     .toList();
 

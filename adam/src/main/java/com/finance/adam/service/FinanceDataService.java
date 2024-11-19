@@ -79,7 +79,7 @@ public class FinanceDataService {
 
 
     public List<OpenDartReportExtractedDTO> getReports(String corpCode){
-        List<OpenDartReportExtractedDTO> reportList = openDartAPI.getRecentReportList(corpCode, 5)
+        List<OpenDartReportExtractedDTO> reportList = openDartAPI.getRecentReportListFive(corpCode)
                 .stream().map((report) -> OpenDartReportExtractedDTO.from(report))
                 .toList();
         return reportList;

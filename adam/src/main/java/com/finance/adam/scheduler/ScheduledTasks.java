@@ -1,5 +1,6 @@
 package com.finance.adam.scheduler;
 
+import com.finance.adam.openapi.dart.OpenDartAPI;
 import com.finance.adam.openapi.krx.CsvReaderService;
 import com.finance.adam.repository.stockprice.dto.StockPriceInfoDTO;
 import com.finance.adam.service.FinanceDataService;
@@ -18,10 +19,12 @@ public class ScheduledTasks {
 
     private final CsvReaderService csvReaderService;
     private final FinanceDataService financeDataService;
+    private final OpenDartAPI openDartAPI;
 
-    public ScheduledTasks(CsvReaderService csvReaderService, FinanceDataService financeDataService) {
+    public ScheduledTasks(CsvReaderService csvReaderService, FinanceDataService financeDataService, OpenDartAPI openDartAPI) {
         this.csvReaderService = csvReaderService;
         this.financeDataService = financeDataService;
+        this.openDartAPI = openDartAPI;
     }
 
     //cron = "* * * * * *"
@@ -51,6 +54,13 @@ public class ScheduledTasks {
         log.info("financeInfoUpdate start : {}", dateFormat.format(System.currentTimeMillis()));
         financeDataService.renewFinancialInfo();
         log.info("financeInfoUpdate end : {}", dateFormat.format(System.currentTimeMillis()));
+    }
+
+    @Scheduled(cron = "0 * * * * *")
+    public void recentReportRedisUpdate() {
+        log.info("recentReportRedisUpdate start : {}", dateFormat.format(System.currentTimeMillis()));
+        openDartAPI.updateRecentReportInRedis();
+        log.info("recentReportRedisUpdate end : {}", dateFormat.format(System.currentTimeMillis()));
     }
 
 }

@@ -28,15 +28,18 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-jdbc")
 	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
+	implementation("org.springframework.boot:spring-boot-starter-data-redis")
+	testImplementation("org.springframework.boot:spring-boot-starter-test")
+
 	implementation("org.modelmapper:modelmapper:3.1.0")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
-	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	compileOnly("org.projectlombok:lombok")
 	annotationProcessor("org.projectlombok:lombok")
 	implementation("mysql:mysql-connector-java:8.0.33")
 	implementation("com.opencsv:opencsv:5.7.1")
 	implementation("org.apache.httpcomponents:httpclient:4.5.13")
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2")
+
 }
 
 tasks.withType<Test> {

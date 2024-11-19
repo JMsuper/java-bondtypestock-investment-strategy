@@ -1,35 +1,25 @@
 package com.finance.adam.config;
 
-import io.swagger.v3.oas.annotations.OpenAPIDefinition;
-import io.swagger.v3.oas.annotations.info.Info;
+// Java
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.oas.models.security.SecurityRequirement;
-import io.swagger.v3.oas.models.security.SecurityScheme;
+import io.swagger.v3.oas.models.info.Info;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-@OpenAPIDefinition(
-        info = @Info(
-                title = "Example API Docs",
-                description = "Description",
-                version = "v1"
-        )
-)
 @Configuration
 public class SwaggerConfig {
-
-    private static final String BEARER_TOKEN_PREFIX = "Bearer";
-
     @Bean
     public OpenAPI openAPI() {
-        SecurityScheme auth = new SecurityScheme()
-                .type(SecurityScheme.Type.APIKEY).in(SecurityScheme.In.COOKIE).name("JSESSIONID");
-        SecurityRequirement securityRequirement = new SecurityRequirement().addList("basicAuth");
-
         return new OpenAPI()
-                .components(new Components().addSecuritySchemes("basicAuth", auth))
-                .addSecurityItem(securityRequirement);
+                .components(new Components())
+                .info(apiInfo());
     }
 
+    private Info apiInfo() {
+        return new Info()
+                .title("눈덩이 주식투자 API 명세서")
+                .description("눈덩이 주식투자 API 명세서")
+                .version("v1");
+    }
 }

@@ -24,8 +24,9 @@ import java.io.IOException;
 
 public class RestAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
     private final ObjectMapper objectMapper = new ObjectMapper();
+
     public RestAuthenticationFilter(HttpSecurity http) {
-        super(new AntPathRequestMatcher("/api/login", "POST"));
+        super(new AntPathRequestMatcher("/api/v1/auth/login", "POST"));
         setSecurityContextRepository(getSecurityContextRepository(http));
     }
 

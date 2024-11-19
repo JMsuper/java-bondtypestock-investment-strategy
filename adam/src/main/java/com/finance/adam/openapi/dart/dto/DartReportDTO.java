@@ -2,15 +2,17 @@ package com.finance.adam.openapi.dart.dto;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+
+import java.io.Serializable;
 
 @Getter
 @Setter
 @ToString
+@NoArgsConstructor
+@AllArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class DartReportDTO {
+public class DartReportDTO implements Serializable {
 
     /**
      * 법인구분 : Y(유가), K(코스닥), N(코넥스), E(기타)
