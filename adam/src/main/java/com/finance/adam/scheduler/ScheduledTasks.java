@@ -27,12 +27,8 @@ public class ScheduledTasks {
         this.openDartAPI = openDartAPI;
     }
 
-    //cron = "* * * * * *"
-    //
-    //
-    // *        *        *        *        *        *        *
-    //초       분        시       일       월      요일    년도(생략가능)
     @Scheduled(cron = "0 0,20,40 8-17 * * MON-FRI")
+    @ConditionalScheduler
     public void stockPriceUpdate() {
         log.info("ScheduledTasks.stockPriceUpdate() start : {}", dateFormat.format(System.currentTimeMillis()));
         File result = csvReaderService.getKrxStockPriceCsvFile();
@@ -43,6 +39,7 @@ public class ScheduledTasks {
     }
 
     @Scheduled(cron = "0 30 6 * * MON-FRI")
+    @ConditionalScheduler
     public void stockListUpdate() {
         log.info("stockListUpdate start : {}", dateFormat.format(System.currentTimeMillis()));
         financeDataService.renewCorpInfoWithKrxList();
@@ -50,6 +47,7 @@ public class ScheduledTasks {
     }
 
     @Scheduled(cron = "0 0 7 * * MON")
+    @ConditionalScheduler
     public void financeInfoUpdate() {
         log.info("financeInfoUpdate start : {}", dateFormat.format(System.currentTimeMillis()));
         financeDataService.renewFinancialInfo();
@@ -57,10 +55,10 @@ public class ScheduledTasks {
     }
 
     @Scheduled(cron = "0 * * * * *")
+    @ConditionalScheduler
     public void recentReportRedisUpdate() {
         log.info("recentReportRedisUpdate start : {}", dateFormat.format(System.currentTimeMillis()));
         openDartAPI.updateRecentReportInRedis();
         log.info("recentReportRedisUpdate end : {}", dateFormat.format(System.currentTimeMillis()));
     }
-
 }
