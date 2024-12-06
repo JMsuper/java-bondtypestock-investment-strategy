@@ -172,7 +172,7 @@ public class OpenDartAPI {
             reportTypeMap.put(reportType, new ArrayList<>());
         }
 
-        Set<String> corpCodeSet = corpRepository.findAll().stream().map((item) -> item.getCorpCode()).collect(Collectors.toSet());
+        Set<String> corpCodeSet = corpRepository.findAllWithStockPrice().stream().map((item) -> item.getCorpCode()).collect(Collectors.toSet());
 
         // 1. 공시유형별(ReportType) 조회
         for(ReportType reportType : reportTypes){
