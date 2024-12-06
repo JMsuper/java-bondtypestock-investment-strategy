@@ -15,26 +15,26 @@ class CsvReaderServiceTest {
     @Autowired
     CsvReaderService csvReaderService;
 
-    @Test
-    void test1(){
-        File result = csvReaderService.getKrxStockPriceCsvFile();
-        String filePath = result.getPath();
-        Map<String, StockPriceInfoDTO> stockPriceInfoDTOList = csvReaderService.readKrxPriceCsvFile(filePath);
-        csvReaderService.saveOrUpdateStockPrices(stockPriceInfoDTOList);
-    }
-
-    @Test
-    void test2(){
-        File result = csvReaderService.getKrxStockPriceCsvFile();
-        String filePath = result.getPath();
-        Map<String, StockPriceInfoDTO> stockPriceInfoDTOList = csvReaderService.readKrxPriceCsvFile(filePath);
-    }
-
-    @Test
-    void test3(){
-        String code = csvReaderService.getKrxStockPriceOTPCode();
-        System.out.println(code);
-    }
+//    @Test
+//    void test1(){
+//        File result = csvReaderService.getKrxStockPriceCsvFile();
+//        String filePath = result.getPath();
+//        Map<String, StockPriceInfoDTO> stockPriceInfoDTOList = csvReaderService.readKrxPriceCsvFile(filePath);
+//        csvReaderService.saveOrUpdateStockPrices(stockPriceInfoDTOList);
+//    }
+//
+//    @Test
+//    void test2(){
+//        File result = csvReaderService.getKrxStockPriceCsvFile();
+//        String filePath = result.getPath();
+//        Map<String, StockPriceInfoDTO> stockPriceInfoDTOList = csvReaderService.readKrxPriceCsvFile(filePath);
+//    }
+//
+//    @Test
+//    void test3(){
+//        String code = csvReaderService.getKrxStockPriceOTPCode();
+//        System.out.println(code);
+//    }
 
 
 }

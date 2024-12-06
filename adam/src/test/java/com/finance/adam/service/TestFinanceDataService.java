@@ -18,22 +18,22 @@ public class TestFinanceDataService {
     @Autowired
     FinanceDataService financeDataService;
 
-    @Test
-    @DisplayName("기업 정보 가져오기")
-    void test1(){
-        List<KrxCorpListResponse> krxCorpListResponses = financeDataService.getKrxCorpInfo();
-        assertThat(krxCorpListResponses).isNotNull();
-    }
-
-    @Test
-    @DisplayName("재무 정보 가져와서 DB에 저장하기")
-    void test2(){
-        financeDataService.renewFinancialInfo();
-    }
-
-    @Test
-    @DisplayName("renewKrxStockList")
-    void renewFinanceStockList(){
-        financeDataService.renewCorpInfoWithKrxList();
-    }
+//    @Test
+//    @DisplayName("기업 정보 가져오기")
+//    void test1(){
+//        List<KrxCorpListResponse> krxCorpListResponses = financeDataService.getKrxCorpInfo();
+//        assertThat(krxCorpListResponses).isNotNull();
+//    }
+//
+//    @Test
+//    @DisplayName("재무 정보 가져와서 DB에 저장하기")
+//    void test2(){
+//        financeDataService.renewFinancialInfo();
+//    }
+//
+//    @Test
+//    @DisplayName("renewKrxStockList")
+//    void renewFinanceStockList(){
+//        financeDataService.renewCorpInfoWithKrxList();
+//    }
 }

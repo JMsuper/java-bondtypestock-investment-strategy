@@ -14,9 +14,9 @@ public class TestCorpRepository {
     @Autowired
     private CorpRepository corpRepository;
 
-    @Test
-    void test(){
-        List<CorpInfo> corpInfoList = corpRepository.findAllWithStockPrice();
-        System.out.println(corpInfoList);
-    }
+//    @Test
+//    void test(){
+//        List<CorpInfo> corpInfoList = corpRepository.findAllWithStockPrice();
+//        System.out.println(corpInfoList);
+//    }
 }

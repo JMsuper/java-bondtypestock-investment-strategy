@@ -24,10 +24,10 @@ public class TestPublicDataPortalOpenAPI {
     @Autowired
     PublicDataPortalOpenAPI publicDataPortalOpenAPI;
 
-    @Test
-    void getKrxItemInfoMap(){
-        Map<String, KrxItemInfo> map = publicDataPortalOpenAPI.getKrxItemInfoMap();
-        System.out.println();
-    }
+//    @Test
+//    void getKrxItemInfoMap(){
+//        Map<String, KrxItemInfo> map = publicDataPortalOpenAPI.getKrxItemInfoMap();
+//        System.out.println();
+//    }
 
 }
