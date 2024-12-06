@@ -24,8 +24,8 @@ public class StockPrice {
     /**
      * 회사 정보, 주식 코드
      */
-    @OneToOne
-    @JoinColumn(name = "corp_info_id")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "corp_info_id", unique = true)
     private CorpInfo corpInfo;
 
     /**

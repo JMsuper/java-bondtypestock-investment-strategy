@@ -132,7 +132,7 @@ public class FinanceDataService {
 
     @Transactional
     public void renewFinancialInfo(){
-        List<CorpInfo> corpInfos = corpRepository.findAll();
+        List<CorpInfo> corpInfos = corpRepository.findAllWithStockPriceAndFinanceInfos();
         for (CorpInfo corpInfo : corpInfos) {
             String corpCode = corpInfo.getCorpCode();
 
@@ -172,7 +172,7 @@ public class FinanceDataService {
     public void renewCorpInfoWithKrxList(){
         Map<String, KrxItemInfo> krxItemInfoMap = publicDataPortalOpenAPI.getKrxItemInfoMap();
         Map<String,String> corpCodeMap = openDartAPI.getCorpCodeMap();
-        List<CorpInfo> corpInfoList = corpRepository.findAll();
+        List<CorpInfo> corpInfoList = corpRepository.findAllWithStockPrice();
 
         for(CorpInfo corpInfo : corpInfoList){
             String stockCode = corpInfo.getStockCode();

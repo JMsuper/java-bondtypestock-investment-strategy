@@ -4,10 +4,7 @@ package com.finance.adam.repository.corpinfo.domain;
 import com.finance.adam.openapi.publicdataportal.vo.KrxItemInfo;
 import com.finance.adam.repository.financeinfo.domain.FinanceInfo;
 import com.finance.adam.repository.stockprice.domain.StockPrice;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -48,10 +45,10 @@ public class CorpInfo {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "corpInfo")
+    @OneToMany(mappedBy = "corpInfo", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<FinanceInfo> financeInfos;
 
-    @OneToOne(mappedBy = "corpInfo")
+    @OneToOne(mappedBy = "corpInfo", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private StockPrice stockPrice;
 
 
