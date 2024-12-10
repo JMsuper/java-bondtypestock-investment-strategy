@@ -17,6 +17,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Component
@@ -129,7 +130,7 @@ public class OpenDartUtil {
         }
 
         byte[] responseBody = response.getBody();
-        log.info("Download completed successfully. Downloaded {} bytes", responseBody.length);
+        log.info("Download completed successfully. Downloaded {} bytes", Objects.requireNonNull(responseBody).length);
         return responseBody;
     }
 
@@ -156,13 +157,11 @@ public class OpenDartUtil {
 
     private OpenDartBaseResponseDTO getRequest(URI uri){
         log.debug("Making GET request to URI: {}", uri);
-        if(DELAY_MILLI_SEC != 0){
-            try {
-                log.debug("Applying delay of {} milliseconds", DELAY_MILLI_SEC);
-                Thread.sleep(DELAY_MILLI_SEC);
-            } catch (InterruptedException e) {
-                log.debug("Sleep interrupted during request delay", e);
-            }
+        try {
+            log.debug("Applying delay of {} milliseconds", DELAY_MILLI_SEC);
+            Thread.sleep(DELAY_MILLI_SEC);
+        } catch (InterruptedException e) {
+            log.debug("Sleep interrupted during request delay", e);
         }
 
         ResponseEntity<OpenDartBaseResponseDTO> rawResponse = restTemplate.getForEntity(uri,OpenDartBaseResponseDTO.class);

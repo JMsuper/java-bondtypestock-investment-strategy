@@ -55,9 +55,14 @@ public class AuthController {
         String password = userRegisterDTO.getPassword();
 
         log.info("Registering new user with id: {}, email: {}", id, email);
-        userService.saveUser(id, email, password);
-        log.info("Successfully registered user: {}", id);
-        return "success";
+        try {
+            userService.saveUser(id, email, password);
+            log.info("Successfully registered user: {}", id);
+            return "success";
+
+        }catch (CustomException e){
+            return "fail";
+        }
     }
 
     @PostMapping("/auto-login")

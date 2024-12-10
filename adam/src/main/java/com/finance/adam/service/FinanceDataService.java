@@ -51,7 +51,7 @@ public class FinanceDataService {
         }
         log.debug("{} corporations have valid stock price information", nullCheckedCorpInfos.size());
         return nullCheckedCorpInfos.stream()
-                .map((corpInfo -> KrxCorpListResponse.fromCorpInfo(corpInfo)))
+                .map((KrxCorpListResponse::fromCorpInfo))
                 .collect(Collectors.toList());
     }
 
@@ -91,7 +91,7 @@ public class FinanceDataService {
     public List<OpenDartReportExtractedDTO> getReports(String corpCode){
         log.info("Getting recent reports for corpCode: {}", corpCode);
         List<OpenDartReportExtractedDTO> reportList = openDartAPI.getRecentReportListFive(corpCode)
-                .stream().map((report) -> OpenDartReportExtractedDTO.from(report))
+                .stream().map(OpenDartReportExtractedDTO::from)
                 .toList();
         log.debug("Retrieved {} recent reports", reportList.size());
         return reportList;
@@ -117,21 +117,20 @@ public class FinanceDataService {
         Map<String,Long> OFS = new HashMap<>();
         OFS.put("OFS",0L);
 
-        for(int i = 0; i < corpFinancialInfoList.size(); i++){
-            DartFinancialInfo info = corpFinancialInfoList.get(i);
+        for (DartFinancialInfo info : corpFinancialInfoList) {
             Map<String, Long> currentFs;
-            if(info.getFsNm().equals("연결재무제표")){
+            if (info.getFsNm().equals("연결재무제표")) {
                 currentFs = CFS;
-            }else{
+            } else {
                 currentFs = OFS;
             }
 
             String name = info.getAccountNm();
 
-            try{
-                Long amount = Long.parseLong(info.getThstrmAmount().replaceAll(",",""));
+            try {
+                Long amount = Long.parseLong(info.getThstrmAmount().replaceAll(",", ""));
                 currentFs.put(name, amount);
-            }catch (NumberFormatException e){
+            } catch (NumberFormatException e) {
                 log.error("Failed to parse amount for corpCode: {}, year: {}, account: {}", corpCode, bsnsYear, name);
                 log.error("Error message: {}", e.getMessage());
             }

@@ -111,8 +111,7 @@ public class AlarmController {
         String userId = accountDto.getId();
         log.info("Updating report alarm - userId: {}, reportId: {}", userId, reportId);
         log.debug("Report alarm update details: {}", dto);
-        
-        ReportAlarmListDTO reportAlarmListDTO = alarmService.updateReportAlarm(userId, dto);
-        return reportAlarmListDTO;
+
+        return alarmService.updateReportAlarm(userId, dto);
     }
 }

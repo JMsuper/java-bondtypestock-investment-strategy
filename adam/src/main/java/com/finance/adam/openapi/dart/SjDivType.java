@@ -34,7 +34,7 @@ public enum SjDivType {
     SCE2("자본변동표, 개별"),
             ;
 
-    String description;
+    private final String description;
     SjDivType(String description){
         this.description = description;
     }

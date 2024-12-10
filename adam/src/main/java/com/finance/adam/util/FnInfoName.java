@@ -1,7 +1,9 @@
 package com.finance.adam.util;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
+@Getter
 @Slf4j
 public enum FnInfoName {
     currentAsset("유동자산"),
@@ -20,14 +22,10 @@ public enum FnInfoName {
     netLoss("당기순이익(손실)"),
     comprehensiveIncome("총포괄손익");
 
-    private String value;
+    private final String value;
 
     FnInfoName(String value) {
         this.value = value;
-    }
-
-    public String getValue() {
-        return value;
     }
 
     public static FnInfoName fromValue(String value) {

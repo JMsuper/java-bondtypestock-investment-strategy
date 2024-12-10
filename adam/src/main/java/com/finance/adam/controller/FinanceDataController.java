@@ -16,8 +16,8 @@ import java.util.List;
 @RequestMapping("/api/v1/finances")
 public class FinanceDataController {
 
-    private FinanceDataService financeDataService;
-    private ScreeningService screeningService;
+    private final FinanceDataService financeDataService;
+    private final ScreeningService screeningService;
 
     public FinanceDataController(FinanceDataService financeDataService, ScreeningService screeningService){
         this.financeDataService = financeDataService;

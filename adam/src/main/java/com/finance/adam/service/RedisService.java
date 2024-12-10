@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public class RedisService {
 
-    private RedisTemplate<String, Object> redisTemplate;
+    private final RedisTemplate<String, Object> redisTemplate;
 
     public RedisService(RedisTemplate redisTemplate){
         this.redisTemplate = redisTemplate;

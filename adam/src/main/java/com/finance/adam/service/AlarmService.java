@@ -73,11 +73,12 @@ public class AlarmService {
 
         for (SaveCorpInfo saveCorpInfo : saveCorpInfoList) {
             List<ReportAlarm> reportAlarmList = reportAlarmRepository.findAllBySaveCorpInfo(saveCorpInfo);
+            boolean active = !reportAlarmList.isEmpty() && reportAlarmList.get(0).isActive();
             reportAlarmListDTOList.add(ReportAlarmListDTO.builder()
                     .stockName(saveCorpInfo.getCorpInfo().getName())
                     .saveCorpInfoId(saveCorpInfo.getId())
                     .reportTypeList(reportAlarmList.stream().map(ReportAlarm::getReportType).toList())
-                    .active(reportAlarmList.size() > 0 ? reportAlarmList.get(0).isActive() : false)
+                    .active(active)
                     .build());
         }
         reportAlarmListDTOList.sort(Comparator.comparing(ReportAlarmListDTO::getSaveCorpInfoId));

@@ -1,6 +1,7 @@
 package com.finance.adam.controller;
 
 import com.finance.adam.auth.dto.AccountDto;
+import com.finance.adam.exception.CustomException;
 import com.finance.adam.repository.savecorpinfo.dto.SaveCorpInfoListResponse;
 import com.finance.adam.repository.savecorpinfo.dto.SaveCorpInfoUpdateDTO;
 import com.finance.adam.service.CorpInfoService;
@@ -37,9 +38,12 @@ public class SaveCorpController {
         String userId = accountDto.getId();
         log.info("Saving corporation {} for user: {}", corpCode, userId);
 
-        corpInfoService.saveCorpInfoListWithUser(corpCode, userId);
-
-        return "success";
+        try{
+            corpInfoService.saveCorpInfoListWithUser(corpCode, userId);
+            return "success";
+        }catch (CustomException e){
+            throw e;
+        }
     }
 
     @PutMapping("/{corpCode}")
@@ -50,10 +54,12 @@ public class SaveCorpController {
         String userId = accountDto.getId();
         log.info("Updating saved corporation {} for user: {}", corpCode, userId);
         log.debug("Update details: {}", saveCorpInfoUpdateDTO);
-
-        corpInfoService.updateSaveCorpInfo(corpCode,saveCorpInfoUpdateDTO, userId);
-
-        return "success";
+        try{
+            corpInfoService.updateSaveCorpInfo(corpCode,saveCorpInfoUpdateDTO, userId);
+            return "success";
+        }catch (CustomException e){
+            throw e;
+        }
     }
 
     @DeleteMapping("/{corpCode}")
@@ -62,9 +68,13 @@ public class SaveCorpController {
             @AuthenticationPrincipal AccountDto accountDto) {
         String userId = accountDto.getId();
         log.info("Deleting saved corporation {} for user: {}", corpCode, userId);
-        
-        corpInfoService.deleteCorpInfoListWithUser(corpCode, userId);
 
-        return "success";
+        try{
+            corpInfoService.deleteCorpInfoListWithUser(corpCode, userId);
+            return "success";
+        }catch (CustomException e){
+            throw e;
+        }
+
     }
 }

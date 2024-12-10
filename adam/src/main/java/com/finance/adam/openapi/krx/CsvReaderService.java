@@ -55,6 +55,18 @@ public class CsvReaderService {
         String formattedDate = currentDate.format(formatter);
         log.debug("Using date {} for OTP request", formattedDate);
 
+        HttpEntity<MultiValueMap<String, String>> request = getMultiValueMapHttpEntity(formattedDate, headers);
+
+        // postForEntity 메서드는 POST 요청을 보내고, 응답을 ResponseEntity 객체로 받음
+        // 아래 POST 요청은 Http Body 에 OTP 코드를 담아 반환하는 요청
+        // EX) HTTP BODY : lksjdofevxlkjg
+        String url = "http://data.krx.co.kr/comm/fileDn/GenerateOTP/generate.cmd";
+        ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
+        log.info("Successfully received OTP code from KRX");
+        return response.getBody();
+    }
+
+    private static HttpEntity<MultiValueMap<String, String>> getMultiValueMapHttpEntity(String formattedDate, HttpHeaders headers) {
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
         map.add("locale", "ko_KR");
         map.add("mktId", "ALL");
@@ -67,13 +79,7 @@ public class CsvReaderService {
 
         // HttpEntity 는 HTTP 요청을 위한 클래스로, 요청 헤더와 요청 바디를 설정할 수 있음
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
-
-        // postForEntity 메서드는 POST 요청을 보내고, 응답을 ResponseEntity 객체로 받음
-        // 아래 POST 요청은 Http Body 에 OTP 코드를 담아 반환하는 요청
-        // EX) HTTP BODY : lksjdofevxlkjg
-        ResponseEntity<String> response = restTemplate.postForEntity("http://data.krx.co.kr/comm/fileDn/GenerateOTP/generate.cmd", request, String.class);
-        log.info("Successfully received OTP code from KRX");
-        return response.getBody();
+        return request;
     }
 
 
@@ -90,10 +96,11 @@ public class CsvReaderService {
         map.add("code", otpCode);
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
 
-        ResponseEntity<byte[]> response = restTemplate.postForEntity("http://data.krx.co.kr/comm/fileDn/download_csv/download.cmd", request, byte[].class);
+        String url = "http://data.krx.co.kr/comm/fileDn/download_csv/download.cmd";
+        ResponseEntity<byte[]> response = restTemplate.postForEntity(url, request, byte[].class);
         log.debug("Received CSV file response from KRX");
 
-        /***
+        /**
          * Content-Disposition은 HTTP 헤더 중 하나로, HTTP 응답 본문의 처리 방식을 정의하는 데 사용됩니다.
          * 이 헤더는 주로 다운로드할 파일의 이름을 지정하거나, 브라우저가 응답을 어떻게 처리해야 하는지를 지시하는 데 사용됩니다.
          * Content-Disposition 헤더에는 주로 두 가지 타입의 값이 사용됩니다:
@@ -106,7 +113,7 @@ public class CsvReaderService {
          * 예를 들어, Content-Disposition: attachment; filename="example.txt"라는 헤더는,
          * 브라우저에게 응답 본문을 example.txt 라는 이름의 파일로 다운로드하도록 지시합니다.
          */
-        String contentDisposition = response.getHeaders().get("Content-Disposition").toString();
+        String contentDisposition = Objects.requireNonNull(response.getHeaders().get("Content-Disposition")).toString();
         String fileName = contentDisposition.substring(contentDisposition.indexOf("filename=") + 9, contentDisposition.length() - 1);
         log.debug("Extracted filename from response: {}", fileName);
 
@@ -129,15 +136,13 @@ public class CsvReaderService {
             outputFile.createNewFile();
         } catch (IOException e) {
             log.error("Failed to create new file", e);
-            e.printStackTrace();
         }
 
         try (FileOutputStream fos = new FileOutputStream(outputFile)) {
-            fos.write(response.getBody());
+            fos.write(Objects.requireNonNull(response.getBody()));
             log.info("Successfully wrote CSV file to: {}", filePath);
         } catch (IOException e) {
             log.error("Failed to write CSV file", e);
-            e.printStackTrace();
         }
 
         return outputFile;
@@ -195,7 +200,7 @@ public class CsvReaderService {
                     for(int i = 0; i < line.length; i++){
                         String columnName = line[i];
                         if(!columnName.equals(columnNameList[i])){
-                            log.error("CSV 파일의 컬럼 순서가 일치하지 않습니다. " + columnName + " : " + columnNameList[i]);
+                            log.error("CSV 파일의 컬럼 순서가 일치하지 않습니다. {} : {}", columnName, columnNameList[i]);
                             return null;
                         }
                     }
@@ -208,10 +213,8 @@ public class CsvReaderService {
             log.info("Successfully read {} stock price records from CSV", stockPriceInfoMap.size());
         } catch (IOException e) {
             log.error("Error reading CSV file", e);
-            e.printStackTrace();
         } catch (CsvValidationException e) {
             log.error("CSV validation error", e);
-            e.printStackTrace();
         }
 
         return stockPriceInfoMap;
@@ -252,7 +255,7 @@ public class CsvReaderService {
 
                 StockPriceInfoDTO stockPriceInfoDTO = stockPriceInfoMap.get(corp.getParsedStockCode());
                 if(stockPriceInfoDTO == null){
-                    log.warn("StockPriceInfoDTO is null. corpCode : " + corp.getParsedStockCode());
+                    log.warn("StockPriceInfoDTO is null. corpCode : {}", corp.getParsedStockCode());
                     continue;
                 }
                 stockPrice.setClosingPrice(stockPriceInfoDTO.getClosingPrice());

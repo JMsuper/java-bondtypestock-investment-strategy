@@ -26,7 +26,7 @@ public class RestRememberMeServices extends TokenBasedRememberMeServices {
         this.setUseSecureCookie(true);
     }
 
-    private GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
+    private final GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
 
     @Override
     public void onLoginSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -90,7 +90,7 @@ public class RestRememberMeServices extends TokenBasedRememberMeServices {
 
     private String getCookiePath(HttpServletRequest request) {
         String contextPath = request.getContextPath();
-        return (contextPath.length() > 0) ? contextPath : "/";
+        return (!contextPath.isEmpty()) ? contextPath : "/";
     }
 
     @Override

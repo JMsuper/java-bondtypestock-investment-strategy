@@ -4,6 +4,9 @@ package com.finance.adam.openapi.dart;
     에러 메시지 참고 링크(다트 API 설명) : https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS003&apiId=2019016
  */
 
+import lombok.Getter;
+
+@Getter
 public enum OpenDartResponseMsg {
     NORMAL("000", "정상"),
     UNREGISTERED_KEY("010", "등록되지 않은 키입니다."),
@@ -36,11 +39,4 @@ public enum OpenDartResponseMsg {
         throw new IllegalArgumentException("Unknown code: " + code);
     }
 
-    public String getCode() {
-        return code;
-    }
-
-    public String getMessage() {
-        return message;
-    }
 }

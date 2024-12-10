@@ -15,8 +15,8 @@ public enum ReportType {
     I("거래소공시","EXCHANGE"),
     J("공정위공시","FAIR_TRADE");
 
-    private String name;
-    private String description;
+    private final String name;
+    private final String description;
 
     ReportType(String name, String description) {
         this.name = name;

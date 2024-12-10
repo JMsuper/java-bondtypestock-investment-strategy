@@ -19,7 +19,8 @@ public class MultiValueMapConverter {
     public static MultiValueMap<String, String> convert(ObjectMapper objectMapper, Object dto){
         try{
             MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-            Map<String, String> map = objectMapper.convertValue(dto, new TypeReference<Map<String, String>>() {});
+            Map<String, String> map = objectMapper.convertValue(dto, new TypeReference<>() {
+            });
             params.setAll(map);
 
             return params;
@@ -35,7 +36,8 @@ public class MultiValueMapConverter {
     public static MultiValueMap<String, String> convertWithOutNull(ObjectMapper objectMapper, Object dto){
         try{
             MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-            Map<String, String> map = objectMapper.convertValue(dto, new TypeReference<Map<String, String>>() {});
+            Map<String, String> map = objectMapper.convertValue(dto, new TypeReference<>() {
+            });
             map.entrySet().stream()
                     .filter(entry -> entry.getValue() != null)
                     .forEach(entry -> params.add(entry.getKey(), entry.getValue()));

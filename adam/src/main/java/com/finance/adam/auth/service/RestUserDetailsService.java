@@ -26,7 +26,7 @@ public class RestUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
 
         Optional<Account> optionalAccount = userRepository.findById(id);
-        if (!optionalAccount.isPresent()) {
+        if (optionalAccount.isEmpty()) {
             throw new UsernameNotFoundException("No user found with id: " + id);
         }
         Account account = optionalAccount.get();

@@ -44,8 +44,7 @@ public class FinanceCalculator {
             long openingPrice,
             float afterTenYearsBPS
     ){
-        float expectedRate = (float) Math.pow((double) afterTenYearsBPS / openingPrice, 0.1) - 1;
-        return expectedRate;
+        return (float) Math.pow((double) afterTenYearsBPS / openingPrice, 0.1) - 1;
     }
 
     public int calculateTargetPrice(

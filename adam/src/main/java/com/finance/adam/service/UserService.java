@@ -20,7 +20,7 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public void saveUser(String id, String email, String password) {
+    public void saveUser(String id, String email, String password) throws CustomException {
         log.info("Attempting to save new user with id: {}", id);
         Optional<Account> optionalAccount = userRepository.findById(id);
         if(optionalAccount.isPresent()){
@@ -36,7 +36,7 @@ public class UserService {
     public AccountDto updateUserEmail(UserUpdateEmailDTO userUpdateEmailDTO, String userId) {
         log.info("Attempting to update email for user: {}", userId);
         Optional<Account> optionalAccount = userRepository.findById(userId);
-        if(!optionalAccount.isPresent()){
+        if(optionalAccount.isEmpty()){
             log.warn("User not found with id: {}", userId);
             throw new CustomException(ErrorCode.NOT_FOUND_USER);
         }
@@ -50,7 +50,7 @@ public class UserService {
     public AccountDto updateUserPassword(UserUpdatePasswordDTO userUpdatePasswordDTO, String userId) {
         log.info("Attempting to update password for user: {}", userId);
         Optional<Account> optionalAccount = userRepository.findById(userId);
-        if(!optionalAccount.isPresent()){
+        if(optionalAccount.isEmpty()){
             log.warn("User not found with id: {}", userId);
             throw new CustomException(ErrorCode.NOT_FOUND_USER);
         }

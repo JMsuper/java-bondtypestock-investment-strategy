@@ -4,6 +4,7 @@ import com.finance.adam.openapi.dart.dto.DartFinancialInfo;
 import com.finance.adam.openapi.dart.dto.DartReportDTO;
 import com.finance.adam.openapi.dart.dto.request.OpenDartBaseRequestDTO;
 import com.finance.adam.repository.corpinfo.CorpRepository;
+import com.finance.adam.repository.corpinfo.domain.CorpInfo;
 import com.finance.adam.repository.reportalarm.domain.ReportType;
 import com.finance.adam.service.RedisService;
 import com.finance.adam.util.CustomModelMapper;
@@ -61,7 +62,6 @@ public class OpenDartAPI {
      * 정기보고서 재무정보 / 단일회사 주요계정
      * @param corpCode 전자공시 기업코드
      * @param bsnsYear 조회연도
-     * @return
      */
     public List<DartFinancialInfo> getCorpFinancialInfo(String corpCode, String bsnsYear) {
         log.info("Getting financial info for corp: {}, year: {}", corpCode, bsnsYear);
@@ -78,7 +78,13 @@ public class OpenDartAPI {
         List<DartFinancialInfo> list = new LinkedList<>();
         for(Object snakeCaseMap : response){
             DartFinancialInfo dto = new DartFinancialInfo();
-            CustomModelMapper.convert((Map<String, String>) snakeCaseMap, dto, DartFinancialInfo.class);
+            if(!(snakeCaseMap instanceof Map)){
+                log.error("Invalid data type for conversion: {}", snakeCaseMap.getClass());
+                continue;
+            }
+            @SuppressWarnings("unchecked")
+            Map<String, String> map = (Map<String, String>) snakeCaseMap;
+            CustomModelMapper.convert(map, dto, DartFinancialInfo.class);
             list.add(dto);
         }
 
@@ -118,7 +124,6 @@ public class OpenDartAPI {
      * @param corpCode 전자공시 기업코드
      * @param pageCount 페이지 당 조회건수
      * @param reportType 공시보고서 유형
-     * @return
      */
     public List<DartReportDTO> getRecentReportList(String corpCode, int pageCount, ReportType reportType){
         log.info("Getting recent reports - corpCode: {}, pageCount: {}, reportType: {}", corpCode, pageCount, reportType);
@@ -190,7 +195,7 @@ public class OpenDartAPI {
             reportTypeMap.put(reportType, new ArrayList<>());
         }
 
-        Set<String> corpCodeSet = corpRepository.findAllWithStockPrice().stream().map((item) -> item.getCorpCode()).collect(Collectors.toSet());
+        Set<String> corpCodeSet = corpRepository.findAllWithStockPrice().stream().map(CorpInfo::getCorpCode).collect(Collectors.toSet());
         log.debug("Found {} corporations with stock prices", corpCodeSet.size());
 
         // 1. 공시유형별(ReportType) 조회
@@ -241,7 +246,13 @@ public class OpenDartAPI {
         List<DartReportDTO> list = new LinkedList<>();
         for(Object snakeCaseMap : response){
             DartReportDTO dto = new DartReportDTO();
-            CustomModelMapper.convert((Map<String, String>) snakeCaseMap, dto, DartReportDTO.class);
+            if(!(snakeCaseMap instanceof Map)){
+                log.error("Invalid data type for conversion: {}", snakeCaseMap.getClass());
+                continue;
+            }
+            @SuppressWarnings("unchecked")
+            Map<String, String> map = (Map<String, String>) snakeCaseMap;
+            CustomModelMapper.convert(map, dto, DartReportDTO.class);
             list.add(dto);
         }
         return list;
@@ -343,7 +354,7 @@ public class OpenDartAPI {
                             stockCode = nodeValue;
                         }
                     }
-                    if(corpCode != null && !corpCode.equals(" ") && stockCode != null && !stockCode.equals(" ")){
+                    if(corpCode != null && !corpCode.equals(" ") && !stockCode.equals(" ")){
                         corpCodeMap.put(stockCode,corpCode);
                         break;
                     }

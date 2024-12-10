@@ -42,7 +42,7 @@ public class OpenDartAPITest {
 
         List<DartFinancialInfo> result = openDartAPI.getCorpFinancialInfo(corpCode,bsnsYear);
         assertTrue(result != null);
-        assertTrue(result.size() > 0);
+        assertTrue(!result.isEmpty());
         assertTrue(result.get(0).getCorpCode().equals(corpCode));
     }
 

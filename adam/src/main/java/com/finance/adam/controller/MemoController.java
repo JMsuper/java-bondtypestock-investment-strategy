@@ -25,8 +25,7 @@ public class MemoController {
         log.info("Creating memo for user: {}", userId);
         log.debug("Memo create details: {}", memoCreateDTO);
 
-        MemoDTO memoDTO = memoService.createMemo(userId, memoCreateDTO);
-        return memoDTO;
+        return memoService.createMemo(userId, memoCreateDTO);
     }
 
     @PutMapping("/{memoId}")
@@ -38,8 +37,7 @@ public class MemoController {
         log.info("Updating memo - userId: {}, memoId: {}", userId, memoId);
         log.debug("Memo update details: {}", memoUpdateDTO);
 
-        MemoDTO memoDTO = memoService.updateMemo(userId, memoId, memoUpdateDTO);
-        return memoDTO;
+        return memoService.updateMemo(userId, memoId, memoUpdateDTO);
     }
 
     @DeleteMapping("/{memoId}")

@@ -55,7 +55,7 @@ public class CorpInfoService {
             StockPrice stockPrice = corpInfo.getStockPrice();
 
             List<OpenDartReportExtractedDTO> reportList = openDartAPI.getRecentReportListFive(corpInfo.getCorpCode())
-                    .stream().map((report) -> OpenDartReportExtractedDTO.from(report))
+                    .stream().map(OpenDartReportExtractedDTO::from)
                     .toList();
             log.debug("Retrieved {} recent reports for corporation {}", reportList.size(), corpInfo.getCorpCode());
 
@@ -79,7 +79,7 @@ public class CorpInfoService {
                 return SaveCorpInfoListResponse.fromSaveCorpInfo(saveCorpInfo,reportList,bps);
             }
 
-            Long afterTenYearsBPS = financeCalculator.calculateAfterTenYearBPS(
+            long afterTenYearsBPS = financeCalculator.calculateAfterTenYearBPS(
                     bps,
                     saveCorpInfo.getAfterTenYearsAverageROE());
             float expectedRate = financeCalculator.calculateExpectedRate(
@@ -90,7 +90,7 @@ public class CorpInfoService {
                     saveCorpInfo.getTargetRate(),
                     afterTenYearsBPS
             );
-            log.debug("Calculated projections for corporation {}: 10Y BPS={}, expectedRate={}, targetPrice={}", 
+            log.debug("Calculated projections for corporation {}: 10Y BPS={}, expectedRate={}, targetPrice={}",
                     corpInfo.getCorpCode(), afterTenYearsBPS, expectedRate, targetPrice);
 
             return SaveCorpInfoListResponse.fromSaveCorpInfo(saveCorpInfo, reportList,bps, targetPrice, expectedRate);
@@ -100,7 +100,7 @@ public class CorpInfoService {
         return result;
     }
 
-    public void saveCorpInfoListWithUser(String corpCode, String userId) {
+    public void saveCorpInfoListWithUser(String corpCode, String userId) throws CustomException{
         log.info("Saving corporation {} for user {}", corpCode, userId);
         CorpInfo corpInfo = corpRepository.findById(corpCode)
                 .orElseThrow(() -> new CustomException(ErrorCode.CORP_NOT_FOUND));
@@ -150,7 +150,9 @@ public class CorpInfoService {
         log.info("Successfully saved corporation {} for user {}", corpCode, userId);
     }
 
-    public void updateSaveCorpInfo(String corpCode,SaveCorpInfoUpdateDTO saveCorpInfoUpdateDTO, String userId) {
+    public void updateSaveCorpInfo(String corpCode,
+                                   SaveCorpInfoUpdateDTO saveCorpInfoUpdateDTO,
+                                   String userId) throws CustomException{
         log.info("Updating saved corporation {} for user {}", corpCode, userId);
         SaveCorpInfo saveCorpInfo = saveCorpInfoRepository.findByCorpInfoCorpCodeAndAccountId(corpCode, userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.SAVE_CORP_INFO_NOT_FOUND));
@@ -167,7 +169,8 @@ public class CorpInfoService {
         log.info("Successfully updated corporation {} for user {}", corpCode, userId);
     }
 
-    public void deleteCorpInfoListWithUser(String corpCode, String userId) {
+    public void deleteCorpInfoListWithUser(String corpCode,
+                                           String userId) throws CustomException{
         log.info("Deleting saved corporation {} for user {}", corpCode, userId);
         SaveCorpInfo saveCorpInfo = saveCorpInfoRepository.findByCorpInfoCorpCodeAndAccountId(corpCode, userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.SAVE_CORP_INFO_NOT_FOUND));

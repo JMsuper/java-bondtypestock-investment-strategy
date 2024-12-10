@@ -24,16 +24,6 @@ public class KrxResponseBody {
 
     private HashMap<String,List<KrxItemInfo>> items;
 
-    public int getPageNo(){return pageNo;}
-
-    public int getNumOfRows() {
-        return numOfRows;
-    }
-
-    public int getTotalCount() {
-        return totalCount;
-    }
-
     public List<KrxItemInfo> getItems() {
         return items.get("item");
     }
