@@ -4,7 +4,6 @@ import com.finance.adam.repository.savecorpinfo.domain.SaveCorpInfo;
 import com.finance.adam.util.AlarmAddedInfo;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;

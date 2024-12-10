@@ -1,11 +1,8 @@
 package com.finance.adam.repository.account.dto;
 
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 // jackson 은 직렬화를 수행할 때 기본생성자를 사용함.
 @Data

@@ -21,12 +21,14 @@ import com.finance.adam.repository.targetpricealarm.dto.CreateTargetPriceAlarmDT
 import com.finance.adam.repository.targetpricealarm.dto.TargetPriceAlarmDTO;
 import com.finance.adam.util.AlarmAddedInfo;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AlarmService {
@@ -38,26 +40,31 @@ public class AlarmService {
     private final ReportAlarmRepository reportAlarmRepository;
 
     public List<TargetPriceAlarmDTO> getTargetPriceAlarm(String userId) {
+        log.info("Getting target price alarms for user: {}", userId);
         Account account = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
 
         List<TargetPriceAlarm> targetPriceAlarmList = targetPriceAlarmRepository.findAllByAccount(account);
+        log.debug("Found {} target price alarms", targetPriceAlarmList.size());
         return targetPriceAlarmList.stream().map(
                 targetPriceAlarm -> TargetPriceAlarmDTO.from(targetPriceAlarm, targetPriceAlarm.getSaveCorpInfo().getCorpInfo())
         ).toList();
     }
 
     public List<PriceAlarmDTO> getPriceAlarm(String userId) {
+        log.info("Getting price alarms for user: {}", userId);
         Account account = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
 
         List<PriceAlarm> priceAlarmList = priceAlarmRepository.findAllByAccount(account);
+        log.debug("Found {} price alarms", priceAlarmList.size());
         return priceAlarmList.stream().map(
                 priceAlarm -> PriceAlarmDTO.from(priceAlarm, priceAlarm.getSaveCorpInfo().getCorpInfo())
         ).toList();
     }
 
     public List<ReportAlarmListDTO> getReportAlarmList(String userId) {
+        log.info("Getting report alarms for user: {}", userId);
         Account account = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
 
@@ -65,7 +72,6 @@ public class AlarmService {
         List<ReportAlarmListDTO> reportAlarmListDTOList = new ArrayList<>();
 
         for (SaveCorpInfo saveCorpInfo : saveCorpInfoList) {
-
             List<ReportAlarm> reportAlarmList = reportAlarmRepository.findAllBySaveCorpInfo(saveCorpInfo);
             reportAlarmListDTOList.add(ReportAlarmListDTO.builder()
                     .stockName(saveCorpInfo.getCorpInfo().getName())
@@ -75,10 +81,12 @@ public class AlarmService {
                     .build());
         }
         reportAlarmListDTOList.sort(Comparator.comparing(ReportAlarmListDTO::getSaveCorpInfoId));
+        log.debug("Found {} report alarms", reportAlarmListDTOList.size());
         return reportAlarmListDTOList;
     }
 
     public void createTargetPriceAlarm(String userId, CreateTargetPriceAlarmDTO createTargetPriceDTO) {
+        log.info("Creating target price alarm for user: {}", userId);
         Long saveCorpInfoId = createTargetPriceDTO.getSaveCorpInfoId();
 
         SaveCorpInfo saveCorpInfo = saveCorpInfoRepository.findByIdAndAccountId(saveCorpInfoId, userId)
@@ -99,9 +107,11 @@ public class AlarmService {
         targetPriceAlarm.setInfoIndexList(alarmAddedInfoList);
 
         targetPriceAlarmRepository.save(targetPriceAlarm);
+        log.info("Successfully created target price alarm for stock: {}", saveCorpInfo.getCorpInfo().getName());
     }
 
     public void createPriceAlarm(String userId, CreatePriceAlarmDTO createPriceAlarmDTO) {
+        log.info("Creating price alarm for user: {}", userId);
         Long saveCorpInfoId = createPriceAlarmDTO.getSaveCorpInfoId();
 
         SaveCorpInfo saveCorpInfo = saveCorpInfoRepository.findByIdAndAccountId(saveCorpInfoId, userId)
@@ -118,43 +128,51 @@ public class AlarmService {
 
         priceAlarm.setInfoIndexList(alarmAddedInfoList);
         priceAlarmRepository.save(priceAlarm);
+        log.info("Successfully created price alarm for stock: {}", saveCorpInfo.getCorpInfo().getName());
     }
 
     public void updateTargetPriceAlarmStatus(String userId, Long targetPriceAlarmId, boolean active) {
+        log.info("Updating target price alarm status - userId: {}, alarmId: {}, active: {}", userId, targetPriceAlarmId, active);
         TargetPriceAlarm targetPriceAlarm = targetPriceAlarmRepository.findById(targetPriceAlarmId)
                 .orElseThrow(() -> new CustomException(ErrorCode.ALARM_NOT_FOUND));
 
         if(!targetPriceAlarm.getSaveCorpInfo().getAccount().getId().equals(userId)){
+            log.warn("User {} attempted to update unauthorized target price alarm {}", userId, targetPriceAlarmId);
             throw new CustomException(ErrorCode.NOT_ALLOWED);
         }
 
         targetPriceAlarm.setActive(active);
         targetPriceAlarmRepository.save(targetPriceAlarm);
+        log.info("Successfully updated target price alarm status");
     }
 
     public void updatePriceAlarmStatus(String userId, Long priceAlarmId, boolean active) {
+        log.info("Updating price alarm status - userId: {}, alarmId: {}, active: {}", userId, priceAlarmId, active);
         PriceAlarm priceAlarm = priceAlarmRepository.findById(priceAlarmId)
                 .orElseThrow(() -> new CustomException(ErrorCode.ALARM_NOT_FOUND));
 
         if(!priceAlarm.getSaveCorpInfo().getAccount().getId().equals(userId)){
+            log.warn("User {} attempted to update unauthorized price alarm {}", userId, priceAlarmId);
             throw new CustomException(ErrorCode.NOT_ALLOWED);
         }
 
         priceAlarm.setActive(active);
         priceAlarmRepository.save(priceAlarm);
+        log.info("Successfully updated price alarm status");
     }
 
     public ReportAlarmListDTO updateReportAlarm(String userId, UpdateReportAlarmDTO dto) {
+        log.info("Updating report alarm - userId: {}, saveCorpInfoId: {}", userId, dto.getSaveCorpInfoId());
         Long saveCorpInfoId = dto.getSaveCorpInfoId();
         List<ReportType> updateReportTypeList = dto.getReportTypeList();
         boolean active = dto.getActive();
 
         SaveCorpInfo saveCorpInfo = saveCorpInfoRepository.findByIdAndAccountId(saveCorpInfoId, userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.SAVE_CORP_INFO_NOT_FOUND));
-        // 1. 기존 알람 삭제
+        
+        log.debug("Deleting existing report alarms for saveCorpInfoId: {}", saveCorpInfoId);
         reportAlarmRepository.deleteAllBySaveCorpInfo(saveCorpInfo);
 
-        // 2. 새로운 알람 추가
         List<ReportAlarm> reportAlarmList = new ArrayList<>();
         for (ReportType reportType : updateReportTypeList) {
             ReportAlarm reportAlarm = ReportAlarm.builder()
@@ -165,10 +183,9 @@ public class AlarmService {
             reportAlarmList.add(reportAlarm);
         }
 
-        // 3. 새로운 알람 저장
         List<ReportAlarm> savedReportAlarm = reportAlarmRepository.saveAll(reportAlarmList);
+        log.info("Successfully updated {} report alarms", savedReportAlarm.size());
 
-        // 4. DTO로 변환하여 반환
         return ReportAlarmListDTO.builder()
                 .stockName(saveCorpInfo.getCorpInfo().getName())
                 .saveCorpInfoId(saveCorpInfoId)
@@ -178,24 +195,30 @@ public class AlarmService {
     }
 
     public void deleteTargetPriceAlarm(String userId, Long targetPriceAlarmId) {
+        log.info("Deleting target price alarm - userId: {}, alarmId: {}", userId, targetPriceAlarmId);
         TargetPriceAlarm targetPriceAlarm = targetPriceAlarmRepository.findById(targetPriceAlarmId)
                 .orElseThrow(() -> new CustomException(ErrorCode.ALARM_NOT_FOUND));
 
         if(!targetPriceAlarm.getSaveCorpInfo().getAccount().getId().equals(userId)){
+            log.warn("User {} attempted to delete unauthorized target price alarm {}", userId, targetPriceAlarmId);
             throw new CustomException(ErrorCode.NOT_ALLOWED);
         }
 
         targetPriceAlarmRepository.delete(targetPriceAlarm);
+        log.info("Successfully deleted target price alarm");
     }
 
     public void deletePriceAlarm(String userId, Long priceAlarmId) {
+        log.info("Deleting price alarm - userId: {}, alarmId: {}", userId, priceAlarmId);
         PriceAlarm priceAlarm = priceAlarmRepository.findById(priceAlarmId)
                 .orElseThrow(() -> new CustomException(ErrorCode.ALARM_NOT_FOUND));
 
         if (!priceAlarm.getSaveCorpInfo().getAccount().getId().equals(userId)) {
+            log.warn("User {} attempted to delete unauthorized price alarm {}", userId, priceAlarmId);
             throw new CustomException(ErrorCode.NOT_ALLOWED);
         }
 
         priceAlarmRepository.delete(priceAlarm);
+        log.info("Successfully deleted price alarm");
     }
 }

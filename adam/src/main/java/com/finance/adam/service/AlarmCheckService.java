@@ -1,7 +1,6 @@
 package com.finance.adam.service;
 
 import com.finance.adam.openapi.dart.dto.DartReportDTO;
-import com.finance.adam.repository.account.domain.Account;
 import com.finance.adam.repository.notification.NotificationRepository;
 import com.finance.adam.repository.notification.domain.Notification;
 import com.finance.adam.repository.pricealarm.PriceAlarmRepository;
@@ -51,6 +50,7 @@ public class AlarmCheckService {
      * @return 생성된 알림 리스트
      */
     public List<Notification> triggerReportAlarm(HashMap<ReportType, List<DartReportDTO>> reportTypeMap) {
+        log.info("Starting report alarm trigger process");
         if (CollectionUtils.isEmpty(reportTypeMap)) {
             log.warn("Empty reportTypeMap provided");
             return new ArrayList<>();
@@ -61,6 +61,7 @@ public class AlarmCheckService {
         for (Map.Entry<ReportType, List<DartReportDTO>> entry : reportTypeMap.entrySet()) {
             ReportType reportType = entry.getKey();
             List<DartReportDTO> dartReportDTOList = entry.getValue();
+            log.debug("Processing report type: {} with {} reports", reportType, dartReportDTOList.size());
 
             for (DartReportDTO dartReportDTO : dartReportDTOList) {
                 String corpCode = dartReportDTO.getCorpCode();
@@ -74,6 +75,7 @@ public class AlarmCheckService {
                 List<ReportAlarm> reportAlarms = reportAlarmRepository.findAllByReportTypeAndCorpCode(
                         reportType, corpCode
                 );
+                log.debug("Found {} report alarms for corpCode: {}", reportAlarms.size(), corpCode);
 
                 // SaveCorpInfo 리스트를 DartReportDTO와 매핑
                 resultMap.put(dartReportDTO, reportAlarms.stream()
@@ -85,10 +87,10 @@ public class AlarmCheckService {
         // DartReportDTO와 관련된 SaveCorpInfo로 Notification 생성
         List<Notification> notifications = createReportNotifications(resultMap);
         notificationRepository.saveAll(notifications);
+        log.info("Created and saved {} report notifications", notifications.size());
 
         return notifications;
     }
-
 
     /**
      * 주가 정기 알람을 트리거하여 알림을 생성합니다.
@@ -96,6 +98,7 @@ public class AlarmCheckService {
      * @return 생성된 알림 리스트
      */
     public List<Notification> triggerStockPriceAlarm(Map<String, StockPriceInfoDTO> stockPriceInfoMap, LocalTime now, int currentDayOfWeek) {
+        log.info("Starting stock price alarm trigger process at {} on day {}", now, currentDayOfWeek);
         if (CollectionUtils.isEmpty(stockPriceInfoMap)) {
             log.warn("Stock price alarm trigger failed: empty stockPriceInfoMap");
             return new ArrayList<>();
@@ -106,7 +109,9 @@ public class AlarmCheckService {
                 .collect(Collectors.toList());
 
         log.debug("Found {} matching price alarms for current time: {}", matchingAlarms.size(), now);
-        return createPriceAlarmNotifications(matchingAlarms, stockPriceInfoMap);
+        List<Notification> notifications = createPriceAlarmNotifications(matchingAlarms, stockPriceInfoMap);
+        log.info("Created {} price alarm notifications", notifications.size());
+        return notifications;
     }
 
     /**
@@ -115,12 +120,14 @@ public class AlarmCheckService {
      * @return 생성된 알림 리스트
      */
     public List<Notification> triggerTargetPriceAlarm(Map<String, StockPriceInfoDTO> stockPriceInfoMap) {
+        log.info("Starting target price alarm trigger process");
         if (CollectionUtils.isEmpty(stockPriceInfoMap)) {
             log.warn("Empty stockPriceInfoMap provided");
             return new ArrayList<>();
         }
 
         List<TargetPriceAlarm> targetPriceAlarms = targetPriceAlarmRepository.findAllByActiveAndAlarmed(true, false);
+        log.debug("Found {} active and non-alarmed target price alarms", targetPriceAlarms.size());
         
         if (CollectionUtils.isEmpty(targetPriceAlarms)) {
             return new ArrayList<>();
@@ -130,16 +137,20 @@ public class AlarmCheckService {
                 .collect(Collectors.groupingBy(alarm -> 
                     alarm.getSaveCorpInfo().getCorpInfo().getStockCode()));
 
-        return processTargetPriceAlarms(targetPriceAlarmMap, stockPriceInfoMap);
+        List<Notification> notifications = processTargetPriceAlarms(targetPriceAlarmMap, stockPriceInfoMap);
+        log.info("Created {} target price alarm notifications", notifications.size());
+        return notifications;
     }
 
     private List<Notification> createReportNotifications(HashMap<DartReportDTO, List<SaveCorpInfo>> resultMap) {
-        return resultMap.entrySet().stream()
+        log.debug("Creating report notifications from {} report entries", resultMap.size());
+        List<Notification> notifications = resultMap.entrySet().stream()
             .flatMap(entry -> entry.getValue().stream()
                 .map(saveCorpInfo -> {
                     String corpName = saveCorpInfo.getCorpInfo().getName();
                     String reportName = entry.getKey().getReportNm();
                     String subject = String.format("[%s] %s 공시", corpName, reportName);
+                    log.trace("Creating report notification for {} with report {}", corpName, reportName);
                     return Notification.builder()
                         .type(REPORT_ALARM_TYPE)
                         .subject(subject)
@@ -148,17 +159,23 @@ public class AlarmCheckService {
                         .build();
                 }))
             .collect(Collectors.toList());
+        log.debug("Created {} report notifications", notifications.size());
+        return notifications;
     }
 
     private boolean isAlarmTimeMatching(PriceAlarm alarm, LocalTime now, int currentDayOfWeek) {
         LocalTime alarmTime = alarm.getTime();
-        return alarmTime.getHour() == now.getHour() && 
+        boolean matches = alarmTime.getHour() == now.getHour() && 
                alarmTime.getMinute() == now.getMinute() &&
                alarm.fromWeekDayList().contains(currentDayOfWeek);
+        log.trace("Alarm time matching check - alarm: {}, now: {}, day: {} - matches: {}", 
+                 alarmTime, now, currentDayOfWeek, matches);
+        return matches;
     }
 
     private List<Notification> createPriceAlarmNotifications(List<PriceAlarm> matchingAlarms, 
             Map<String, StockPriceInfoDTO> stockPriceInfoMap) {
+        log.debug("Creating price alarm notifications for {} matching alarms", matchingAlarms.size());
         List<Notification> notifications = new ArrayList<>();
 
         for (PriceAlarm alarm : matchingAlarms) {
@@ -174,6 +191,7 @@ public class AlarmCheckService {
             String corpName = saveCorpInfo.getCorpInfo().getName();
             String subject = String.format("[%s] 현재가 %d원", corpName, stockPriceInfo.getClosingPrice());
             String htmlContent = htmlBuilder.buildPriceAlarmHtml(alarm, stockPriceInfo);
+            log.trace("Creating price notification for {} at price {}", corpName, stockPriceInfo.getClosingPrice());
 
             notifications.add(Notification.builder()
                     .account(saveCorpInfo.getAccount())
@@ -183,11 +201,13 @@ public class AlarmCheckService {
                     .build());
         }
 
+        log.debug("Created {} price alarm notifications", notifications.size());
         return notifications;
     }
 
     private List<Notification> processTargetPriceAlarms(Map<String, List<TargetPriceAlarm>> targetPriceAlarmMap,
             Map<String, StockPriceInfoDTO> stockPriceInfoMap) {
+        log.debug("Processing target price alarms for {} stock codes", targetPriceAlarmMap.size());
         List<Notification> notifications = new ArrayList<>();
         List<TargetPriceAlarm> triggeredAlarms = new ArrayList<>();
 
@@ -208,6 +228,8 @@ public class AlarmCheckService {
                     String corpName = alarm.getSaveCorpInfo().getCorpInfo().getName();
                     String subject = String.format("[%s] 목표가 도달! 현재가 %d원", corpName, stockPriceInfo.getClosingPrice());
                     String htmlContent = htmlBuilder.buildTargetPriceAlarmHtml(alarm, stockPriceInfo);
+                    log.debug("Target price reached for {}: target={}, current={}", 
+                            corpName, alarm.getTargetPrice(), stockPriceInfo.getClosingPrice());
 
                     notifications.add(Notification.builder()
                             .account(alarm.getSaveCorpInfo().getAccount())
@@ -221,13 +243,17 @@ public class AlarmCheckService {
 
         if (!triggeredAlarms.isEmpty()) {
             targetPriceAlarmRepository.saveAll(triggeredAlarms);
+            log.info("Saved {} triggered target price alarms", triggeredAlarms.size());
         }
 
         return notifications;
     }
 
     private boolean shouldTriggerAlarm(TargetPriceAlarm alarm, Long currentPrice) {
-        return (alarm.isBuy() && currentPrice <= alarm.getTargetPrice()) ||
+        boolean shouldTrigger = (alarm.isBuy() && currentPrice <= alarm.getTargetPrice()) ||
                (!alarm.isBuy() && currentPrice >= alarm.getTargetPrice());
+        log.trace("Target price alarm trigger check - type: {}, target: {}, current: {} - should trigger: {}", 
+                 alarm.isBuy() ? "BUY" : "SELL", alarm.getTargetPrice(), currentPrice, shouldTrigger);
+        return shouldTrigger;
     }
 }

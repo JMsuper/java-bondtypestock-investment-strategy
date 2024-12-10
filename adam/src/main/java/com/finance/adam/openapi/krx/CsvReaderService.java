@@ -41,16 +41,19 @@ public class CsvReaderService {
         this.corpRepository = corpRepository;
         this.stockPriceRepository = stockPriceRepository;
         this.restTemplate = restTemplate;
+        log.debug("CsvReaderService initialized with repositories and RestTemplate");
     }
 
     // 주식 시세 정보 CSV 파일을 다운로드하기 위한 OTP 코드를 가져오는 메소드
     public String getKrxStockPriceOTPCode() {
+        log.debug("Requesting OTP code from KRX");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
         LocalDate currentDate = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
         String formattedDate = currentDate.format(formatter);
+        log.debug("Using date {} for OTP request", formattedDate);
 
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
         map.add("locale", "ko_KR");
@@ -69,13 +72,16 @@ public class CsvReaderService {
         // 아래 POST 요청은 Http Body 에 OTP 코드를 담아 반환하는 요청
         // EX) HTTP BODY : lksjdofevxlkjg
         ResponseEntity<String> response = restTemplate.postForEntity("http://data.krx.co.kr/comm/fileDn/GenerateOTP/generate.cmd", request, String.class);
+        log.info("Successfully received OTP code from KRX");
         return response.getBody();
     }
 
 
     public File getKrxStockPriceCsvFile() {
+        log.debug("Starting to download KRX stock price CSV file");
         // krx에서 code 값 가져오기
         String otpCode = getKrxStockPriceOTPCode();
+        log.debug("Retrieved OTP code: {}", otpCode);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -85,6 +91,7 @@ public class CsvReaderService {
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
 
         ResponseEntity<byte[]> response = restTemplate.postForEntity("http://data.krx.co.kr/comm/fileDn/download_csv/download.cmd", request, byte[].class);
+        log.debug("Received CSV file response from KRX");
 
         /***
          * Content-Disposition은 HTTP 헤더 중 하나로, HTTP 응답 본문의 처리 방식을 정의하는 데 사용됩니다.
@@ -101,6 +108,7 @@ public class CsvReaderService {
          */
         String contentDisposition = response.getHeaders().get("Content-Disposition").toString();
         String fileName = contentDisposition.substring(contentDisposition.indexOf("filename=") + 9, contentDisposition.length() - 1);
+        log.debug("Extracted filename from response: {}", fileName);
 
         LocalDateTime currentDate = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd-HH_mm_ss");
@@ -109,21 +117,26 @@ public class CsvReaderService {
         Path directoryPath = Paths.get(".", "price-data");
         File directory = directoryPath.toFile();
         if(!directory.exists()){
+            log.debug("Creating directory: {}", directoryPath);
             directory.mkdir();
         }
 
         Path filePath = Paths.get(directoryPath.toString(),formattedDate+ "-" + fileName);
+        log.debug("Creating file at path: {}", filePath);
 
         File outputFile = filePath.toFile();
         try {
             outputFile.createNewFile();
         } catch (IOException e) {
+            log.error("Failed to create new file", e);
             e.printStackTrace();
         }
 
         try (FileOutputStream fos = new FileOutputStream(outputFile)) {
             fos.write(response.getBody());
+            log.info("Successfully wrote CSV file to: {}", filePath);
         } catch (IOException e) {
+            log.error("Failed to write CSV file", e);
             e.printStackTrace();
         }
 
@@ -131,17 +144,21 @@ public class CsvReaderService {
     }
 
     private InputStreamReader createInputStreamReader(String filePath) {
+        log.debug("Creating InputStreamReader for file: {}", filePath);
         try {
             FileInputStream fileInputStream = new FileInputStream(filePath);
             return new InputStreamReader(fileInputStream, "x-windows-949");
         } catch (UnsupportedEncodingException e) {
+            log.error("Unsupported encoding for file: {}", filePath, e);
             throw new RuntimeException("Unsupported encoding", e);
         } catch (FileNotFoundException e) {
+            log.error("File not found: {}", filePath, e);
             throw new RuntimeException(e);
         }
     }
 
     public Map<String, StockPriceInfoDTO> readKrxPriceCsvFile(String filePath) {
+        log.debug("Starting to read KRX price CSV file: {}", filePath);
         Map<String ,StockPriceInfoDTO> stockPriceInfoMap = new HashMap<>();
 
         try (CSVReader reader = new CSVReaderBuilder(createInputStreamReader(filePath)).build()) {
@@ -169,6 +186,7 @@ public class CsvReaderService {
                  */
                 if(isFirstLine){
                     isFirstLine = false;
+                    log.debug("Validating CSV column headers");
 
                     String[] columnNameList = {
                             "종목코드","종목명","시장구분","소속부","종가","대비","등락률","시가","고가","저가","거래량","거래대금","시가총액","상장주식수"
@@ -187,9 +205,12 @@ public class CsvReaderService {
                 StockPriceInfoDTO stockInfo = getStockPriceInfoDTO(line);
                 stockPriceInfoMap.put(line[0], stockInfo);
             }
+            log.info("Successfully read {} stock price records from CSV", stockPriceInfoMap.size());
         } catch (IOException e) {
+            log.error("Error reading CSV file", e);
             e.printStackTrace();
         } catch (CsvValidationException e) {
+            log.error("CSV validation error", e);
             e.printStackTrace();
         }
 
@@ -197,6 +218,7 @@ public class CsvReaderService {
     }
 
     private StockPriceInfoDTO getStockPriceInfoDTO(String[] line) {
+        log.trace("Creating StockPriceInfoDTO for stock code: {}", line[0]);
         StockPriceInfoDTO stockInfo = new StockPriceInfoDTO();
         stockInfo.setStockCode(line[0]);
         stockInfo.setStockName(line[1]);
@@ -216,11 +238,14 @@ public class CsvReaderService {
     }
 
     public void saveOrUpdateStockPrices(Map<String, StockPriceInfoDTO> stockPriceInfoMap) {
+            log.debug("Starting to save or update stock prices");
             List<CorpInfo> corpInfo = corpRepository.findAllWithStockPrice();
+            log.debug("Found {} corporations to process", corpInfo.size());
 
             for(CorpInfo corp : corpInfo){
                 StockPrice stockPrice = corp.getStockPrice();
                 if (stockPrice == null) {
+                    log.debug("Creating new StockPrice for corporation: {}", corp.getParsedStockCode());
                     stockPrice = new StockPrice();
                     stockPrice.setCorpInfo(corp);
                 }
@@ -242,6 +267,8 @@ public class CsvReaderService {
                 stockPrice.setListedShares(stockPriceInfoDTO.getListedShares());
 
                 stockPriceRepository.saveAndFlush(stockPrice);
+                log.debug("Saved/Updated stock price for corporation: {}", corp.getParsedStockCode());
             }
+            log.info("Successfully completed stock price update for {} corporations", corpInfo.size());
     }
 }

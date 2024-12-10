@@ -1,6 +1,5 @@
 package com.finance.adam.exception;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.http.ResponseEntity;

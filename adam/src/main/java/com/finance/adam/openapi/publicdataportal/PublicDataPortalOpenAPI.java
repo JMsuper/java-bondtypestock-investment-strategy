@@ -18,7 +18,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * 공공데이터포털 Open API
@@ -42,6 +41,7 @@ public class PublicDataPortalOpenAPI {
     public PublicDataPortalOpenAPI(ObjectMapper objectMapper, RestTemplate restTemplate) {
         this.objectMapper = objectMapper;
         this.restTemplate = restTemplate;
+        log.debug("PublicDataPortalOpenAPI initialized with ObjectMapper and RestTemplate");
     }
 
     /**
@@ -49,46 +49,58 @@ public class PublicDataPortalOpenAPI {
      * key : stockCode(ex. 005930)
      */
     public Map<String,KrxItemInfo> getKrxItemInfoMap() {
+        log.debug("Starting to fetch KRX item information");
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         HttpEntity<?> httpEntity = new HttpEntity<>(headers);
+        log.debug("HTTP headers set with Accept: APPLICATION_JSON");
 
         URI uri;
         try {
             uri = createURI();
+            log.debug("Created URI for API request: {}", uri);
         } catch (URISyntaxException e) {
+            log.error("Failed to create URI", e);
             throw new RuntimeException(ERROR_MSG,e);
         }
 
+        log.debug("Making HTTP request to KRX API");
         ResponseEntity<String> response = restTemplate.exchange(uri, HttpMethod.GET,httpEntity,String.class);
         KrxResponseHeader krxResponseHeader;
         KrxResponseBody krxResponseBody;
 
         if(response.getStatusCode() != HttpStatus.OK){
+            log.error("API request failed with status: {}", response.getStatusCode());
             log.warn(response.toString());
             throw new RuntimeException(ERROR_MSG);
         }
+        log.debug("Received successful response from KRX API");
 
         try {
             HashMap<String, HashMap> rawResponse = objectMapper.readValue(response.getBody(),HashMap.class);
             krxResponseHeader = objectMapper.convertValue(rawResponse.get("response").get("header"),KrxResponseHeader.class);
             krxResponseBody = objectMapper.convertValue(rawResponse.get("response").get("body"), KrxResponseBody.class);
+            log.debug("Successfully parsed API response");
         } catch (JsonProcessingException e) {
+            log.error("Failed to parse API response", e);
             throw new RuntimeException(ERROR_MSG,e);
         }
 
         if(krxResponseHeader.getResultCode().equals("00")){
-            log.info(krxResponseHeader.toString());
+            log.info("API request successful: {}", krxResponseHeader);
         }else{
-            log.warn(krxResponseHeader.toString());
+            log.warn("API request returned error: {}", krxResponseHeader);
             throw new RuntimeException(ERROR_MSG);
         }
 
         List<KrxItemInfo> listOfDuplicatedData = krxResponseBody.getItems();
+        log.debug("Retrieved {} items from API (may include duplicates)", listOfDuplicatedData.size());
+        
         Map<String, KrxItemInfo> distinctMap = new HashMap<>();
         for (KrxItemInfo krxItemInfo : listOfDuplicatedData) {
             distinctMap.put(krxItemInfo.getSrtnCd(), krxItemInfo);
         }
+        log.info("Successfully processed {} unique KRX items", distinctMap.size());
         return distinctMap;
     }
 
@@ -98,6 +110,7 @@ public class PublicDataPortalOpenAPI {
      * 즉, 데이터 중복이 존재한다.
      */
     private URI createURI() throws URISyntaxException {
+        log.debug("Creating URI with parameters - numOfRows: {}", numOfRows);
         String urlTemplate = UriComponentsBuilder.fromHttpUrl(corpListUrl)
                 .queryParam("numOfRows",numOfRows)
                 .queryParam("resultType","json")

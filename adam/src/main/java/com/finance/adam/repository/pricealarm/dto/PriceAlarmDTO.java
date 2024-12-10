@@ -2,7 +2,6 @@ package com.finance.adam.repository.pricealarm.dto;
 
 import com.finance.adam.repository.corpinfo.domain.CorpInfo;
 import com.finance.adam.repository.pricealarm.domain.PriceAlarm;
-import com.finance.adam.repository.targetpricealarm.domain.TargetPriceAlarm;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

@@ -10,12 +10,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
@@ -27,7 +29,10 @@ public class AuthController {
     public String logout(HttpServletRequest request, HttpServletResponse response){
         Authentication authentication = SecurityContextHolder.getContextHolderStrategy().getContext().getAuthentication();
         if(authentication != null){
+            log.info("Logging out user: {}", authentication.getName());
             new SecurityContextLogoutHandler().logout(request, response, authentication);
+        } else {
+            log.info("Logout requested but no authentication found");
         }
         Cookie jSessionId = new Cookie("JSESSIONID", null);
         jSessionId.setMaxAge(0);
@@ -49,13 +54,19 @@ public class AuthController {
         String email = userRegisterDTO.getEmail();
         String password = userRegisterDTO.getPassword();
 
+        log.info("Registering new user with id: {}, email: {}", id, email);
         userService.saveUser(id, email, password);
+        log.info("Successfully registered user: {}", id);
         return "success";
     }
 
     @PostMapping("/auto-login")
     public AccountDto autoLogin(@AuthenticationPrincipal AccountDto accountDto){
-        if(accountDto == null) throw new CustomException(ErrorCode.UNAUTHORIZED);
+        if(accountDto == null) {
+            log.warn("Auto-login failed - no authentication found");
+            throw new CustomException(ErrorCode.UNAUTHORIZED);
+        }
+        log.info("Auto-login successful for user: {}", accountDto.getId());
         accountDto.setPassword(null);
         return accountDto;
     }

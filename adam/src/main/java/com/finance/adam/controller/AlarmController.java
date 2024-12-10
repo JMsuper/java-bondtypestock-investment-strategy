@@ -10,11 +10,13 @@ import com.finance.adam.repository.targetpricealarm.dto.TargetPriceAlarmDTO;
 import com.finance.adam.service.AlarmService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/alarms")
@@ -29,18 +31,22 @@ public class AlarmController {
     @GetMapping("/target-prices")
     public List<TargetPriceAlarmDTO> getTargetPriceAlarm(@AuthenticationPrincipal AccountDto accountDto){
         String userId = accountDto.getId();
+        log.info("Getting target price alarms for user: {}", userId);
         return alarmService.getTargetPriceAlarm(userId);
     }
 
     @GetMapping("/prices")
     public List<PriceAlarmDTO> getPriceAlarm(@AuthenticationPrincipal AccountDto accountDto){
         String userId = accountDto.getId();
+        log.info("Getting price alarms for user: {}", userId);
         return alarmService.getPriceAlarm(userId);
     }
 
     @PostMapping("/target-prices")
     public void createTargetPriceAlarm(@RequestBody @Valid CreateTargetPriceAlarmDTO createTargetPriceAlarmDTO, @AuthenticationPrincipal AccountDto accountDto){
         String userId = accountDto.getId();
+        log.info("Creating target price alarm for user: {}", userId);
+        log.debug("Target price alarm details: {}", createTargetPriceAlarmDTO);
 
         alarmService.createTargetPriceAlarm(userId, createTargetPriceAlarmDTO);
     }
@@ -48,6 +54,8 @@ public class AlarmController {
     @PostMapping("/prices")
     public void createPriceAlarm(@RequestBody @Valid CreatePriceAlarmDTO createPriceAlarmDTO, @AuthenticationPrincipal AccountDto accountDto){
         String userId = accountDto.getId();
+        log.info("Creating price alarm for user: {}", userId);
+        log.debug("Price alarm details: {}", createPriceAlarmDTO);
 
         alarmService.createPriceAlarm(userId, createPriceAlarmDTO);
     }
@@ -55,6 +63,7 @@ public class AlarmController {
     @PutMapping("/target-prices/{targetPriceId}")
     public void updateTargetPriceAlarmStatus(@PathVariable() Long targetPriceId, @RequestParam() boolean active, @AuthenticationPrincipal AccountDto accountDto){
         String userId = accountDto.getId();
+        log.info("Updating target price alarm status - userId: {}, alarmId: {}, active: {}", userId, targetPriceId, active);
 
         alarmService.updateTargetPriceAlarmStatus(userId, targetPriceId, active);
     }
@@ -62,15 +71,15 @@ public class AlarmController {
     @PutMapping("/prices/{priceId}")
     public void updatePriceAlarmStatus(@PathVariable() Long priceId, @RequestParam() boolean active, @AuthenticationPrincipal AccountDto accountDto){
         String userId = accountDto.getId();
+        log.info("Updating price alarm status - userId: {}, alarmId: {}, active: {}", userId, priceId, active);
 
         alarmService.updatePriceAlarmStatus(userId, priceId, active);
     }
 
-
-
     @DeleteMapping("/target-prices/{targetPriceId}")
     public void deleteTargetPriceAlarm(@PathVariable() Long targetPriceId, @AuthenticationPrincipal AccountDto accountDto){
         String userId = accountDto.getId();
+        log.info("Deleting target price alarm - userId: {}, alarmId: {}", userId, targetPriceId);
 
         alarmService.deleteTargetPriceAlarm(userId, targetPriceId);
     }
@@ -78,6 +87,7 @@ public class AlarmController {
     @DeleteMapping("/prices/{priceId}")
     public void deletePriceAlarm(@PathVariable() Long priceId, @AuthenticationPrincipal AccountDto accountDto){
         String userId = accountDto.getId();
+        log.info("Deleting price alarm - userId: {}, alarmId: {}", userId, priceId);
 
         alarmService.deletePriceAlarm(userId, priceId);
     }
@@ -89,6 +99,7 @@ public class AlarmController {
     @GetMapping("/reports")
     public List<ReportAlarmListDTO> getReportAlarm(@AuthenticationPrincipal AccountDto accountDto){
         String userId = accountDto.getId();
+        log.info("Getting report alarms for user: {}", userId);
         return alarmService.getReportAlarmList(userId);
     }
 
@@ -98,6 +109,9 @@ public class AlarmController {
             @RequestBody @Valid UpdateReportAlarmDTO dto,
             @AuthenticationPrincipal AccountDto accountDto){
         String userId = accountDto.getId();
+        log.info("Updating report alarm - userId: {}, reportId: {}", userId, reportId);
+        log.debug("Report alarm update details: {}", dto);
+        
         ReportAlarmListDTO reportAlarmListDTO = alarmService.updateReportAlarm(userId, dto);
         return reportAlarmListDTO;
     }

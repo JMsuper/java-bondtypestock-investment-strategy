@@ -7,7 +7,6 @@ import com.finance.adam.auth.handler.RestAccessDeniedHandler;
 import com.finance.adam.auth.handler.RestAuthenticationFailureHandler;
 import com.finance.adam.auth.handler.RestAuthenticationSuccessHandler;
 import com.finance.adam.auth.service.RestRememberMeServices;
-import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -30,8 +29,6 @@ public class SecurityConfig {
     private final RestAuthenticationFailureHandler failureHandler;
     private final RestRememberMeServices restRememberMeServices;
     private final RememberMeAuthenticationProvider rememberMeAuthenticationProvider;
-
-    private final String tempKey = "rememberme";
 
     public SecurityConfig(AuthenticationProvider restAuthenticationProvider, RestAuthenticationSuccessHandler successHandler, RestAuthenticationFailureHandler failureHandler, RestRememberMeServices restRememberMeServices, RememberMeAuthenticationProvider rememberMeAuthenticationProvider) {
         this.restAuthenticationProvider = restAuthenticationProvider;

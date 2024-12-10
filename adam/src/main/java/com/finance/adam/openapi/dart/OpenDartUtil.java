@@ -39,6 +39,7 @@ public class OpenDartUtil {
     public OpenDartUtil(RestTemplate restTemplate,ObjectMapper objectMapper) {
         this.restTemplate = restTemplate;
         this.objectMapper = objectMapper;
+        log.debug("OpenDartUtil initialized with RestTemplate and ObjectMapper");
     }
 
     /**
@@ -55,31 +56,42 @@ public class OpenDartUtil {
             String path,
             OpenDartBaseRequestDTO requestDTO
     ){
+        log.info("Making API request to path: {}", path);
         // 1. 매개변수 유효성 검사
         requestDTO.checkParams();
+        log.debug("Parameter validation completed for request");
 
         // 2. API KEY 추가
         requestDTO.setCrtfcKey(apiKey);
+        log.debug("API key added to request");
 
         // 2. URI 생성
         URI uri = createUriWithQueryParams(baseUrl + path, requestDTO);
         if(uri == null){
+            log.error("Failed to create URI for path: {}", path);
             return new ArrayList<>();
         }
+        log.debug("URI created successfully: {}", uri);
 
         // 3. API 요청
         OpenDartBaseResponseDTO responseBody = getRequest(uri);
         if(responseBody == null){
+            log.error("Received null response from API request");
             return new ArrayList<>();
         }
+        log.debug("Received response from API");
 
         // 4. 응답 상태코드 확인
         boolean isOk = checkResponseStatusCode(responseBody);
         if(!isOk){
+            log.warn("Response status code check failed");
             return new ArrayList<>();
         }
+        log.debug("Response status code check passed");
 
-        return responseBody.getList();
+        List<Object> result = responseBody.getList();
+        log.info("API request completed successfully. Retrieved {} items", result.size());
+        return result;
     }
 
     /**
@@ -92,26 +104,33 @@ public class OpenDartUtil {
             String path,
             OpenDartBaseRequestDTO requestDTO
     ){
+        log.info("Starting download from path: {}", path);
         // 1. 매개변수 유효성 검사
         requestDTO.checkParams();
+        log.debug("Parameter validation completed for download request");
 
         // 2. API KEY 추가
         requestDTO.setCrtfcKey(apiKey);
+        log.debug("API key added to download request");
 
         // 2. URI 생성
         URI uri = createUriWithQueryParams(baseUrl + path, requestDTO);
         if(uri == null){
+            log.error("Failed to create URI for download path: {}", path);
             return new byte[0];
         }
+        log.debug("URI created successfully for download: {}", uri);
 
         // 3. API 요청
         ResponseEntity<byte[]> response = restTemplate.getForEntity(uri, byte[].class);
         if(response.getStatusCode() != HttpStatus.OK){
-            log.warn(response.toString());
+            log.warn("Download request failed with response: {}", response);
             return new byte[0];
         }
 
-        return response.getBody();
+        byte[] responseBody = response.getBody();
+        log.info("Download completed successfully. Downloaded {} bytes", responseBody.length);
+        return responseBody;
     }
 
 
@@ -119,6 +138,7 @@ public class OpenDartUtil {
      - params DTO 를 담아서, 쿼리 파라미터 형태의 URI 를 반환 <br/>
      */
     private URI createUriWithQueryParams(String requestUrl, Object params) {
+        log.debug("Creating URI with query parameters for URL: {}", requestUrl);
         String urlTemplate = UriComponentsBuilder.fromHttpUrl(requestUrl)
                 .queryParams(MultiValueMapConverter.convertWithOutNull(objectMapper, params))
                 .encode()
@@ -126,30 +146,37 @@ public class OpenDartUtil {
         URI uri;
         try {
             uri = new URI(urlTemplate);
+            log.debug("Successfully created URI: {}", uri);
         } catch (URISyntaxException e) {
-            log.error("URI 생성 중 오류가 발생하였습니다. urlTemplate={}", urlTemplate, e);
+            log.error("URI creation failed for urlTemplate: {}", urlTemplate, e);
             return null;
         }
         return uri;
     }
 
     private OpenDartBaseResponseDTO getRequest(URI uri){
+        log.debug("Making GET request to URI: {}", uri);
         if(DELAY_MILLI_SEC != 0){
             try {
+                log.debug("Applying delay of {} milliseconds", DELAY_MILLI_SEC);
                 Thread.sleep(DELAY_MILLI_SEC);
-            } catch (InterruptedException e) {}
+            } catch (InterruptedException e) {
+                log.debug("Sleep interrupted during request delay", e);
+            }
         }
 
         ResponseEntity<OpenDartBaseResponseDTO> rawResponse = restTemplate.getForEntity(uri,OpenDartBaseResponseDTO.class);
         if(rawResponse.getStatusCode() != HttpStatus.OK){
-            log.warn(rawResponse.toString());
+            log.warn("GET request failed with response: {}", rawResponse);
             return null;
         }
+        log.debug("GET request completed successfully");
         return rawResponse.getBody();
     }
 
     private boolean checkResponseStatusCode(OpenDartBaseResponseDTO response){
         String statusCode = response.getStatus();
+        log.debug("Checking response status code: {}", statusCode);
         try{
             OpenDartResponseMsg responseMsg = OpenDartResponseMsg.findByCode(statusCode);
             if(responseMsg != OpenDartResponseMsg.NORMAL){
@@ -163,10 +190,11 @@ public class OpenDartUtil {
 
                 return false;
             }
+            log.debug("Response status code check passed");
+            return true;
         }catch (IllegalArgumentException e){
-            log.error("정의되지 않은 상태 코드입니다. statusCode={}",statusCode);
+            log.error("Undefined status code received: {}", statusCode);
             return false;
         }
-        return true;
     }
 }

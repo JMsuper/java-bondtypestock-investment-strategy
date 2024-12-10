@@ -40,13 +40,16 @@ public class CorpInfoService {
 
 
     public List<SaveCorpInfoListResponse> getSaveCorpInfoList(String userId) {
+        log.info("Getting saved corporation info list for user: {}", userId);
         Account user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.UNAUTHORIZED));
 
         List<SaveCorpInfo> saveCorpInfoList = saveCorpInfoRepository.findAllByAccount(user);
+        log.debug("Found {} saved corporations for user", saveCorpInfoList.size());
 
         List<SaveCorpInfoListResponse> result = saveCorpInfoList.stream().map(saveCorpInfo -> {
             CorpInfo corpInfo = saveCorpInfo.getCorpInfo();
+            log.debug("Processing corporation: {}", corpInfo.getCorpCode());
 
             List<FinanceInfo> financeInfoList = corpInfo.getFinanceInfos();
             StockPrice stockPrice = corpInfo.getStockPrice();
@@ -54,6 +57,7 @@ public class CorpInfoService {
             List<OpenDartReportExtractedDTO> reportList = openDartAPI.getRecentReportListFive(corpInfo.getCorpCode())
                     .stream().map((report) -> OpenDartReportExtractedDTO.from(report))
                     .toList();
+            log.debug("Retrieved {} recent reports for corporation {}", reportList.size(), corpInfo.getCorpCode());
 
             FinanceInfo financeInfo = financeInfoList.stream()
                     .filter( f -> f.getYear() == 2023)
@@ -67,9 +71,11 @@ public class CorpInfoService {
             }
 
             Long bps = financeDataService.getBPS(financeInfo, stockPrice);
+            log.debug("Calculated BPS for corporation {}: {}", corpInfo.getCorpCode(), bps);
 
             // 10년 후 예상 ROE 가 없는 경우, targetPrice 와 expectedRate 계산 불가능
             if(saveCorpInfo.getAfterTenYearsAverageROE() == null){
+                log.debug("No 10-year ROE projection available for corporation {}", corpInfo.getCorpCode());
                 return SaveCorpInfoListResponse.fromSaveCorpInfo(saveCorpInfo,reportList,bps);
             }
 
@@ -84,6 +90,8 @@ public class CorpInfoService {
                     saveCorpInfo.getTargetRate(),
                     afterTenYearsBPS
             );
+            log.debug("Calculated projections for corporation {}: 10Y BPS={}, expectedRate={}, targetPrice={}", 
+                    corpInfo.getCorpCode(), afterTenYearsBPS, expectedRate, targetPrice);
 
             return SaveCorpInfoListResponse.fromSaveCorpInfo(saveCorpInfo, reportList,bps, targetPrice, expectedRate);
 
@@ -93,6 +101,7 @@ public class CorpInfoService {
     }
 
     public void saveCorpInfoListWithUser(String corpCode, String userId) {
+        log.info("Saving corporation {} for user {}", corpCode, userId);
         CorpInfo corpInfo = corpRepository.findById(corpCode)
                 .orElseThrow(() -> new CustomException(ErrorCode.CORP_NOT_FOUND));
 
@@ -100,12 +109,15 @@ public class CorpInfoService {
                 .orElseThrow(() -> new CustomException(ErrorCode.UNAUTHORIZED));
 
         int count = saveCorpInfoRepository.countByAccountId(userId);
+        log.debug("Current saved corporation count for user {}: {}", userId, count);
         if (count >= 10) {
+            log.warn("User {} attempted to exceed maximum saved corporation limit", userId);
             throw new CustomException(ErrorCode.SAVE_CORP_MAX_COUNT);
         }
 
         saveCorpInfoRepository.findByCorpInfoCorpCodeAndAccountId(corpCode, userId)
                 .ifPresent(saveCorpInfo -> {
+                    log.warn("User {} attempted to save duplicate corporation {}", userId, corpCode);
                     throw new CustomException(ErrorCode.SAVE_CORP_INFO_DUPLICATED);
                 });
 
@@ -118,6 +130,7 @@ public class CorpInfoService {
         SaveCorpInfo saveCorpInfo;
         if(expectedROE.isPresent()) {
             afterTenYearsAverageROE = expectedROE.get();
+            log.debug("Using 3-year average ROE {} as 10-year projection for corporation {}", afterTenYearsAverageROE, corpCode);
             saveCorpInfo = SaveCorpInfo.builder()
                     .corpInfo(corpInfo)
                     .account(user)
@@ -125,6 +138,7 @@ public class CorpInfoService {
                     .afterTenYearsAverageROE(afterTenYearsAverageROE)
                     .build();
         }else{
+            log.debug("No 3-year ROE available for corporation {}, skipping 10-year projection", corpCode);
             saveCorpInfo = SaveCorpInfo.builder()
                     .corpInfo(corpInfo)
                     .account(user)
@@ -133,23 +147,33 @@ public class CorpInfoService {
         }
 
         saveCorpInfoRepository.saveAndFlush(saveCorpInfo);
+        log.info("Successfully saved corporation {} for user {}", corpCode, userId);
     }
 
     public void updateSaveCorpInfo(String corpCode,SaveCorpInfoUpdateDTO saveCorpInfoUpdateDTO, String userId) {
+        log.info("Updating saved corporation {} for user {}", corpCode, userId);
         SaveCorpInfo saveCorpInfo = saveCorpInfoRepository.findByCorpInfoCorpCodeAndAccountId(corpCode, userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.SAVE_CORP_INFO_NOT_FOUND));
 
-        saveCorpInfo.setTargetRate(saveCorpInfoUpdateDTO.getTargetRate() / 100f);
-        saveCorpInfo.setAfterTenYearsAverageROE(saveCorpInfoUpdateDTO.getExpectedROE());
+        float newTargetRate = saveCorpInfoUpdateDTO.getTargetRate() / 100f;
+        float newExpectedROE = saveCorpInfoUpdateDTO.getExpectedROE();
+        log.debug("Updating corporation {} with new target rate: {}, new expected ROE: {}", 
+                corpCode, newTargetRate, newExpectedROE);
+
+        saveCorpInfo.setTargetRate(newTargetRate);
+        saveCorpInfo.setAfterTenYearsAverageROE(newExpectedROE);
 
         saveCorpInfoRepository.saveAndFlush(saveCorpInfo);
+        log.info("Successfully updated corporation {} for user {}", corpCode, userId);
     }
 
     public void deleteCorpInfoListWithUser(String corpCode, String userId) {
+        log.info("Deleting saved corporation {} for user {}", corpCode, userId);
         SaveCorpInfo saveCorpInfo = saveCorpInfoRepository.findByCorpInfoCorpCodeAndAccountId(corpCode, userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.SAVE_CORP_INFO_NOT_FOUND));
 
         saveCorpInfoRepository.delete(saveCorpInfo);
+        log.info("Successfully deleted corporation {} for user {}", corpCode, userId);
     }
 
 }
