@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
@@ -22,6 +23,7 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest()
+@ActiveProfiles("api")
 public class OpenDartAPITest {
 
     @Autowired
@@ -114,35 +116,36 @@ public class OpenDartAPITest {
 //        list.forEach( item -> assertTrue(item.getCorpCode().equals(testCorpCode)));
 //    }
 
-//    @Test
-//    @DisplayName("전체 종목 최근공시 5건 레디스 PUSH 기능 테스트 - 성공")
-//    void test6(){
-//        // given
-//        // 전체 종목 조회
-//        List<CorpInfo> corpInfoList = corpRepository.findAll();
-//        String samsungCorpCd = "00126380";
-//        // 전체 종목에 대한 레디스 內 key 삭제
-//        List<String> corpCodeList = corpInfoList.stream().map((CorpInfo::getCorpCode)).toList();
+    @Test
+    @DisplayName("전체 종목 최근공시 5건 레디스 PUSH 기능 테스트 - 성공")
+    void test6(){
+        // given
+        // 전체 종목 조회
+        List<CorpInfo> corpInfoList = corpRepository.findAllWithStockPrice();
+        String samsungCorpCd = "00126380";
+        // 전체 종목에 대한 레디스 內 key 삭제
+        List<String> corpCodeList = corpInfoList.stream().map((CorpInfo::getCorpCode)).toList();
+
 //        for(String corpCd : corpCodeList){
 //            redisService.deleteKey(corpCd);
 //            assertTrue(!redisService.isKeyExists(corpCd));
 //        }
-//
-//        // when
-//        // 레디스 갱신
-//        int resultCnt = openDartAPI.initRecentReportInRedis(corpCodeList);
-//
-//        // then
-//        assertTrue(resultCnt == corpInfoList.size());
-//        for(String corpCd : corpCodeList){
-//            List<DartReportDTO> dtoList = openDartAPI.getRecentReportListFive(corpCd);
-//            assertTrue(!dtoList.isEmpty());
-//            for(DartReportDTO dto : dtoList){
-//                assertTrue(!dto.getCorpCode().isEmpty());
-//                assertTrue(!dto.getReportNm().isEmpty());
-//            }
-//        }
-//    }
+
+        // when
+        // 레디스 갱신
+        int resultCnt = openDartAPI.initRecentReportInRedis(corpCodeList);
+
+        // then
+        assertTrue(resultCnt == corpInfoList.size());
+        for(String corpCd : corpCodeList){
+            List<DartReportDTO> dtoList = openDartAPI.getRecentReportListFive(corpCd);
+            assertTrue(!dtoList.isEmpty());
+            for(DartReportDTO dto : dtoList){
+                assertTrue(!dto.getCorpCode().isEmpty());
+                assertTrue(!dto.getReportNm().isEmpty());
+            }
+        }
+    }
 //
 //    @Test
 //    @DisplayName("신규 공시에 대해 레디스 갱신 - 성공")

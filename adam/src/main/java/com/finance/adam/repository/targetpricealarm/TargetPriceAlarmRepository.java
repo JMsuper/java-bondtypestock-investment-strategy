@@ -1,7 +1,6 @@
 package com.finance.adam.repository.targetpricealarm;
 
 import com.finance.adam.repository.account.domain.Account;
-import com.finance.adam.repository.savecorpinfo.domain.SaveCorpInfo;
 import com.finance.adam.repository.targetpricealarm.domain.TargetPriceAlarm;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,4 +13,6 @@ public interface TargetPriceAlarmRepository extends JpaRepository<TargetPriceAla
     @EntityGraph(attributePaths = {"saveCorpInfo", "saveCorpInfo.account", "saveCorpInfo.corpInfo"})
     @Query(value = "select t from TargetPriceAlarm t where t.saveCorpInfo.account = :account")
     List<TargetPriceAlarm> findAllByAccount(Account account);
+
+    List<TargetPriceAlarm> findAllByActiveAndAlarmed(boolean active, boolean alarmed);
 }

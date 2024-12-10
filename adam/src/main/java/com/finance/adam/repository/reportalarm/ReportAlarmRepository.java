@@ -7,6 +7,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -21,6 +22,19 @@ public interface ReportAlarmRepository extends JpaRepository<ReportAlarm, Long> 
         WHERE ra.reportType = :reportType AND cp.corpCode IN :corpCodeList
     """)
     List<ReportAlarm> findAllByReportTypeAndCorpCodeList(ReportType reportType, List<String> corpCodeList);
+
+    @Query("""
+        SELECT ra
+        FROM ReportAlarm ra
+        JOIN FETCH ra.saveCorpInfo sci
+        JOIN FETCH sci.corpInfo cp
+        WHERE ra.reportType = :reportType
+          AND cp.corpCode = :corpCode
+    """)
+    List<ReportAlarm> findAllByReportTypeAndCorpCode(
+            @Param("reportType") ReportType reportType,
+            @Param("corpCode") String corpCode
+    );
 
     List<ReportAlarm> findAllBySaveCorpInfo(SaveCorpInfo saveCorpInfoId);
 

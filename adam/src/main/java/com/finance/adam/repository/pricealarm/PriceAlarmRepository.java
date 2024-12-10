@@ -13,4 +13,6 @@ public interface PriceAlarmRepository extends JpaRepository<PriceAlarm,Long> {
     @EntityGraph(attributePaths = {"saveCorpInfo", "saveCorpInfo.account", "saveCorpInfo.corpInfo"})
     @Query(value = "select p from PriceAlarm p where p.saveCorpInfo.account = :account")
     List<PriceAlarm> findAllByAccount(Account account);
+
+    List<PriceAlarm> findAllByActive(boolean active);
 }

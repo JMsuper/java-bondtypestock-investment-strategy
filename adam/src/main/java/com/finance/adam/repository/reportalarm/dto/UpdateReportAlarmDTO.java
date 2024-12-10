@@ -5,7 +5,7 @@ import com.finance.adam.validation.ValidReportType;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
-;
+
 
 import java.util.List;
 
