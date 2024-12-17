@@ -110,6 +110,7 @@ public class AlarmCheckService {
 
         log.debug("Found {} matching price alarms for current time: {}", matchingAlarms.size(), now);
         List<Notification> notifications = createPriceAlarmNotifications(matchingAlarms, stockPriceInfoMap);
+        notificationRepository.saveAll(notifications);
         log.info("Created {} price alarm notifications", notifications.size());
         return notifications;
     }
@@ -135,9 +136,10 @@ public class AlarmCheckService {
 
         Map<String, List<TargetPriceAlarm>> targetPriceAlarmMap = targetPriceAlarms.stream()
                 .collect(Collectors.groupingBy(alarm -> 
-                    alarm.getSaveCorpInfo().getCorpInfo().getStockCode()));
+                    alarm.getSaveCorpInfo().getCorpInfo().getParsedStockCode()));
 
         List<Notification> notifications = processTargetPriceAlarms(targetPriceAlarmMap, stockPriceInfoMap);
+        notificationRepository.saveAll(notifications);
         log.info("Created {} target price alarm notifications", notifications.size());
         return notifications;
     }
@@ -165,9 +167,15 @@ public class AlarmCheckService {
 
     private boolean isAlarmTimeMatching(PriceAlarm alarm, LocalTime now, int currentDayOfWeek) {
         LocalTime alarmTime = alarm.getTime();
-        boolean matches = alarmTime.getHour() == now.getHour() && 
-               alarmTime.getMinute() == now.getMinute() &&
-               alarm.fromWeekDayList().contains(currentDayOfWeek);
+        int alarmHour = alarmTime.getHour();
+        int nowHour = now.getHour();
+        int alarmMinute = alarmTime.getMinute();
+        int nowMinute = now.getMinute();
+        List<Integer> weekDayList = alarm.fromWeekDayList();
+
+        boolean matches = alarmHour == nowHour &&
+               alarmMinute == nowMinute &&
+               weekDayList.contains(currentDayOfWeek);
         log.trace("Alarm time matching check - alarm: {}, now: {}, day: {} - matches: {}", 
                  alarmTime, now, currentDayOfWeek, matches);
         return matches;
@@ -180,7 +188,7 @@ public class AlarmCheckService {
 
         for (PriceAlarm alarm : matchingAlarms) {
             SaveCorpInfo saveCorpInfo = alarm.getSaveCorpInfo();
-            String stockCode = saveCorpInfo.getCorpInfo().getStockCode();
+            String stockCode = saveCorpInfo.getCorpInfo().getParsedStockCode();
             StockPriceInfoDTO stockPriceInfo = stockPriceInfoMap.get(stockCode);
 
             if (stockPriceInfo == null) {
@@ -206,7 +214,7 @@ public class AlarmCheckService {
     }
 
     private List<Notification> processTargetPriceAlarms(Map<String, List<TargetPriceAlarm>> targetPriceAlarmMap,
-            Map<String, StockPriceInfoDTO> stockPriceInfoMap) {
+                                                        Map<String, StockPriceInfoDTO> stockPriceInfoMap) {
         log.debug("Processing target price alarms for {} stock codes", targetPriceAlarmMap.size());
         List<Notification> notifications = new ArrayList<>();
         List<TargetPriceAlarm> triggeredAlarms = new ArrayList<>();

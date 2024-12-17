@@ -44,6 +44,7 @@ public class ScheduledTasks {
     @ConditionalScheduler
     public void stockPriceUpdate() {
         log.info("ScheduledTasks.stockPriceUpdate() start : {}", dateFormat.format(System.currentTimeMillis()));
+        LocalTime localTime = LocalTime.now();
 
         File result = csvReaderService.getKrxStockPriceCsvFile();
         String filePath = result.getPath();
@@ -56,8 +57,8 @@ public class ScheduledTasks {
         targetPriceNotifications.forEach(notificationService::handleNotification);
 
         // 주가 정기 알림
-        LocalTime localTime = LocalTime.now();
-        int dayOfWeek = LocalDate.now().getDayOfWeek().getValue();
+        // java.util.DayOfWeek(월:1, 화:2) 와 현 서비스 기준(월:0, 화:1)을 맞추기 위함
+        int dayOfWeek = LocalDate.now().getDayOfWeek().getValue() - 1;
         List<Notification> priceNotifications = alarmCheckService.triggerStockPriceAlarm(
                 stockPriceInfoDTOList,
                 localTime,

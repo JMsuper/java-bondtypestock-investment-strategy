@@ -51,7 +51,9 @@ public class CorpInfo {
     @OneToOne(mappedBy = "corpInfo", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private StockPrice stockPrice;
 
-
+    /**
+     * A005930 -> 005930
+     */
     public String getParsedStockCode(){
         return this.stockCode.substring(1);
     }
