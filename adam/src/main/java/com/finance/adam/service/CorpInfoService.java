@@ -47,57 +47,58 @@ public class CorpInfoService {
         List<SaveCorpInfo> saveCorpInfoList = saveCorpInfoRepository.findAllByAccount(user);
         log.debug("Found {} saved corporations for user", saveCorpInfoList.size());
 
-        List<SaveCorpInfoListResponse> result = saveCorpInfoList.stream().map(saveCorpInfo -> {
-            CorpInfo corpInfo = saveCorpInfo.getCorpInfo();
-            log.debug("Processing corporation: {}", corpInfo.getCorpCode());
-
-            List<FinanceInfo> financeInfoList = corpInfo.getFinanceInfos();
-            StockPrice stockPrice = corpInfo.getStockPrice();
-
-            List<OpenDartReportExtractedDTO> reportList = openDartAPI.getRecentReportListFive(corpInfo.getCorpCode())
-                    .stream().map(OpenDartReportExtractedDTO::from)
-                    .toList();
-            log.debug("Retrieved {} recent reports for corporation {}", reportList.size(), corpInfo.getCorpCode());
-
-            FinanceInfo financeInfo = financeInfoList.stream()
-                    .filter( f -> f.getYear() == 2023)
-                    .findFirst()
-                    .orElse(null);
-
-            // 재무정보가 없는 경우
-            if(financeInfo == null){
-                log.error("재무정보가 존재하지 않는 기업이 저장되어 있어서는 안됩니다. corpCode: {}", corpInfo.getCorpCode());
-                return SaveCorpInfoListResponse.fromSaveCorpInfo(saveCorpInfo, reportList);
-            }
-
-            Long bps = financeDataService.getBPS(financeInfo, stockPrice);
-            log.debug("Calculated BPS for corporation {}: {}", corpInfo.getCorpCode(), bps);
-
-            // 10년 후 예상 ROE 가 없는 경우, targetPrice 와 expectedRate 계산 불가능
-            if(saveCorpInfo.getAfterTenYearsAverageROE() == null){
-                log.debug("No 10-year ROE projection available for corporation {}", corpInfo.getCorpCode());
-                return SaveCorpInfoListResponse.fromSaveCorpInfo(saveCorpInfo,reportList,bps);
-            }
-
-            long afterTenYearsBPS = financeCalculator.calculateAfterTenYearBPS(
-                    bps,
-                    saveCorpInfo.getAfterTenYearsAverageROE());
-            float expectedRate = financeCalculator.calculateExpectedRate(
-                    stockPrice.getOpeningPrice(),
-                    afterTenYearsBPS
-            );
-            int targetPrice = financeCalculator.calculateTargetPrice(
-                    saveCorpInfo.getTargetRate(),
-                    afterTenYearsBPS
-            );
-            log.debug("Calculated projections for corporation {}: 10Y BPS={}, expectedRate={}, targetPrice={}",
-                    corpInfo.getCorpCode(), afterTenYearsBPS, expectedRate, targetPrice);
-
-            return SaveCorpInfoListResponse.fromSaveCorpInfo(saveCorpInfo, reportList,bps, targetPrice, expectedRate);
-
+        return saveCorpInfoList.stream().map(saveCorpInfo -> {
+            return calculateSaveCorpInfoResponse(saveCorpInfo);
         }).toList();
+    }
 
-        return result;
+    public SaveCorpInfoListResponse calculateSaveCorpInfoResponse(SaveCorpInfo saveCorpInfo) {
+        CorpInfo corpInfo = saveCorpInfo.getCorpInfo();
+        log.debug("Processing corporation: {}", corpInfo.getCorpCode());
+
+        List<FinanceInfo> financeInfoList = corpInfo.getFinanceInfos();
+        StockPrice stockPrice = corpInfo.getStockPrice();
+
+        List<OpenDartReportExtractedDTO> reportList = openDartAPI.getRecentReportListFive(corpInfo.getCorpCode())
+                .stream().map(OpenDartReportExtractedDTO::from)
+                .toList();
+        log.debug("Retrieved {} recent reports for corporation {}", reportList.size(), corpInfo.getCorpCode());
+
+        FinanceInfo financeInfo = financeInfoList.stream()
+                .filter( f -> f.getYear() == 2023)
+                .findFirst()
+                .orElse(null);
+
+        // 재무정보가 없는 경우
+        if(financeInfo == null){
+            log.error("재무정보가 존재하지 않는 기업이 저장되어 있어서는 안됩니다. corpCode: {}", corpInfo.getCorpCode());
+            return SaveCorpInfoListResponse.fromSaveCorpInfo(saveCorpInfo, reportList);
+        }
+
+        Long bps = financeDataService.getBPS(financeInfo, stockPrice);
+        log.debug("Calculated BPS for corporation {}: {}", corpInfo.getCorpCode(), bps);
+
+        // 10년 후 예상 ROE 가 없는 경우, targetPrice 와 expectedRate 계산 불가능
+        if(saveCorpInfo.getAfterTenYearsAverageROE() == null){
+            log.debug("No 10-year ROE projection available for corporation {}", corpInfo.getCorpCode());
+            return SaveCorpInfoListResponse.fromSaveCorpInfo(saveCorpInfo,reportList,bps);
+        }
+
+        long afterTenYearsBPS = financeCalculator.calculateAfterTenYearBPS(
+                bps,
+                saveCorpInfo.getAfterTenYearsAverageROE());
+        float expectedRate = financeCalculator.calculateExpectedRate(
+                stockPrice.getOpeningPrice(),
+                afterTenYearsBPS
+        );
+        int targetPrice = financeCalculator.calculateTargetPrice(
+                saveCorpInfo.getTargetRate(),
+                afterTenYearsBPS
+        );
+        log.debug("Calculated projections for corporation {}: 10Y BPS={}, expectedRate={}, targetPrice={}",
+                corpInfo.getCorpCode(), afterTenYearsBPS, expectedRate, targetPrice);
+
+        return SaveCorpInfoListResponse.fromSaveCorpInfo(saveCorpInfo, reportList,bps, targetPrice, expectedRate);
     }
 
     public void saveCorpInfoListWithUser(String corpCode, String userId) throws CustomException{
