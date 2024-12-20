@@ -1,5 +1,6 @@
 package com.finance.adam.repository.stockprice.dto;
 
+import com.finance.adam.repository.stockprice.domain.StockPrice;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,4 +27,23 @@ public class StockPriceInfoDTO {
     private Long tradingValue;
     private Long marketCap;
     private Long listedShares;
+
+    public static StockPriceInfoDTO from(StockPrice entity){
+        return StockPriceInfoDTO.builder()
+                .stockCode(entity.getCorpInfo().getParsedStockCode())
+                .stockName(entity.getCorpInfo().getName())
+                .marketType(entity.getCorpInfo().getMarket())
+//                .department() StockPrice 에서는 소속부(department)를 관리하지 않음
+                .closingPrice(entity.getClosingPrice())
+                .difference(entity.getDifference())
+                .fluctuationRate(entity.getFluctuationRate())
+                .openingPrice(entity.getOpeningPrice())
+                .highPrice(entity.getHighPrice())
+                .lowPrice(entity.getLowPrice())
+                .volume(entity.getVolume())
+                .tradingValue(entity.getTradingValue())
+                .marketCap(entity.getMarketCap())
+                .listedShares(entity.getListedShares())
+                .build();
+    }
 }
