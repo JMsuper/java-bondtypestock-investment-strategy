@@ -162,7 +162,7 @@ public class CsvReaderService {
         }
     }
 
-    public Map<String, StockPriceInfoDTO> readKrxPriceCsvFile(String filePath) {
+    public Map<String, StockPriceInfoDTO> readKrxPriceCsvFile(String filePath) throws NumberFormatException {
         log.debug("Starting to read KRX price CSV file: {}", filePath);
         Map<String ,StockPriceInfoDTO> stockPriceInfoMap = new HashMap<>();
 
