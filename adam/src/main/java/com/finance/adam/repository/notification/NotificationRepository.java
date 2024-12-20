@@ -8,11 +8,15 @@ import com.finance.adam.repository.notification.domain.Notification;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
-    List<Notification> findAllByAccountIdAndIsDeletedFalse(String accountId);
-    
+
+    List<Notification> findAllByAccountIdAndIsDeletedFalseOrderByCreatedAtDesc(String accountId);
+
+    Optional<Notification> findByIdAndIsDeletedFalse(Long notificationId);
+
     @Modifying
     @Query("UPDATE Notification n SET n.isDeleted = true WHERE n.id = :notificationId")
-    void deleteNotificationById(@Param("notificationId") Long notificationId);
+    void softDeleteNotificationById(@Param("notificationId") Long notificationId);
 }

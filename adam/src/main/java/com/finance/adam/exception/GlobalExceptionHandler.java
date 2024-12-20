@@ -16,8 +16,13 @@ import java.util.HashMap;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponseEntity> handleServerException(Exception e){
+        return ErrorResponseEntity.toResponseEntity(ErrorCode.SERVER_ERROR);
+    }
+
     @ExceptionHandler(CustomException.class)
-    protected ResponseEntity<ErrorResponseEntity> handleCustomException(CustomException e){
+    public ResponseEntity<ErrorResponseEntity> handleCustomException(CustomException e){
         return ErrorResponseEntity.toResponseEntity(e.getErrorCode());
     }
 
