@@ -43,6 +43,7 @@ CMD ["-jar", "/app/app.jar"]
 
 # 5. 컨테이너에서 사용하는 포트 설정
 EXPOSE 8080
+EXPOSE 8000
 
-# API 서버 : docker run -e SPRING_PROFILES_ACTIVE=api -p 8080:8080 springboot-api
+# API 서버 : docker run -e SPRING_PROFILES_ACTIVE=api -p 8080:8080 --name springboot-api ghcr.io/jmsuper/finance:번호
 # 스케줄러 서버 : docker run -e SPRING_PROFILES_ACTIVE=scheduler -p 8080:8080 springboot-scheduler

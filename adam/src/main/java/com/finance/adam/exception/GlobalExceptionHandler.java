@@ -10,6 +10,7 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.HashMap;
 
@@ -19,6 +20,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponseEntity> handleServerException(Exception e){
         return ErrorResponseEntity.toResponseEntity(ErrorCode.SERVER_ERROR);
+    }
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<ErrorResponseEntity> handleNoResourceFoundException(NoResourceFoundException e){
+        return ErrorResponseEntity.toResponseEntity(ErrorCode.NOT_FOUND);
     }
 
     @ExceptionHandler(CustomException.class)
