@@ -1,0 +1,60 @@
+version: '3.7'
+services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./conf.d:/etc/nginx/conf.d
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+      - ./logs/nginx:/var/log/nginx
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+    depends_on :
+      - api-1
+      - api-2
+    restart: always
+    networks:
+      - app-network
+  api-1:
+    image: ghcr.io/jmsuper/finance:${TAG:-latest}
+    container_name: api-1
+    environment:
+      - SPRING_PROFILES_ACTIVE=api
+    ports:
+      - "8080"
+      - "8000"
+    volumes:
+      - ${PWD}/logs/api-1:/var/log/finance
+    restart: always
+    networks:
+      - app-network
+  api-2:
+    image: ghcr.io/jmsuper/finance:${TAG:-latest}
+    container_name: api-2
+    environment:
+      - SPRING_PROFILES_ACTIVE=api
+    ports:
+      - "8080"
+      - "8000"
+    volumes:
+      - ${PWD}/logs/api-2:/var/log/finance
+    restart: always
+    networks:
+      - app-network
+  scheduler:
+    image: ghcr.io/jmsuper/finance:${TAG:-latest}
+    container_name: springboot-scheduler
+    environment:
+      - SPRING_PROFILES_ACTIVE=scheduler
+    volumes:
+      - ${PWD}/logs/scheduler:/var/log/finance
+    restart: always
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
