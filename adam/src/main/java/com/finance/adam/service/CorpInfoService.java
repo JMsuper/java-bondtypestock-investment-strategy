@@ -20,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -60,8 +61,11 @@ public class CorpInfoService {
         StockPrice stockPrice = corpInfo.getStockPrice();
 
         List<OpenDartReportExtractedDTO> reportList = openDartAPI.getRecentReportListFive(corpInfo.getCorpCode())
-                .stream().map(OpenDartReportExtractedDTO::from)
+                .stream()
+                .map(OpenDartReportExtractedDTO::from)
+                .sorted(Comparator.comparing(OpenDartReportExtractedDTO::getRceptDt).reversed())
                 .toList();
+
         log.debug("Retrieved {} recent reports for corporation {}", reportList.size(), corpInfo.getCorpCode());
 
         FinanceInfo financeInfo = financeInfoList.stream()
