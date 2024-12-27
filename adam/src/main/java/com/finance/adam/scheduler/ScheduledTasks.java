@@ -12,6 +12,7 @@ import com.finance.adam.service.AlarmCheckService;
 import com.finance.adam.service.NotificationService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -40,6 +41,7 @@ public class ScheduledTasks {
 
     @Scheduled(cron = "0 0,10,20,30,40,50 * * * *")
     @ConditionalScheduler
+    @Async
     public void stockPriceUpdate() {
         log.info("ScheduledTasks.stockPriceUpdate() start : {}", dateFormat.format(System.currentTimeMillis()));
         LocalTime localTime = LocalTime.now();
@@ -80,6 +82,7 @@ public class ScheduledTasks {
 
     @Scheduled(cron = "0 30 6 * * MON-FRI")
     @ConditionalScheduler
+    @Async
     public void stockListUpdate() {
         log.info("stockListUpdate start : {}", dateFormat.format(System.currentTimeMillis()));
         financeDataService.renewCorpInfoWithKrxList();
@@ -88,6 +91,7 @@ public class ScheduledTasks {
 
     @Scheduled(cron = "0 0 7 * * MON")
     @ConditionalScheduler
+    @Async
     public void financeInfoUpdate() {
         log.info("financeInfoUpdate start : {}", dateFormat.format(System.currentTimeMillis()));
         financeDataService.renewFinancialInfo();
@@ -96,6 +100,7 @@ public class ScheduledTasks {
 
     @Scheduled(cron = "0 * * * * *")
     @ConditionalScheduler
+    @Async
     public void recentReportRedisUpdate() {
         log.info("recentReportRedisUpdate start : {}", dateFormat.format(System.currentTimeMillis()));
 

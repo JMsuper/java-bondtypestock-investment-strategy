@@ -19,6 +19,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -74,11 +75,11 @@ public class OpenDartAPITest {
 
     @Test
     @DisplayName("Open Dart 공시 보고서 조회 - 보고서유형 지정")
-    void test4(){
+    void test4() throws ExecutionException, InterruptedException {
         String corpCode = "00126380";
         int pageCount = 5;
 
-        List<DartReportDTO> result = openDartAPI.getRecentReportList(corpCode,pageCount, ReportType.A);
+        List<DartReportDTO> result = openDartAPI.getRecentReportList(corpCode,pageCount, ReportType.A).get();
         assertNotNull(result);
         assertTrue(result.size() == 5);
 
