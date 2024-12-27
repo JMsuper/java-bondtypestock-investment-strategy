@@ -35,4 +35,7 @@
         <appender-ref ref="FILE" />
     </root>
 
+    <!-- NoResourceFoundException 예외에 대한 WARN 로깅 제외 -->
+    <logger name="org.springframework.web" level="ERROR" />
+
 </configuration>
