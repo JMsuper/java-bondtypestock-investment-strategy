@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -18,6 +19,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 
 @Slf4j
 @Component
@@ -93,6 +95,24 @@ public class OpenDartUtil {
         List<Object> result = responseBody.getList();
         log.info("API request completed successfully. Retrieved {} items", result.size());
         return result;
+    }
+
+    /**
+     * 비동기 방식으로 API 요청을 수행합니다.
+     *
+     * @param path API 경로
+     * @param requestDTO 요청 DTO, <br/>
+     *                   DTO 의 멤버 변수 중 null 값인 것은 쿼리 파라미터 생성에서 제외, <br/>
+     *                   crtfcKey 는 메서드에서 직접 지정해줌 -> so, crtfcKey 는 신경쓰지 않아도 됨
+     *
+     * @return CompletableFuture 객체
+     */
+    @Async
+    public CompletableFuture<List<Object>> apiRequestAsync(
+            String path,
+            OpenDartBaseRequestDTO requestDTO
+    ){
+        return CompletableFuture.completedFuture(apiRequest(path, requestDTO));
     }
 
     /**

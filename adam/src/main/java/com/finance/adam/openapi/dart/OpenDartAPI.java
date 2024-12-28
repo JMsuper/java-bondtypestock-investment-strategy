@@ -27,6 +27,7 @@ import java.nio.file.Files;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import java.util.zip.ZipInputStream;
 import java.util.Map;
@@ -93,7 +94,7 @@ public class OpenDartAPI {
     }
 
     /**
-     * Redis에서 캐싱된 최근 공시를 조회.
+     * Redis에서 �����싱된 최근 공시를 조회.
      * 직접 OpenDart API를 활용하는 것은 공시 갱신 스케줄러에서만 수행하도록 제한
      * -> 관심사를 분리하기 위함
      */
@@ -114,7 +115,7 @@ public class OpenDartAPI {
         return reportList;
     }
 
-    public List<DartReportDTO> getRecentReportList(String corpCode, int pageCount){
+    public CompletableFuture<List<DartReportDTO>> getRecentReportList(String corpCode, int pageCount){
         log.debug("Getting recent reports with default parameters - corpCode: {}, pageCount: {}", corpCode, pageCount);
         return getRecentReportList(corpCode, pageCount, null);
     }
@@ -125,7 +126,7 @@ public class OpenDartAPI {
      * @param pageCount 페이지 당 조회건수
      * @param reportType 공시보고서 유형
      */
-    public List<DartReportDTO> getRecentReportList(String corpCode, int pageCount, ReportType reportType){
+    public CompletableFuture<List<DartReportDTO>> getRecentReportList(String corpCode, int pageCount, ReportType reportType){
         log.info("Getting recent reports - corpCode: {}, pageCount: {}, reportType: {}", corpCode, pageCount, reportType);
         final String REQ_URL = "api/list.json";
         String bgnDe = "20000101";
@@ -144,13 +145,8 @@ public class OpenDartAPI {
                 .pageCount(String.valueOf(pageCount))
                 .pblntfTy(reportType)
                 .build();
-        List<Object> response = openDartUtil.apiRequest(REQ_URL, requestDTO);
-        log.debug("Received {} reports from API", response.size());
-
-        List<DartReportDTO> list = covertToDartReportDTO(response);
-        log.debug("Converted {} reports to DartReportDTO", list.size());
-
-        return list;
+        return openDartUtil.apiRequestAsync(REQ_URL, requestDTO)
+            .thenApply(this::covertToDartReportDTO);
     }
 
     public int initRecentReportInRedis(List<String> corpCodeList){
@@ -161,7 +157,7 @@ public class OpenDartAPI {
         for(String corpCode : corpCodeList){
             log.debug("Processing corporation: {}", corpCode);
             // 2. 종목코드에 해당하는 최근공시 5건 조회
-            List<DartReportDTO> recentRepotList = getRecentReportList(corpCode,5);
+            List<DartReportDTO> recentRepotList = getRecentReportList(corpCode,5).join();
 
             if(!recentRepotList.isEmpty()){
                 cnt++;
@@ -198,10 +194,18 @@ public class OpenDartAPI {
         Set<String> corpCodeSet = corpRepository.findAllWithStockPrice().stream().map(CorpInfo::getCorpCode).collect(Collectors.toSet());
         log.debug("Found {} corporations with stock prices", corpCodeSet.size());
 
+        Map<ReportType, CompletableFuture<List<DartReportDTO>>> futuresMap = new HashMap<>();
+        for(ReportType reportType : reportTypes){
+            CompletableFuture<List<DartReportDTO>> dartReportDTOList = getRecentReportList(null, 100, reportType);
+            futuresMap.put(reportType, dartReportDTOList);
+        }
+        CompletableFuture.allOf(futuresMap.values().toArray(new CompletableFuture[futuresMap.size()])).join();
+
+
         // 1. 공시유형별(ReportType) 조회
         for(ReportType reportType : reportTypes){
             log.debug("Processing report type: {}", reportType);
-            List<DartReportDTO> dartReportDTOList = getRecentReportList(null, 100, reportType);
+            List<DartReportDTO> dartReportDTOList = futuresMap.get(reportType).join();
 
             for(DartReportDTO dto : dartReportDTOList){
                 String corpCd = dto.getCorpCode();

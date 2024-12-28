@@ -50,7 +50,7 @@ public class ScreeningService {
 
             for (FinanceInfo financeInfo : financeInfoList) {
                 if(financeInfo.getNetIncome() == null || financeInfo.getTotalCapital() == null){
-                    log.warn("Missing financial data for corporation: corpCode={}, year={}", corpInfo.getCorpCode(), financeInfo.getYear());
+                    log.debug("Missing financial data for corporation: corpCode={}, year={}", corpInfo.getCorpCode(), financeInfo.getYear());
                     continue;
                 }
                 StepOneFinanceInfoDTO financeInfoDTO = StepOneFinanceInfoDTO.builder()
