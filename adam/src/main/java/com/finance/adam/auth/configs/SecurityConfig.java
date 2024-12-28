@@ -54,6 +54,9 @@ public class SecurityConfig {
 
         http
                 .securityMatcher("/api/**")
+                .headers(headers -> headers
+                        .cacheControl(cache -> cache.disable())
+                )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v1/auth/**", "/api/v1/finances/**")
                         .permitAll()
