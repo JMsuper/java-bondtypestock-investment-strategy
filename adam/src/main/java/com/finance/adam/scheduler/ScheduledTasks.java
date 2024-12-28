@@ -10,6 +10,7 @@ import com.finance.adam.repository.stockprice.dto.StockPriceInfoDTO;
 import com.finance.adam.service.FinanceDataService;
 import com.finance.adam.service.AlarmCheckService;
 import com.finance.adam.service.NotificationService;
+import com.finance.adam.service.CacheService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
@@ -38,6 +39,7 @@ public class ScheduledTasks {
     private final AlarmCheckService alarmCheckService;
     private final NotificationService notificationService;
     private final StockPriceRepository stockPriceRepository;
+    private final CacheService cacheService;
 
     @Scheduled(cron = "0 0,10,20,30,40,50 * * * *")
     @ConditionalScheduler
@@ -78,6 +80,7 @@ public class ScheduledTasks {
         priceNotifications.forEach(notificationService::handleNotification);
 
         log.info("ScheduledTasks.stockPriceUpdate() end : {}", dateFormat.format(System.currentTimeMillis()));
+        cacheService.refreshCache();
     }
 
     @Scheduled(cron = "0 30 6 * * MON-FRI")
@@ -87,6 +90,7 @@ public class ScheduledTasks {
         log.info("stockListUpdate start : {}", dateFormat.format(System.currentTimeMillis()));
         financeDataService.renewCorpInfoWithKrxList();
         log.info("stockListUpdate end : {}", dateFormat.format(System.currentTimeMillis()));
+        cacheService.refreshCache();
     }
 
     @Scheduled(cron = "0 0 7 * * MON")
@@ -96,6 +100,7 @@ public class ScheduledTasks {
         log.info("financeInfoUpdate start : {}", dateFormat.format(System.currentTimeMillis()));
         financeDataService.renewFinancialInfo();
         log.info("financeInfoUpdate end : {}", dateFormat.format(System.currentTimeMillis()));
+        cacheService.refreshCache();
     }
 
     @Scheduled(cron = "0 * * * * *")
@@ -110,5 +115,6 @@ public class ScheduledTasks {
         notifications.forEach(notificationService::handleNotification);
 
         log.info("recentReportRedisUpdate end : {}", dateFormat.format(System.currentTimeMillis()));
+        cacheService.refreshCache();
     }
 }
