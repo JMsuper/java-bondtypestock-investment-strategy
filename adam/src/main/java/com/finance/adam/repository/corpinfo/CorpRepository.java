@@ -11,8 +11,11 @@ import java.util.Optional;
 public interface CorpRepository extends JpaRepository<CorpInfo,String> {
     Optional<CorpInfo> findByStockCode(String stockCode);
 
-    @EntityGraph(attributePaths = {"stockPrice"})
-    @Query("select c from CorpInfo c")
+    @Query("""
+        SELECT ci, sp
+        FROM CorpInfo ci
+        JOIN FETCH ci.stockPrice sp
+    """)
     List<CorpInfo> findAllWithStockPrice();
 
     @EntityGraph(attributePaths = {"stockPrice", "financeInfos"})

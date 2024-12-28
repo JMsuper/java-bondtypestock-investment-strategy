@@ -8,9 +8,11 @@ import com.finance.adam.repository.stockprice.domain.StockPrice;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvValidationException;
+import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -28,19 +30,23 @@ import java.util.*;
  * 한국거래소 KRX 정보데이터 시스템 크롤링 API
  */
 @Service
+@Transactional
 @Slf4j
 public class CsvReaderService {
 
+    // @Value("${spring.jpa.properties.hibernate.jdbc.batch_size}")
+    private static final int BATCH_SIZE = 100;
+
     private final CorpRepository corpRepository;
-    private final StockPriceRepository stockPriceRepository;
     private final RestTemplate restTemplate;
+    private final EntityManager entityManager;
 
     public CsvReaderService(CorpRepository corpRepository,
-                            StockPriceRepository stockPriceRepository,
-                            RestTemplate restTemplate) {
+                            RestTemplate restTemplate,
+                            EntityManager entityManager) {
         this.corpRepository = corpRepository;
-        this.stockPriceRepository = stockPriceRepository;
         this.restTemplate = restTemplate;
+        this.entityManager = entityManager;
         log.debug("CsvReaderService initialized with repositories and RestTemplate");
     }
 
@@ -240,38 +246,59 @@ public class CsvReaderService {
         return stockInfo;
     }
 
+    @Transactional
     public void saveOrUpdateStockPrices(Map<String, StockPriceInfoDTO> stockPriceInfoMap) {
-            log.debug("Starting to save or update stock prices");
-            List<CorpInfo> corpInfo = corpRepository.findAllWithStockPrice();
-            log.debug("Found {} corporations to process", corpInfo.size());
+        List<CorpInfo> corpInfoList = corpRepository.findAllWithStockPrice();
+        List<StockPrice> batchStockPrices = new ArrayList<>();
 
-            for(CorpInfo corp : corpInfo){
-                StockPrice stockPrice = corp.getStockPrice();
-                if (stockPrice == null) {
-                    log.debug("Creating new StockPrice for corporation: {}", corp.getParsedStockCode());
-                    stockPrice = new StockPrice();
-                    stockPrice.setCorpInfo(corp);
-                }
+        // 모든 데이터를 단일 리스트로 처리
+        for (CorpInfo corp : corpInfoList) {
+            StockPriceInfoDTO dto = stockPriceInfoMap.get(corp.getParsedStockCode());
+            if (dto == null) continue;
 
-                StockPriceInfoDTO stockPriceInfoDTO = stockPriceInfoMap.get(corp.getParsedStockCode());
-                if(stockPriceInfoDTO == null){
-                    log.warn("StockPriceInfoDTO is null. corpCode : {}", corp.getParsedStockCode());
-                    continue;
-                }
-                stockPrice.setClosingPrice(stockPriceInfoDTO.getClosingPrice());
-                stockPrice.setDifference(stockPriceInfoDTO.getDifference());
-                stockPrice.setFluctuationRate(stockPriceInfoDTO.getFluctuationRate());
-                stockPrice.setOpeningPrice(stockPriceInfoDTO.getOpeningPrice());
-                stockPrice.setHighPrice(stockPriceInfoDTO.getHighPrice());
-                stockPrice.setLowPrice(stockPriceInfoDTO.getLowPrice());
-                stockPrice.setVolume(stockPriceInfoDTO.getVolume());
-                stockPrice.setTradingValue(stockPriceInfoDTO.getTradingValue());
-                stockPrice.setMarketCap(stockPriceInfoDTO.getMarketCap());
-                stockPrice.setListedShares(stockPriceInfoDTO.getListedShares());
-
-                stockPriceRepository.saveAndFlush(stockPrice);
-                log.debug("Saved/Updated stock price for corporation: {}", corp.getParsedStockCode());
+            StockPrice price = corp.getStockPrice();
+            if (price == null) {
+                price = new StockPrice();
+                price.setCorpInfo(corp);
             }
-            log.info("Successfully completed stock price update for {} corporations", corpInfo.size());
+            updateStockPriceFields(price, dto);
+            batchStockPrices.add(price);
+
+            // 배치 크기에 도달하면 처리
+            if (batchStockPrices.size() >= BATCH_SIZE) {
+                processBatch(batchStockPrices);
+                batchStockPrices.clear();
+            }
+        }
+
+        // 남은 배치 처리
+        if (!batchStockPrices.isEmpty()) {
+            processBatch(batchStockPrices);
+        }
+    }
+
+    private void processBatch(List<StockPrice> batch) {
+        for (StockPrice price : batch) {
+            if (price.getId() == null) {
+                entityManager.persist(price);
+            } else {
+                entityManager.merge(price);
+            }
+        }
+        entityManager.flush();
+        log.info("Processed batch of {} records", batch.size());
+    }
+
+    private void updateStockPriceFields(StockPrice stockPrice, StockPriceInfoDTO dto) {
+        stockPrice.setClosingPrice(dto.getClosingPrice());
+        stockPrice.setDifference(dto.getDifference());
+        stockPrice.setFluctuationRate(dto.getFluctuationRate());
+        stockPrice.setOpeningPrice(dto.getOpeningPrice());
+        stockPrice.setHighPrice(dto.getHighPrice());
+        stockPrice.setLowPrice(dto.getLowPrice());
+        stockPrice.setVolume(dto.getVolume());
+        stockPrice.setTradingValue(dto.getTradingValue());
+        stockPrice.setMarketCap(dto.getMarketCap());
+        stockPrice.setListedShares(dto.getListedShares());
     }
 }
