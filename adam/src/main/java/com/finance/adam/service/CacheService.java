@@ -17,8 +17,10 @@ public class CacheService {
     
     private final RestTemplate restTemplate;
     
-    @Value("${cache.server.urls}")
-    private List<String> urls;
+    @Value("${cache.server.url-1}")
+    private String CACHE_SERVER_URL_1;
+    @Value("${cache.server.url-2}")
+    private String CACHE_SERVER_URL_2;
 
     private boolean sendRequest(String url) {
         try {
@@ -50,6 +52,8 @@ public class CacheService {
 
     @Async
     public void refreshCache() {
+        List<String> urls = List.of(CACHE_SERVER_URL_1,CACHE_SERVER_URL_2);
+
         urls.forEach(url -> {
             if (!sendRequest(url)) {
                 log.info("Retrying cache refresh for URL: {}", url);
