@@ -18,8 +18,11 @@ services:
     container_name: springboot-scheduler
     environment:
       - SPRING_PROFILES_ACTIVE=scheduler
+    ports:
+      - "8080:8080"
+      - "8000:8000"
     volumes:
-      - ${PWD}/logs/scheduler:/var/log/finance
+      - ${PWD}/logs/scheduler:/var/log/finandockce
     restart: always
     networks:
       - app-network
