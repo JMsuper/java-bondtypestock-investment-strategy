@@ -1,0 +1,93 @@
+# 실행시 필요한 인자 : TAG(springboot version), GRAFANA_PW(그라파나 비밀번호)
+# 실행 명령어 : TAG=1.13 GRAFANA_PW=123456 docker-compose -f compose-public up -d
+
+version: '3.7'
+services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./conf.d:/etc/nginx/conf.d
+      - ./nginx-cache:/data/nginx/cache
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+      - ./logs/nginx:/var/log/nginx
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+    depends_on :
+      - api-1
+      - api-2
+    restart: always
+    networks:
+      - app-network
+
+  nginx-exporter:
+    image: nginx/nginx-prometheus-exporter:latest
+    command:
+      - -nginx.scrape-uri=http://nginx:80/stub_status
+    ports:
+      - "9500:9500"
+    depends_on:
+      - nginx
+
+  api-1:
+    image: ghcr.io/jmsuper/finance:${TAG:-latest}
+    container_name: api-1
+    environment:
+      - SPRING_PROFILES_ACTIVE=api
+    ports:
+      - "8080"
+      - "8000"
+    volumes:
+      - ${PWD}/logs/api-1:/var/log/finance
+    restart: always
+    networks:
+      - app-network
+
+  api-2:
+    image: ghcr.io/jmsuper/finance:${TAG:-latest}
+    container_name: api-2
+    environment:
+      - SPRING_PROFILES_ACTIVE=api
+    ports:
+      - "8080"
+      - "8000"
+    volumes:
+      - ${PWD}/logs/api-2:/var/log/finance
+    restart: always
+    networks:
+      - app-network
+
+  prometheus:
+    image: prom/prometheus:v2.45.0-alpine
+    ports:
+      - "9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+    user: "65534:65534"  # nobody:nobody
+
+  grafana:
+    image: grafana/grafana:10.1.0-alpine
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+    environment:
+      - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-simple-json-datasource
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PW}
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  prometheus_data:
+  grafana_data:

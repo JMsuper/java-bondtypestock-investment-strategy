@@ -1,3 +1,6 @@
+# 실행시 필요한 인자 : TAG(springboot version), GRAFANA_PW(그라파나 비밀번호)
+# 실행 명령어 : TAG=1.13 GRAFANA_PW=123456 docker-compose -f compose-public up -d
+
 version: '3.7'
 services:
   redis:
@@ -13,6 +16,18 @@ services:
     networks:
       - app-network
 
+  redis-exporter:
+    image: oliver006/redis_exporter:latest
+    environment:
+      - REDIS_ADDR= "redis://redis:6379"
+      - REDIS_PASSWORD=${REDIS_PW}
+    ports:
+      - "9500:9500"
+    depends_on:
+      - redis
+    networks:
+      - app-network
+
   scheduler:
     image: ghcr.io/jmsuper/finance:${TAG:-latest}
     container_name: springboot-scheduler
@@ -22,7 +37,7 @@ services:
       - "8080:8080"
       - "8000:8000"
     volumes:
-      - ${PWD}/logs/scheduler:/var/log/finandockce
+      - ${PWD}/logs/scheduler:/var/log/finance
     restart: always
     networks:
       - app-network
