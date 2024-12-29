@@ -45,16 +45,6 @@ services:
     restart: always
     networks:
       - app-network
-  scheduler:
-    image: ghcr.io/jmsuper/finance:${TAG:-latest}
-    container_name: springboot-scheduler
-    environment:
-      - SPRING_PROFILES_ACTIVE=scheduler
-    volumes:
-      - ${PWD}/logs/scheduler:/var/log/finance
-    restart: always
-    networks:
-      - app-network
 
 networks:
   app-network:

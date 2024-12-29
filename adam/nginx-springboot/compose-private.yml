@@ -1,0 +1,29 @@
+version: '3.7'
+services:
+  redis:
+    image: redis:alpine3.20
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - ${PWD}/redis/redis.conf:/etc/redis/redis.conf
+      - ${PWD}/data:/data
+    command: redis-server /etc/redis/redis.conf
+    restart: always
+    networks:
+      - app-network
+
+  scheduler:
+    image: ghcr.io/jmsuper/finance:${TAG:-latest}
+    container_name: springboot-scheduler
+    environment:
+      - SPRING_PROFILES_ACTIVE=scheduler
+    volumes:
+      - ${PWD}/logs/scheduler:/var/log/finance
+    restart: always
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
