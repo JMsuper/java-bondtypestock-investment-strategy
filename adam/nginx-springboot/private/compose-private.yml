@@ -18,13 +18,28 @@ services:
 
   redis-exporter:
     image: oliver006/redis_exporter:latest
+    container_name: redis-exporter
     environment:
       - REDIS_ADDR= "redis://redis:6379"
-      - REDIS_PASSWORD=${REDIS_PW}
+      - REDIS_PASSWORD=${REDIS_PW:-123456}
     ports:
-      - "9500:9500"
+      - "9121:9121"
     depends_on:
       - redis
+    networks:
+      - app-network
+
+  mysql-exporter:
+    image: prom/mysqld-exporter
+    container_name: mysql-exporter
+    ports:
+      - "9104:9104"
+    volumes:
+      - .my.cnf:/etc/.my.cnf:ro
+    command:
+      - '--config.my-cnf=/etc/.my.cnf'
+    depends_on:
+      - mysql
     networks:
       - app-network
 

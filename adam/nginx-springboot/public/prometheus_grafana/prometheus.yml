@@ -12,13 +12,16 @@ scrape_configs:
       - targets: ['10.10.1.4:8000']
 
   - job_name: 'nginx'
+    scrape_interval: 5s
     static_configs:
-      - targets: ['nginx-exporter:9500']
+      - targets: ['nginx-exporter:9113']
 
   - job_name: 'redis'
+    scrape_interval: 5s
     static_configs:
-      - targets: ['10.10.1.4:9500']
+      - targets: ['10.10.1.4:9121']
 
-#  - job_name: 'mysql'
-#    static_configs:
-#      - targets: ['mysql-exporter:9104']
+  - job_name: 'mysql'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['10.10.1.4:9104']

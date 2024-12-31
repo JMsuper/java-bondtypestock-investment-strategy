@@ -10,9 +10,9 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
-      - ./conf.d:/etc/nginx/conf.d
-      - ./nginx-cache:/data/nginx/cache
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/nginx-cache:/data/nginx/cache
       - /etc/letsencrypt:/etc/letsencrypt:ro
       - ./logs/nginx:/var/log/nginx
     command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
@@ -25,12 +25,15 @@ services:
 
   nginx-exporter:
     image: nginx/nginx-prometheus-exporter:latest
+    container_name: nginx-exporter
     command:
-      - -nginx.scrape-uri=http://nginx:80/stub_status
+      - -nginx.scrape-uri=http://nginx/stub_status
     ports:
-      - "9500:9500"
+      - "9113:9113"
     depends_on:
       - nginx
+    networks:
+      - app-network
 
   api-1:
     image: ghcr.io/jmsuper/finance:${TAG:-latest}
@@ -60,34 +63,6 @@ services:
     networks:
       - app-network
 
-  prometheus:
-    image: prom/prometheus:v2.45.0-alpine
-    ports:
-      - "9090"
-    volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
-      - prometheus_data:/prometheus
-    command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.path=/prometheus'
-      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
-      - '--web.console.templates=/usr/share/prometheus/consoles'
-    user: "65534:65534"  # nobody:nobody
-
-  grafana:
-    image: grafana/grafana:10.1.0-alpine
-    ports:
-      - "3000:3000"
-    volumes:
-      - grafana_data:/var/lib/grafana
-    environment:
-      - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-simple-json-datasource
-      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PW}
-
 networks:
   app-network:
     driver: bridge
-
-volumes:
-  prometheus_data:
-  grafana_data:

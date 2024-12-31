@@ -1,0 +1,32 @@
+version: '3.7'
+services:
+  prometheus:
+    image: prom/prometheus:v2.45.0-alpine
+    ports:
+      - "9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+    networks:
+      - app-network
+
+  grafana:
+    image: grafana/grafana:10.1.0-alpine
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+    environment:
+      - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-simple-json-datasource
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PW:-123456}
+    networks:
+      - app-network
+
+volumes:
+  prometheus_data:
+  grafana_data:
