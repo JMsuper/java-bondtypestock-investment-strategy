@@ -1,7 +1,18 @@
 version: '3.7'
 services:
+  node_exporter:
+    image: quay.io/prometheus/node-exporter:latest
+    container_name: node_exporter
+    command:
+      - '--path.rootfs=host'
+    network_mode: host
+    pid: host
+    restart: unless-stopped
+    volumes:
+      - './node_exporter:/host:ro,rslave'
+
   prometheus:
-    image: prom/prometheus:v2.45.0-alpine
+    image: prom/prometheus:latest
     ports:
       - "9090"
     volumes:
@@ -12,11 +23,12 @@ services:
       - '--storage.tsdb.path=/prometheus'
       - '--web.console.libraries=/usr/share/prometheus/console_libraries'
       - '--web.console.templates=/usr/share/prometheus/consoles'
-    networks:
-      - app-network
+    depends_on:
+      - node_exporter
 
   grafana:
-    image: grafana/grafana:10.1.0-alpine
+    image: grafana/grafana:latest
+    container_name: grafana
     ports:
       - "3000:3000"
     volumes:
@@ -24,8 +36,8 @@ services:
     environment:
       - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-simple-json-datasource
       - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PW:-123456}
-    networks:
-      - app-network
+    depends_on:
+      - prometheus
 
 volumes:
   prometheus_data:

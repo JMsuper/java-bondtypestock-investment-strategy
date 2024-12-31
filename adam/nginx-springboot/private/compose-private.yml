@@ -20,7 +20,7 @@ services:
     image: oliver006/redis_exporter:latest
     container_name: redis-exporter
     environment:
-      - REDIS_ADDR= "redis://redis:6379"
+      - REDIS_ADDR=redis://redis:6379
       - REDIS_PASSWORD=${REDIS_PW:-123456}
     ports:
       - "9121:9121"
@@ -38,10 +38,19 @@ services:
       - .my.cnf:/etc/.my.cnf:ro
     command:
       - '--config.my-cnf=/etc/.my.cnf'
-    depends_on:
-      - mysql
     networks:
       - app-network
+
+  node_exporter:
+    image: quay.io/prometheus/node-exporter:latest
+    container_name: node_exporter
+    command:
+      - '--path.rootfs=host'
+    network_mode: host
+    pid: host
+    restart: unless-stopped
+    volumes:
+      - './node_exporter:/host:ro,rslave'
 
   scheduler:
     image: ghcr.io/jmsuper/finance:${TAG:-latest}
