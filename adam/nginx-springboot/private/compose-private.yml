@@ -1,0 +1,71 @@
+# 실행시 필요한 인자 : TAG(springboot version), GRAFANA_PW(그라파나 비밀번호)
+# 실행 명령어 : TAG=1.13 GRAFANA_PW=123456 docker-compose -f compose-public up -d
+
+version: '3.7'
+services:
+  redis:
+    image: redis:alpine3.20
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - ${PWD}/redis/redis.conf:/etc/redis/redis.conf
+      - ${PWD}/data:/data
+    command: redis-server /etc/redis/redis.conf
+    restart: always
+    networks:
+      - app-network
+
+  redis-exporter:
+    image: oliver006/redis_exporter:latest
+    container_name: redis-exporter
+    environment:
+      - REDIS_ADDR=redis://redis:6379
+      - REDIS_PASSWORD=${REDIS_PW:-123456}
+    ports:
+      - "9121:9121"
+    depends_on:
+      - redis
+    networks:
+      - app-network
+
+  mysql-exporter:
+    image: prom/mysqld-exporter
+    container_name: mysql-exporter
+    ports:
+      - "9104:9104"
+    volumes:
+      - .my.cnf:/etc/.my.cnf:ro
+    command:
+      - '--config.my-cnf=/etc/.my.cnf'
+    networks:
+      - app-network
+
+  node_exporter:
+    image: quay.io/prometheus/node-exporter:latest
+    container_name: node_exporter
+    command:
+      - '--path.rootfs=host'
+    network_mode: host
+    pid: host
+    restart: unless-stopped
+    volumes:
+      - './node_exporter:/host:ro,rslave'
+
+  scheduler:
+    image: ghcr.io/jmsuper/finance:${TAG:-latest}
+    container_name: springboot-scheduler
+    environment:
+      - SPRING_PROFILES_ACTIVE=scheduler
+    ports:
+      - "8080:8080"
+      - "8000:8000"
+    volumes:
+      - ${PWD}/logs/scheduler:/var/log/finance
+    restart: always
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

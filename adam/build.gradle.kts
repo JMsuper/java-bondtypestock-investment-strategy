@@ -29,7 +29,9 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springframework.boot:spring-boot-starter-data-redis")
-	implementation("org.springframework.boot:spring-boot-starter-actuator:3.4.0")
+	implementation("org.springframework.boot:spring-boot-starter-actuator:3.2.3")
+	implementation("io.micrometer:micrometer-registry-prometheus")
+
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	implementation("org.springframework.boot:spring-boot-starter-mail")
 	implementation("org.modelmapper:modelmapper:3.1.0")
