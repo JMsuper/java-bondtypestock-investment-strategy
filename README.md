@@ -1,7 +1,6 @@
 ## 목차
 - [📋 프로젝트 개요](#📋-프로젝트-개요)
 - [🛠 기술 스택](#🛠-기술-스택)
-- [📁 폴더 구조](#📁-폴더-구조)
 - [⚙️ 핵심 기능 구현](#⚙️-핵심-기능-구현)
 - [🖥️ 주요 화면](#🖥️-주요-화면)
 - [🏗 시스템 아키텍처](#🏗-시스템-아키텍처)
@@ -21,7 +20,7 @@
 - 기업 재무정보 및 주가 정보 제공
 - 관심 종목 등록 및 알림 서비스
 - 기업 공시 정보 알림
-- ROE 기반 기업 스크리닝
+- ROE 기반 기업 스크리닝 및 가치평가 시스템 구현
 
 ### 💡 프로젝트 특징
 - 1인 풀스택 개발 (프론트엔드/백엔드/인프라)
@@ -30,97 +29,88 @@
 
 ## 🛠 기술 스택
 
-| 분류 | 기술 스택 | 설명 |
-|------|-----------|------|
-| **Frontend** | Next.js 13.4.3 | React 기반 SSR 프레임워크 |
-| | TypeScript 5.0.4 | 정적 타입 지원 |
-| | MUI 5.x | Material Design UI 라이브러리 |
-| | React 18.2.0 | UI 라이브러리 |
-| | Recoil 0.7.7 | 상태 관리 라이브러리 |
-| | Vercel | 웹 애플리케이션 배포 플랫폼 |
-| **Backend** | Java 17 | LTS 버전 |
-| | Spring Boot 3.2.2 | 웹 애플리케이션 프레임워크 |
-| | Spring Security 3.2.2 | 인증/인가 처리 |
-| | JPA/Hibernate | ORM 프레임워크 |
-| | Redis | 기업공시 데이터 인메모리 캐시 |
-| | Actuator 3.2.3 | 애플리케이션 모니터링 |
-| **Infrastructure** | AWS EC2 t3.small | 애플리케이션 서버 |
-| | AWS RDS MySQL 8.0 | MySQL 데이터베이스 |
-| | AWS VPC | 서브넷 분리된 네트워크 구성 |
-| | AWS Route 53 | DNS 서비스 및 도메인 관리 |
-| | Docker 24.0.7 | 컨테이너 기반 배포 |
-| | Nginx 1.24.0 | API 캐싱, 리버스 프록시 |
-| | Prometheus & Grafana | 시스템 모니터링, Slack 알림 |
+<div align="center">
+<table style="font-size: 0.8em;">
+<tr>
+<th>분류</th><th>기술 스택</th><th>설명</th>
+</tr>
+<tr>
+<td><b>Frontend</b></td>
+<td>
+Next.js 13.4.3<br>
+TypeScript 5.0.4<br>
+MUI 5.x<br>
+React 18.2.0<br>
+Recoil 0.7.7<br>
+Vercel
+</td>
+<td>
+React 기반 SSR 프레임워크<br>
+정적 타입 지원<br>
+Material Design UI 라이브러리<br>
+UI 라이브러리<br>
+상태 관리 라이브러리<br>
+웹 애플리케이션 배포 플랫폼
+</td>
+</tr>
+<tr>
+<td><b>Backend</b></td>
+<td>
+Java 17<br>
+Spring Boot 3.2.2<br>
+Spring Security 3.2.2<br>
+JPA/Hibernate<br>
+Redis<br>
+Actuator 3.2.3
+</td>
+<td>
+LTS 버전<br>
+웹 애플리케이션 프레임워크<br>
+인증/인가 처리<br>
+ORM 프레임워크<br>
+기업공시 데이터 인메모리 캐시<br>
+애플리케이션 모니터링
+</td>
+</tr>
+<tr>
+<td><b>Infrastructure</b></td>
+<td>
+AWS EC2 t3.small<br>
+AWS RDS MySQL 8.0<br>
+AWS VPC<br>
+AWS Route 53<br>
+Docker 24.0.7<br>
+Nginx 1.24.0<br>
+Prometheus & Grafana
+</td>
+<td>
+애플리케이션 서버<br>
+MySQL 데이터베이스<br>
+서브넷 분리된 네트워크 구성<br>
+DNS 서비스 및 도메인 관리<br>
+컨테이너 기반 배포<br>
+API 캐싱, 리버스 프록시<br>
+시스템 모니터링, Slack 알림
+</td>
+</tr>
+</table>
+</div>
 
-## 📁 폴더 구조
-
-### IaC (Infrastructure as Code)
-```
-IaC/
-├─ private/ # 프라이빗 서브넷 관련 설정
-│ ├─ data/ # 데이터 저장소
-│ ├─ logs/ # 로그 파일
-│ └─ node_exporter/ # host os 모니터링 에이전트
-└─ public/ # 퍼블릭 서브넷 관련 설정
-  ├─ logs/ # API 서버 및 Nginx 로그
-  ├─ nginx/ # Nginx 설정 및 캐시
-  └─ prometheus_grafana/# 모니터링 시스템
-```
-
-### Backend Application
-```
-src/
-├─ main/
-│ ├─ java/com/finance/adam/
-│ │ ├─ auth/ # 인증/인가 관련
-│ │ ├─ config/ # 애플리케이션 설정
-│ │ ├─ controller/ # API 엔드포인트
-│ │ ├─ dto/ # 데이터 전송 객체
-│ │ ├─ exception/ # 예외 처리
-│ │ ├─ openapi/ # 외부 API 연동
-│ │ │ ├─ dart/ # 전자공시 API
-│ │ │ ├─ krx/ # 한국거래소 API
-│ │ │ └─ publicdataportal/ # 공공데이터 API
-│ │ ├─ repository/ # 데이터 접근 계층
-│ │ ├─ scheduler/ # 배치 작업
-│ │ ├─ service/ # 비즈니스 로직
-│ │ ├─ util/ # 유틸리티
-│ │ └─ validation/ # 입력값 검증
-│ └─ resources/ # 정적 리소스
-└─ test/ # 테스트 코드
-```
 
 ## ⚙️ 핵심 기능 구현
+
 ### 1. 주가 정보 수집 및 제공
-- **한국거래소(KRX) 웹사이트 크롤링**
-  - 주가 데이터 10분 간격 수집
-  - CSV 파일 파싱 및 데이터 가공
-  - 실시간 시세 정보 제공
-  
-- **공공데이터 포털 API 연동**
-  - 일 1회 상장/상폐 정보 자동 갱신
-  - 기업 기본 정보 동기화
-  - 종목 마스터 데이터 관리
+- KRX 웹사이트 크롤링으로 10분 간격 주가 데이터 수집
+- 공공데이터 포털 API 연동으로 일 1회 상장/상폐 정보 갱신
+- Nginx, Redis 캐싱으로 API 응답 속도 최적화
 
 ### 2. 기업 재무정보 분석
-- **재무제표 데이터 수집**
-  - 금융감독원(DART) 전자공시 API 활용
-  - 분기/연간 재무제표 자동 수집
-  - 기업별 재무정보 정기 갱신
+- 전자공시 DART API 활용한 재무제표 자동 수집
+- ROE 기준 기업 가치평가(클라이언트 로직 구현)
 
-- **투자 지표 분석**
-  - ROE 기반 기업 스크리닝
-  - 맞춤형 종목 필터링
-
-### 3. 알림 서비스
-- **맞춤형 알림 설정**
-  - 목표주가 도달 알림
-  - 정기 주가 알림 (시간 설정)
-  - 관심 기업 공시 알림 (공시 유형 선택)
-
-- **알림 이력 관리**
-  - 알림 로그 페이지 제공
-  - 알림 발생 시간 및 상세 내용 조회
+### 3. 실시간 알림 서비스
+- 스케줄러를 통한 `정기주가` & `목표주가` & `기업공시`  알림
+- 알림 히스토리 조회 페이지 제공
 
 ## 🖥️ 주요 화면
 ### 주식 상장사 검색
@@ -212,6 +202,8 @@ src/
 <div align="center">
   <img src="./images/erd.png" width="80%" />
 </div>
+
+## 모니터링 구축
 
 ## 🔍 트러블 슈팅
 작성중
