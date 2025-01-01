@@ -63,6 +63,8 @@ services:
     volumes:
       - ${PWD}/logs/scheduler:/var/log/finance
     restart: always
+    extra_hosts:
+      - "snowball-stock.site:10.10.0.4"
     networks:
       - app-network
 
