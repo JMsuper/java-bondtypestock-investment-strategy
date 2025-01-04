@@ -21,8 +21,8 @@
   | 서비스 | URL | 테스트 계정 |
   |--------|-----|-------------|
   | 웹 서비스 | https://snowball-stock.vercel.app/ (Vercel)| ID: test123, PW: 123123 |
-  | API | https://snowball-stock.site/api/v1 (Nginx)| same |
-  | 모니터링 | http://snowball-stock.site:3000 (Grafana) | same |
+  | API | https://snowball-stock.site/api/v1 (Nginx)| - |
+  | 모니터링 | http://snowball-stock.site:3000 (Grafana) | - |
   </div>
 
   ### 핵심 기능
@@ -35,6 +35,7 @@
   - 1인 풀스택 개발 (프론트엔드/백엔드/인프라)
   - ['눈덩이 주식투자'](https://www.yes24.com/Product/Goods/7498176?Acode=101) 도서 기반 가치투자 시스템 구현
   - 자동화된 데이터 수집 및 모니터링 시스템
+  - 프론트엔드 깃허브 주소: https://github.com/JMsuper/nextjs-finance-web
 
   <br>
 
