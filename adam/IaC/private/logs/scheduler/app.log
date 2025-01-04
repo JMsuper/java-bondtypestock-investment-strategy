@@ -1,0 +1,949 @@
+2024-12-22 21:15:58 INFO  com.finance.adam.AdamApplication - Starting AdamApplication v0.0.1-SNAPSHOT using Java 17-ea with PID 1 (/app/app.jar started by root in /)
+2024-12-22 21:15:58 INFO  com.finance.adam.AdamApplication - The following 3 profiles are active: "scheduler", "profile2", "common"
+2024-12-22 21:16:07 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2024-12-22 21:16:07 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-12-22 21:16:08 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 1296 ms. Found 10 JPA repository interfaces.
+2024-12-22 21:16:08 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2024-12-22 21:16:08 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2024-12-22 21:16:08 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.finance.adam.repository.pricealarm.PriceAlarmRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-22 21:16:08 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.finance.adam.repository.reportalarm.ReportAlarmRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-22 21:16:08 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.finance.adam.repository.corpinfo.CorpRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-22 21:16:08 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.finance.adam.repository.notification.NotificationRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-22 21:16:08 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.finance.adam.repository.account.UserRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-22 21:16:08 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.finance.adam.repository.targetpricealarm.TargetPriceAlarmRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-22 21:16:08 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.finance.adam.repository.memo.MemoRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-22 21:16:08 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.finance.adam.repository.stockprice.StockPriceRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-22 21:16:08 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.finance.adam.repository.financeinfo.FinanceInfoRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-22 21:16:08 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.finance.adam.repository.savecorpinfo.SaveCorpInfoRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-22 21:16:08 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 88 ms. Found 0 Redis repository interfaces.
+2024-12-22 21:16:15 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2024-12-22 21:16:15 INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2024-12-22 21:16:15 INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2024-12-22 21:16:15 INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.18]
+2024-12-22 21:16:16 INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-12-22 21:16:16 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 17957 ms
+2024-12-22 21:16:20 INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-12-22 21:16:20 INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.4.1.Final
+2024-12-22 21:16:21 INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2024-12-22 21:16:23 INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-12-22 21:16:24 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2024-12-22 21:16:26 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@61b76a7d
+2024-12-22 21:16:26 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2024-12-22 21:16:30 INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2024-12-22 21:16:37 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-12-22 21:16:38 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-12-22 21:16:41 INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-12-22 21:16:55 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-12-22 21:17:05 INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure Or [Mvc [pattern='/api/**']] with [org.springframework.security.web.session.DisableEncodeUrlFilter@10bf4f1c, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@c2de6ec, org.springframework.security.web.context.SecurityContextHolderFilter@4b3abc1, org.springframework.security.web.header.HeaderWriterFilter@3aee9ce3, org.springframework.web.filter.CorsFilter@5fbf6d4a, org.springframework.security.web.authentication.logout.LogoutFilter@3a778c6f, com.finance.adam.auth.filters.RestAuthenticationFilter@39ce0aba, org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter@53e36530, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@643ee419, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@6033ed50, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@309ae326, org.springframework.security.web.access.ExceptionTranslationFilter@314ecfa1, org.springframework.security.web.access.intercept.AuthorizationFilter@271e8be8]
+2024-12-22 21:17:10 INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2024-12-22 21:17:10 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+2024-12-22 21:17:10 INFO  com.finance.adam.AdamApplication - Started AdamApplication in 80.004 seconds (process running for 87.11)
+2024-12-22 21:18:00 INFO  c.f.adam.scheduler.SchedulerAspect - Scheduler is enabled. Executing recentReportRedisUpdate
+2024-12-22 21:18:00 INFO  c.f.adam.scheduler.ScheduledTasks - recentReportRedisUpdate start : 2024-12-22 Sun요일 21:18:00
+2024-12-22 21:18:00 INFO  c.f.adam.openapi.dart.OpenDartAPI - Updating recent reports in Redis by report type
+2024-12-22 21:18:03 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: A
+2024-12-22 21:18:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:18:05 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 10 items
+2024-12-22 21:18:07 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: B
+2024-12-22 21:18:07 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:18:08 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 71 items
+2024-12-22 21:18:08 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: C
+2024-12-22 21:18:08 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:18:08 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:18:08 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: D
+2024-12-22 21:18:08 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:18:09 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:18:09 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: E
+2024-12-22 21:18:09 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:18:09 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 26 items
+2024-12-22 21:18:09 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: F
+2024-12-22 21:18:09 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:18:09 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 17 items
+2024-12-22 21:18:09 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: G
+2024-12-22 21:18:09 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:18:10 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 66 items
+2024-12-22 21:18:10 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: H
+2024-12-22 21:18:10 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:18:10 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 2 items
+2024-12-22 21:18:10 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: I
+2024-12-22 21:18:10 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:18:10 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:18:10 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: J
+2024-12-22 21:18:10 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:18:11 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:18:11 INFO  c.f.adam.openapi.dart.OpenDartAPI - Completed updating recent reports in Redis
+2024-12-22 21:18:11 INFO  c.f.adam.service.AlarmCheckService - Starting report alarm trigger process
+2024-12-22 21:18:11 INFO  c.f.adam.service.AlarmCheckService - Created and saved 0 report notifications
+2024-12-22 21:18:11 INFO  c.f.adam.scheduler.ScheduledTasks - recentReportRedisUpdate end : 2024-12-22 Sun요일 21:18:11
+2024-12-22 21:19:00 INFO  c.f.adam.scheduler.SchedulerAspect - Scheduler is enabled. Executing recentReportRedisUpdate
+2024-12-22 21:19:00 INFO  c.f.adam.scheduler.ScheduledTasks - recentReportRedisUpdate start : 2024-12-22 Sun요일 21:19:00
+2024-12-22 21:19:00 INFO  c.f.adam.openapi.dart.OpenDartAPI - Updating recent reports in Redis by report type
+2024-12-22 21:19:00 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: A
+2024-12-22 21:19:00 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:19:00 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 10 items
+2024-12-22 21:19:00 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: B
+2024-12-22 21:19:00 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:19:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 71 items
+2024-12-22 21:19:01 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: C
+2024-12-22 21:19:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:19:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:19:01 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: D
+2024-12-22 21:19:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:19:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:19:02 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: E
+2024-12-22 21:19:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:19:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 26 items
+2024-12-22 21:19:02 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: F
+2024-12-22 21:19:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:19:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 17 items
+2024-12-22 21:19:02 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: G
+2024-12-22 21:19:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:19:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 66 items
+2024-12-22 21:19:02 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: H
+2024-12-22 21:19:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:19:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 2 items
+2024-12-22 21:19:03 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: I
+2024-12-22 21:19:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:19:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:19:03 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: J
+2024-12-22 21:19:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:19:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:19:03 INFO  c.f.adam.openapi.dart.OpenDartAPI - Completed updating recent reports in Redis
+2024-12-22 21:19:03 INFO  c.f.adam.service.AlarmCheckService - Starting report alarm trigger process
+2024-12-22 21:19:03 INFO  c.f.adam.service.AlarmCheckService - Created and saved 0 report notifications
+2024-12-22 21:19:03 INFO  c.f.adam.scheduler.ScheduledTasks - recentReportRedisUpdate end : 2024-12-22 Sun요일 21:19:03
+2024-12-22 21:20:00 INFO  c.f.adam.scheduler.SchedulerAspect - Scheduler is enabled. Executing stockPriceUpdate
+2024-12-22 21:20:00 INFO  c.f.adam.scheduler.ScheduledTasks - ScheduledTasks.stockPriceUpdate() start : 2024-12-22 Sun요일 21:20:00
+2024-12-22 21:20:00 INFO  c.f.a.openapi.krx.CsvReaderService - Successfully received OTP code from KRX
+2024-12-22 21:20:00 INFO  c.f.a.openapi.krx.CsvReaderService - Successfully wrote CSV file to: ./price-data/20241222-21_20_00-data_2000_20241222.csv
+2024-12-22 21:20:00 INFO  c.f.adam.scheduler.ScheduledTasks - CSV file에서 주가정보 숫자 변환 실패 - 00:00 ~ 09:10 <- 인지된 사항
+2024-12-22 21:20:00 INFO  c.f.adam.service.AlarmCheckService - Starting target price alarm trigger process
+2024-12-22 21:20:01 INFO  c.f.adam.service.AlarmCheckService - Created 0 target price alarm notifications
+2024-12-22 21:20:01 INFO  c.f.adam.service.AlarmCheckService - Starting stock price alarm trigger process at 21:20:00.004396311 on day 6
+2024-12-22 21:20:01 INFO  c.f.adam.service.AlarmCheckService - Created 0 price alarm notifications
+2024-12-22 21:20:01 INFO  c.f.adam.scheduler.ScheduledTasks - ScheduledTasks.stockPriceUpdate() end : 2024-12-22 Sun요일 21:20:01
+2024-12-22 21:20:01 INFO  c.f.adam.scheduler.SchedulerAspect - Scheduler is enabled. Executing recentReportRedisUpdate
+2024-12-22 21:20:01 INFO  c.f.adam.scheduler.ScheduledTasks - recentReportRedisUpdate start : 2024-12-22 Sun요일 21:20:01
+2024-12-22 21:20:01 INFO  c.f.adam.openapi.dart.OpenDartAPI - Updating recent reports in Redis by report type
+2024-12-22 21:20:01 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: A
+2024-12-22 21:20:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:20:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 10 items
+2024-12-22 21:20:01 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: B
+2024-12-22 21:20:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:20:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 71 items
+2024-12-22 21:20:02 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: C
+2024-12-22 21:20:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:20:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:20:02 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: D
+2024-12-22 21:20:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:20:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:20:03 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: E
+2024-12-22 21:20:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:20:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 26 items
+2024-12-22 21:20:03 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: F
+2024-12-22 21:20:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:20:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 17 items
+2024-12-22 21:20:03 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: G
+2024-12-22 21:20:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:20:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 66 items
+2024-12-22 21:20:03 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: H
+2024-12-22 21:20:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:20:04 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 2 items
+2024-12-22 21:20:04 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: I
+2024-12-22 21:20:04 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:20:04 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:20:04 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: J
+2024-12-22 21:20:04 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:20:04 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:20:04 INFO  c.f.adam.openapi.dart.OpenDartAPI - Completed updating recent reports in Redis
+2024-12-22 21:20:04 INFO  c.f.adam.service.AlarmCheckService - Starting report alarm trigger process
+2024-12-22 21:20:04 INFO  c.f.adam.service.AlarmCheckService - Created and saved 0 report notifications
+2024-12-22 21:20:04 INFO  c.f.adam.scheduler.ScheduledTasks - recentReportRedisUpdate end : 2024-12-22 Sun요일 21:20:04
+2024-12-22 21:21:00 INFO  c.f.adam.scheduler.SchedulerAspect - Scheduler is enabled. Executing recentReportRedisUpdate
+2024-12-22 21:21:00 INFO  c.f.adam.scheduler.ScheduledTasks - recentReportRedisUpdate start : 2024-12-22 Sun요일 21:21:00
+2024-12-22 21:21:00 INFO  c.f.adam.openapi.dart.OpenDartAPI - Updating recent reports in Redis by report type
+2024-12-22 21:21:00 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: A
+2024-12-22 21:21:00 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:21:00 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 10 items
+2024-12-22 21:21:00 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: B
+2024-12-22 21:21:00 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:21:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 71 items
+2024-12-22 21:21:01 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: C
+2024-12-22 21:21:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:21:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:21:01 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: D
+2024-12-22 21:21:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:21:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:21:02 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: E
+2024-12-22 21:21:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:21:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 26 items
+2024-12-22 21:21:02 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: F
+2024-12-22 21:21:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:21:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 17 items
+2024-12-22 21:21:02 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: G
+2024-12-22 21:21:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:21:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 66 items
+2024-12-22 21:21:02 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: H
+2024-12-22 21:21:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:21:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 2 items
+2024-12-22 21:21:03 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: I
+2024-12-22 21:21:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:21:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:21:03 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: J
+2024-12-22 21:21:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:21:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:21:03 INFO  c.f.adam.openapi.dart.OpenDartAPI - Completed updating recent reports in Redis
+2024-12-22 21:21:03 INFO  c.f.adam.service.AlarmCheckService - Starting report alarm trigger process
+2024-12-22 21:21:03 INFO  c.f.adam.service.AlarmCheckService - Created and saved 0 report notifications
+2024-12-22 21:21:03 INFO  c.f.adam.scheduler.ScheduledTasks - recentReportRedisUpdate end : 2024-12-22 Sun요일 21:21:03
+2024-12-22 21:21:34 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-12-22 21:21:34 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2024-12-22 21:21:34 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2024-12-22 21:21:59 INFO  com.finance.adam.AdamApplication - Starting AdamApplication v0.0.1-SNAPSHOT using Java 17-ea with PID 1 (/app/app.jar started by root in /)
+2024-12-22 21:21:59 INFO  com.finance.adam.AdamApplication - The following 3 profiles are active: "scheduler", "profile2", "common"
+2024-12-22 21:22:08 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2024-12-22 21:22:08 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-12-22 21:22:10 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 1508 ms. Found 10 JPA repository interfaces.
+2024-12-22 21:22:10 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2024-12-22 21:22:10 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2024-12-22 21:22:10 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.finance.adam.repository.pricealarm.PriceAlarmRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-22 21:22:10 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.finance.adam.repository.reportalarm.ReportAlarmRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-22 21:22:10 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.finance.adam.repository.corpinfo.CorpRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-22 21:22:10 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.finance.adam.repository.notification.NotificationRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-22 21:22:10 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.finance.adam.repository.account.UserRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-22 21:22:10 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.finance.adam.repository.targetpricealarm.TargetPriceAlarmRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-22 21:22:10 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.finance.adam.repository.memo.MemoRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-22 21:22:10 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.finance.adam.repository.stockprice.StockPriceRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-22 21:22:10 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.finance.adam.repository.financeinfo.FinanceInfoRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-22 21:22:10 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.finance.adam.repository.savecorpinfo.SaveCorpInfoRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-22 21:22:10 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 90 ms. Found 0 Redis repository interfaces.
+2024-12-22 21:22:17 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2024-12-22 21:22:17 INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2024-12-22 21:22:17 INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2024-12-22 21:22:17 INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.18]
+2024-12-22 21:22:17 INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-12-22 21:22:18 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 17727 ms
+2024-12-22 21:22:21 INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-12-22 21:22:22 INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.4.1.Final
+2024-12-22 21:22:22 INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2024-12-22 21:22:25 INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-12-22 21:22:25 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2024-12-22 21:22:27 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@61b76a7d
+2024-12-22 21:22:27 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2024-12-22 21:22:32 INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2024-12-22 21:22:39 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-12-22 21:22:40 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-12-22 21:22:43 INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-12-22 21:22:57 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-12-22 21:23:09 INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure Or [Mvc [pattern='/api/**']] with [org.springframework.security.web.session.DisableEncodeUrlFilter@10bf4f1c, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@c2de6ec, org.springframework.security.web.context.SecurityContextHolderFilter@4b3abc1, org.springframework.security.web.header.HeaderWriterFilter@3aee9ce3, org.springframework.web.filter.CorsFilter@5fbf6d4a, org.springframework.security.web.authentication.logout.LogoutFilter@3a778c6f, com.finance.adam.auth.filters.RestAuthenticationFilter@39ce0aba, org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter@53e36530, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@643ee419, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@6033ed50, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@309ae326, org.springframework.security.web.access.ExceptionTranslationFilter@314ecfa1, org.springframework.security.web.access.intercept.AuthorizationFilter@271e8be8]
+2024-12-22 21:23:15 INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2024-12-22 21:23:15 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+2024-12-22 21:23:15 INFO  com.finance.adam.AdamApplication - Started AdamApplication in 82.839 seconds (process running for 89.795)
+2024-12-22 21:24:02 INFO  c.f.adam.scheduler.SchedulerAspect - Scheduler is enabled. Executing recentReportRedisUpdate
+2024-12-22 21:24:02 INFO  c.f.adam.scheduler.ScheduledTasks - recentReportRedisUpdate start : 2024-12-22 Sun요일 21:24:02
+2024-12-22 21:24:02 INFO  c.f.adam.openapi.dart.OpenDartAPI - Updating recent reports in Redis by report type
+2024-12-22 21:24:10 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: A
+2024-12-22 21:24:10 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:24:12 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 10 items
+2024-12-22 21:24:15 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: B
+2024-12-22 21:24:15 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:24:15 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 71 items
+2024-12-22 21:24:15 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: C
+2024-12-22 21:24:15 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:24:15 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:24:16 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: D
+2024-12-22 21:24:16 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:24:16 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:24:16 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: E
+2024-12-22 21:24:16 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:24:16 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 26 items
+2024-12-22 21:24:16 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: F
+2024-12-22 21:24:16 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:24:17 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 17 items
+2024-12-22 21:24:17 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: G
+2024-12-22 21:24:17 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:24:17 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 66 items
+2024-12-22 21:24:17 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: H
+2024-12-22 21:24:17 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:24:17 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 2 items
+2024-12-22 21:24:17 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: I
+2024-12-22 21:24:17 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:24:17 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:24:18 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: J
+2024-12-22 21:24:18 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:24:18 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:24:18 INFO  c.f.adam.openapi.dart.OpenDartAPI - Completed updating recent reports in Redis
+2024-12-22 21:24:18 INFO  c.f.adam.service.AlarmCheckService - Starting report alarm trigger process
+2024-12-22 21:24:18 INFO  c.f.adam.service.AlarmCheckService - Created and saved 0 report notifications
+2024-12-22 21:24:18 INFO  c.f.adam.scheduler.ScheduledTasks - recentReportRedisUpdate end : 2024-12-22 Sun요일 21:24:18
+2024-12-22 21:25:00 INFO  c.f.adam.scheduler.SchedulerAspect - Scheduler is enabled. Executing recentReportRedisUpdate
+2024-12-22 21:25:00 INFO  c.f.adam.scheduler.ScheduledTasks - recentReportRedisUpdate start : 2024-12-22 Sun요일 21:25:00
+2024-12-22 21:25:00 INFO  c.f.adam.openapi.dart.OpenDartAPI - Updating recent reports in Redis by report type
+2024-12-22 21:25:00 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: A
+2024-12-22 21:25:00 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:25:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 10 items
+2024-12-22 21:25:01 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: B
+2024-12-22 21:25:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:25:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 71 items
+2024-12-22 21:25:01 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: C
+2024-12-22 21:25:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:25:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:25:02 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: D
+2024-12-22 21:25:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:25:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:25:02 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: E
+2024-12-22 21:25:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:25:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 26 items
+2024-12-22 21:25:02 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: F
+2024-12-22 21:25:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:25:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 17 items
+2024-12-22 21:25:03 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: G
+2024-12-22 21:25:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:25:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 66 items
+2024-12-22 21:25:03 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: H
+2024-12-22 21:25:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:25:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 2 items
+2024-12-22 21:25:03 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: I
+2024-12-22 21:25:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:25:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:25:03 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: J
+2024-12-22 21:25:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:25:04 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:25:04 INFO  c.f.adam.openapi.dart.OpenDartAPI - Completed updating recent reports in Redis
+2024-12-22 21:25:04 INFO  c.f.adam.service.AlarmCheckService - Starting report alarm trigger process
+2024-12-22 21:25:04 INFO  c.f.adam.service.AlarmCheckService - Created and saved 0 report notifications
+2024-12-22 21:25:04 INFO  c.f.adam.scheduler.ScheduledTasks - recentReportRedisUpdate end : 2024-12-22 Sun요일 21:25:04
+2024-12-22 21:25:59 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-12-22 21:25:59 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2024-12-22 21:25:59 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2024-12-22 21:31:08 INFO  com.finance.adam.AdamApplication - Starting AdamApplication v0.0.1-SNAPSHOT using Java 17-ea with PID 1 (/app/app.jar started by root in /)
+2024-12-22 21:31:08 INFO  com.finance.adam.AdamApplication - The following 3 profiles are active: "scheduler", "profile2", "common"
+2024-12-22 21:31:17 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2024-12-22 21:31:17 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-12-22 21:31:18 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 1385 ms. Found 10 JPA repository interfaces.
+2024-12-22 21:31:19 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2024-12-22 21:31:19 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2024-12-22 21:31:19 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.finance.adam.repository.pricealarm.PriceAlarmRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-22 21:31:19 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.finance.adam.repository.reportalarm.ReportAlarmRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-22 21:31:19 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.finance.adam.repository.corpinfo.CorpRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-22 21:31:19 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.finance.adam.repository.notification.NotificationRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-22 21:31:19 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.finance.adam.repository.account.UserRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-22 21:31:19 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.finance.adam.repository.targetpricealarm.TargetPriceAlarmRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-22 21:31:19 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.finance.adam.repository.memo.MemoRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-22 21:31:19 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.finance.adam.repository.stockprice.StockPriceRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-22 21:31:19 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.finance.adam.repository.financeinfo.FinanceInfoRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-22 21:31:19 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.finance.adam.repository.savecorpinfo.SaveCorpInfoRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-22 21:31:19 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 93 ms. Found 0 Redis repository interfaces.
+2024-12-22 21:42:21 INFO  com.finance.adam.AdamApplication - Starting AdamApplication v0.0.1-SNAPSHOT using Java 17-ea with PID 1 (/app/app.jar started by root in /)
+2024-12-22 21:42:21 INFO  com.finance.adam.AdamApplication - The following 3 profiles are active: "scheduler", "profile2", "common"
+2024-12-22 21:42:28 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2024-12-22 21:42:28 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-12-22 21:42:30 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 1488 ms. Found 10 JPA repository interfaces.
+2024-12-22 21:42:30 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2024-12-22 21:42:30 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2024-12-22 21:42:30 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.finance.adam.repository.pricealarm.PriceAlarmRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-22 21:42:30 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.finance.adam.repository.reportalarm.ReportAlarmRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-22 21:42:30 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.finance.adam.repository.corpinfo.CorpRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-22 21:42:30 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.finance.adam.repository.notification.NotificationRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-22 21:42:30 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.finance.adam.repository.account.UserRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-22 21:42:30 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.finance.adam.repository.targetpricealarm.TargetPriceAlarmRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-22 21:42:30 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.finance.adam.repository.memo.MemoRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-22 21:42:30 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.finance.adam.repository.stockprice.StockPriceRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-22 21:42:30 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.finance.adam.repository.financeinfo.FinanceInfoRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-22 21:42:30 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.finance.adam.repository.savecorpinfo.SaveCorpInfoRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-22 21:42:30 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 110 ms. Found 0 Redis repository interfaces.
+2024-12-22 21:42:37 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2024-12-22 21:42:37 INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2024-12-22 21:42:37 INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2024-12-22 21:42:37 INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.18]
+2024-12-22 21:42:38 INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-12-22 21:42:38 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 16651 ms
+2024-12-22 21:42:41 INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-12-22 21:42:41 INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.4.1.Final
+2024-12-22 21:42:42 INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2024-12-22 21:42:44 INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-12-22 21:42:44 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2024-12-22 21:42:47 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@61b76a7d
+2024-12-22 21:42:47 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2024-12-22 21:42:51 INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2024-12-22 21:42:59 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-12-22 21:42:59 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-12-22 21:43:02 INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-12-22 21:43:13 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-12-22 21:43:22 INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure Or [Mvc [pattern='/api/**']] with [org.springframework.security.web.session.DisableEncodeUrlFilter@15bb7acd, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@725f288f, org.springframework.security.web.context.SecurityContextHolderFilter@3ab8f900, org.springframework.security.web.header.HeaderWriterFilter@1269538a, org.springframework.web.filter.CorsFilter@3e12aa8b, org.springframework.security.web.authentication.logout.LogoutFilter@3026d4cd, com.finance.adam.auth.filters.RestAuthenticationFilter@29c947d0, org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter@676a2d36, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@404c8c9d, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2cdd3638, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@6cfa6a04, org.springframework.security.web.access.ExceptionTranslationFilter@643ee419, org.springframework.security.web.access.intercept.AuthorizationFilter@146b1d42]
+2024-12-22 21:43:28 INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2024-12-22 21:43:29 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+2024-12-22 21:43:29 INFO  com.finance.adam.AdamApplication - Started AdamApplication in 74.055 seconds (process running for 79.322)
+2024-12-22 21:43:38 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-12-22 21:43:38 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2024-12-22 21:43:39 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2024-12-22 21:44:09 INFO  com.finance.adam.AdamApplication - Starting AdamApplication v0.0.1-SNAPSHOT using Java 17-ea with PID 1 (/app/app.jar started by root in /)
+2024-12-22 21:44:09 INFO  com.finance.adam.AdamApplication - The following 3 profiles are active: "scheduler", "profile2", "common"
+2024-12-22 21:44:17 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2024-12-22 21:44:17 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-12-22 21:44:19 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 1339 ms. Found 10 JPA repository interfaces.
+2024-12-22 21:44:19 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2024-12-22 21:44:19 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2024-12-22 21:44:19 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.finance.adam.repository.pricealarm.PriceAlarmRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-22 21:44:19 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.finance.adam.repository.reportalarm.ReportAlarmRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-22 21:44:19 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.finance.adam.repository.corpinfo.CorpRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-22 21:44:19 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.finance.adam.repository.notification.NotificationRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-22 21:44:19 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.finance.adam.repository.account.UserRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-22 21:44:19 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.finance.adam.repository.targetpricealarm.TargetPriceAlarmRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-22 21:44:19 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.finance.adam.repository.memo.MemoRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-22 21:44:19 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.finance.adam.repository.stockprice.StockPriceRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-22 21:44:19 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.finance.adam.repository.financeinfo.FinanceInfoRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-22 21:44:19 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.finance.adam.repository.savecorpinfo.SaveCorpInfoRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-22 21:44:19 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 134 ms. Found 0 Redis repository interfaces.
+2024-12-22 21:44:26 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2024-12-22 21:44:26 INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2024-12-22 21:44:26 INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2024-12-22 21:44:26 INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.18]
+2024-12-22 21:44:26 INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-12-22 21:44:26 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 16990 ms
+2024-12-22 21:44:30 INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-12-22 21:44:30 INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.4.1.Final
+2024-12-22 21:44:30 INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2024-12-22 21:44:32 INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-12-22 21:44:33 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2024-12-22 21:44:35 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@61b76a7d
+2024-12-22 21:44:35 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2024-12-22 21:44:39 INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2024-12-22 21:44:46 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-12-22 21:44:47 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-12-22 21:44:50 INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-12-22 21:45:00 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-12-22 21:45:11 INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure Or [Mvc [pattern='/api/**']] with [org.springframework.security.web.session.DisableEncodeUrlFilter@10bf4f1c, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@c2de6ec, org.springframework.security.web.context.SecurityContextHolderFilter@4b3abc1, org.springframework.security.web.header.HeaderWriterFilter@3aee9ce3, org.springframework.web.filter.CorsFilter@5fbf6d4a, org.springframework.security.web.authentication.logout.LogoutFilter@3a778c6f, com.finance.adam.auth.filters.RestAuthenticationFilter@39ce0aba, org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter@53e36530, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@643ee419, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@6033ed50, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@309ae326, org.springframework.security.web.access.ExceptionTranslationFilter@314ecfa1, org.springframework.security.web.access.intercept.AuthorizationFilter@271e8be8]
+2024-12-22 21:45:15 INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2024-12-22 21:45:16 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+2024-12-22 21:45:16 INFO  com.finance.adam.AdamApplication - Started AdamApplication in 72.532 seconds (process running for 77.674)
+2024-12-22 21:46:03 INFO  c.f.adam.scheduler.SchedulerAspect - Scheduler is enabled. Executing recentReportRedisUpdate
+2024-12-22 21:46:03 INFO  c.f.adam.scheduler.ScheduledTasks - recentReportRedisUpdate start : 2024-12-22 Sun요일 21:46:03
+2024-12-22 21:46:03 INFO  c.f.adam.openapi.dart.OpenDartAPI - Updating recent reports in Redis by report type
+2024-12-22 21:46:11 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: A
+2024-12-22 21:46:11 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:46:14 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 10 items
+2024-12-22 21:46:16 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: B
+2024-12-22 21:46:16 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:46:16 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 71 items
+2024-12-22 21:46:17 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: C
+2024-12-22 21:46:17 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:46:17 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:46:17 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: D
+2024-12-22 21:46:17 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:46:17 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:46:18 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: E
+2024-12-22 21:46:18 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:46:18 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 26 items
+2024-12-22 21:46:18 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: F
+2024-12-22 21:46:18 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:46:18 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 17 items
+2024-12-22 21:46:18 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: G
+2024-12-22 21:46:18 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:46:18 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 66 items
+2024-12-22 21:46:18 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: H
+2024-12-22 21:46:18 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:46:19 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 2 items
+2024-12-22 21:46:19 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: I
+2024-12-22 21:46:19 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:46:19 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:46:19 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: J
+2024-12-22 21:46:19 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:46:19 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:46:19 INFO  c.f.adam.openapi.dart.OpenDartAPI - Completed updating recent reports in Redis
+2024-12-22 21:46:20 INFO  c.f.adam.service.AlarmCheckService - Starting report alarm trigger process
+2024-12-22 21:46:20 INFO  c.f.adam.service.AlarmCheckService - Created and saved 0 report notifications
+2024-12-22 21:46:20 INFO  c.f.adam.scheduler.ScheduledTasks - recentReportRedisUpdate end : 2024-12-22 Sun요일 21:46:20
+2024-12-22 21:47:00 INFO  c.f.adam.scheduler.SchedulerAspect - Scheduler is enabled. Executing recentReportRedisUpdate
+2024-12-22 21:47:00 INFO  c.f.adam.scheduler.ScheduledTasks - recentReportRedisUpdate start : 2024-12-22 Sun요일 21:47:00
+2024-12-22 21:47:00 INFO  c.f.adam.openapi.dart.OpenDartAPI - Updating recent reports in Redis by report type
+2024-12-22 21:47:00 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: A
+2024-12-22 21:47:00 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:47:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 10 items
+2024-12-22 21:47:01 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: B
+2024-12-22 21:47:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:47:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 71 items
+2024-12-22 21:47:01 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: C
+2024-12-22 21:47:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:47:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:47:01 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: D
+2024-12-22 21:47:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:47:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:47:02 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: E
+2024-12-22 21:47:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:47:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 26 items
+2024-12-22 21:47:02 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: F
+2024-12-22 21:47:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:47:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 17 items
+2024-12-22 21:47:03 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: G
+2024-12-22 21:47:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:47:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 66 items
+2024-12-22 21:47:03 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: H
+2024-12-22 21:47:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:47:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 2 items
+2024-12-22 21:47:03 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: I
+2024-12-22 21:47:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:47:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:47:03 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: J
+2024-12-22 21:47:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:47:04 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:47:04 INFO  c.f.adam.openapi.dart.OpenDartAPI - Completed updating recent reports in Redis
+2024-12-22 21:47:04 INFO  c.f.adam.service.AlarmCheckService - Starting report alarm trigger process
+2024-12-22 21:47:04 INFO  c.f.adam.service.AlarmCheckService - Created and saved 0 report notifications
+2024-12-22 21:47:04 INFO  c.f.adam.scheduler.ScheduledTasks - recentReportRedisUpdate end : 2024-12-22 Sun요일 21:47:04
+2024-12-22 21:48:00 INFO  c.f.adam.scheduler.SchedulerAspect - Scheduler is enabled. Executing recentReportRedisUpdate
+2024-12-22 21:48:00 INFO  c.f.adam.scheduler.ScheduledTasks - recentReportRedisUpdate start : 2024-12-22 Sun요일 21:48:00
+2024-12-22 21:48:00 INFO  c.f.adam.openapi.dart.OpenDartAPI - Updating recent reports in Redis by report type
+2024-12-22 21:48:00 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: A
+2024-12-22 21:48:00 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:48:00 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 10 items
+2024-12-22 21:48:00 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: B
+2024-12-22 21:48:00 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:48:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 71 items
+2024-12-22 21:48:01 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: C
+2024-12-22 21:48:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:48:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:48:01 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: D
+2024-12-22 21:48:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:48:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:48:01 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: E
+2024-12-22 21:48:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:48:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 26 items
+2024-12-22 21:48:02 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: F
+2024-12-22 21:48:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:48:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 17 items
+2024-12-22 21:48:02 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: G
+2024-12-22 21:48:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:48:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 66 items
+2024-12-22 21:48:02 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: H
+2024-12-22 21:48:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:48:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 2 items
+2024-12-22 21:48:03 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: I
+2024-12-22 21:48:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:48:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:48:03 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: J
+2024-12-22 21:48:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:48:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:48:03 INFO  c.f.adam.openapi.dart.OpenDartAPI - Completed updating recent reports in Redis
+2024-12-22 21:48:03 INFO  c.f.adam.service.AlarmCheckService - Starting report alarm trigger process
+2024-12-22 21:48:03 INFO  c.f.adam.service.AlarmCheckService - Created and saved 0 report notifications
+2024-12-22 21:48:03 INFO  c.f.adam.scheduler.ScheduledTasks - recentReportRedisUpdate end : 2024-12-22 Sun요일 21:48:03
+2024-12-22 21:49:00 INFO  c.f.adam.scheduler.SchedulerAspect - Scheduler is enabled. Executing recentReportRedisUpdate
+2024-12-22 21:49:00 INFO  c.f.adam.scheduler.ScheduledTasks - recentReportRedisUpdate start : 2024-12-22 Sun요일 21:49:00
+2024-12-22 21:49:00 INFO  c.f.adam.openapi.dart.OpenDartAPI - Updating recent reports in Redis by report type
+2024-12-22 21:49:00 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: A
+2024-12-22 21:49:00 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:49:00 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 10 items
+2024-12-22 21:49:00 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: B
+2024-12-22 21:49:00 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:49:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 71 items
+2024-12-22 21:49:01 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: C
+2024-12-22 21:49:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:49:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:49:01 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: D
+2024-12-22 21:49:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:49:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:49:02 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: E
+2024-12-22 21:49:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:49:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 26 items
+2024-12-22 21:49:02 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: F
+2024-12-22 21:49:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:49:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 17 items
+2024-12-22 21:49:02 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: G
+2024-12-22 21:49:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:49:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 66 items
+2024-12-22 21:49:02 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: H
+2024-12-22 21:49:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:49:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 2 items
+2024-12-22 21:49:03 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: I
+2024-12-22 21:49:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:49:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:49:03 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: J
+2024-12-22 21:49:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:49:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:49:03 INFO  c.f.adam.openapi.dart.OpenDartAPI - Completed updating recent reports in Redis
+2024-12-22 21:49:03 INFO  c.f.adam.service.AlarmCheckService - Starting report alarm trigger process
+2024-12-22 21:49:03 INFO  c.f.adam.service.AlarmCheckService - Created and saved 0 report notifications
+2024-12-22 21:49:03 INFO  c.f.adam.scheduler.ScheduledTasks - recentReportRedisUpdate end : 2024-12-22 Sun요일 21:49:03
+2024-12-22 21:50:00 INFO  c.f.adam.scheduler.SchedulerAspect - Scheduler is enabled. Executing recentReportRedisUpdate
+2024-12-22 21:50:00 INFO  c.f.adam.scheduler.ScheduledTasks - recentReportRedisUpdate start : 2024-12-22 Sun요일 21:50:00
+2024-12-22 21:50:00 INFO  c.f.adam.openapi.dart.OpenDartAPI - Updating recent reports in Redis by report type
+2024-12-22 21:50:00 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: A
+2024-12-22 21:50:00 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:50:00 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 10 items
+2024-12-22 21:50:00 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: B
+2024-12-22 21:50:00 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:50:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 71 items
+2024-12-22 21:50:01 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: C
+2024-12-22 21:50:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:50:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:50:01 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: D
+2024-12-22 21:50:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:50:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:50:01 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: E
+2024-12-22 21:50:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:50:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 26 items
+2024-12-22 21:50:02 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: F
+2024-12-22 21:50:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:50:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 17 items
+2024-12-22 21:50:02 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: G
+2024-12-22 21:50:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:50:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 66 items
+2024-12-22 21:50:02 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: H
+2024-12-22 21:50:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:50:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 2 items
+2024-12-22 21:50:02 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: I
+2024-12-22 21:50:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:50:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:50:03 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: J
+2024-12-22 21:50:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:50:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:50:03 INFO  c.f.adam.openapi.dart.OpenDartAPI - Completed updating recent reports in Redis
+2024-12-22 21:50:03 INFO  c.f.adam.service.AlarmCheckService - Starting report alarm trigger process
+2024-12-22 21:50:03 INFO  c.f.adam.service.AlarmCheckService - Created and saved 0 report notifications
+2024-12-22 21:50:03 INFO  c.f.adam.scheduler.ScheduledTasks - recentReportRedisUpdate end : 2024-12-22 Sun요일 21:50:03
+2024-12-22 21:50:03 INFO  c.f.adam.scheduler.SchedulerAspect - Scheduler is enabled. Executing stockPriceUpdate
+2024-12-22 21:50:03 INFO  c.f.adam.scheduler.ScheduledTasks - ScheduledTasks.stockPriceUpdate() start : 2024-12-22 Sun요일 21:50:03
+2024-12-22 21:50:03 INFO  c.f.a.openapi.krx.CsvReaderService - Successfully received OTP code from KRX
+2024-12-22 21:50:03 INFO  c.f.a.openapi.krx.CsvReaderService - Successfully wrote CSV file to: ./price-data/20241222-21_50_03-data_5003_20241222.csv
+2024-12-22 21:50:03 INFO  c.f.adam.scheduler.ScheduledTasks - CSV file에서 주가정보 숫자 변환 실패 - 00:00 ~ 09:10 <- 인지된 사항
+2024-12-22 21:50:04 INFO  c.f.adam.service.AlarmCheckService - Starting target price alarm trigger process
+2024-12-22 21:50:04 INFO  c.f.adam.service.AlarmCheckService - Created 0 target price alarm notifications
+2024-12-22 21:50:04 INFO  c.f.adam.service.AlarmCheckService - Starting stock price alarm trigger process at 21:50:03.607146762 on day 6
+2024-12-22 21:50:04 INFO  c.f.adam.service.AlarmCheckService - Created 0 price alarm notifications
+2024-12-22 21:50:04 INFO  c.f.adam.scheduler.ScheduledTasks - ScheduledTasks.stockPriceUpdate() end : 2024-12-22 Sun요일 21:50:04
+2024-12-22 21:51:00 INFO  c.f.adam.scheduler.SchedulerAspect - Scheduler is enabled. Executing recentReportRedisUpdate
+2024-12-22 21:51:00 INFO  c.f.adam.scheduler.ScheduledTasks - recentReportRedisUpdate start : 2024-12-22 Sun요일 21:51:00
+2024-12-22 21:51:00 INFO  c.f.adam.openapi.dart.OpenDartAPI - Updating recent reports in Redis by report type
+2024-12-22 21:51:00 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: A
+2024-12-22 21:51:00 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:51:00 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 10 items
+2024-12-22 21:51:00 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: B
+2024-12-22 21:51:00 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:51:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 71 items
+2024-12-22 21:51:01 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: C
+2024-12-22 21:51:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:51:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:51:01 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: D
+2024-12-22 21:51:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:51:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:51:01 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: E
+2024-12-22 21:51:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:51:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 26 items
+2024-12-22 21:51:02 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: F
+2024-12-22 21:51:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:51:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 17 items
+2024-12-22 21:51:02 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: G
+2024-12-22 21:51:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:51:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 66 items
+2024-12-22 21:51:02 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: H
+2024-12-22 21:51:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:51:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 2 items
+2024-12-22 21:51:03 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: I
+2024-12-22 21:51:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:51:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:51:03 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: J
+2024-12-22 21:51:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:51:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:51:03 INFO  c.f.adam.openapi.dart.OpenDartAPI - Completed updating recent reports in Redis
+2024-12-22 21:51:03 INFO  c.f.adam.service.AlarmCheckService - Starting report alarm trigger process
+2024-12-22 21:51:03 INFO  c.f.adam.service.AlarmCheckService - Created and saved 0 report notifications
+2024-12-22 21:51:03 INFO  c.f.adam.scheduler.ScheduledTasks - recentReportRedisUpdate end : 2024-12-22 Sun요일 21:51:03
+2024-12-22 21:52:00 INFO  c.f.adam.scheduler.SchedulerAspect - Scheduler is enabled. Executing recentReportRedisUpdate
+2024-12-22 21:52:00 INFO  c.f.adam.scheduler.ScheduledTasks - recentReportRedisUpdate start : 2024-12-22 Sun요일 21:52:00
+2024-12-22 21:52:00 INFO  c.f.adam.openapi.dart.OpenDartAPI - Updating recent reports in Redis by report type
+2024-12-22 21:52:00 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: A
+2024-12-22 21:52:00 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:52:00 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 10 items
+2024-12-22 21:52:00 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: B
+2024-12-22 21:52:00 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:52:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 71 items
+2024-12-22 21:52:01 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: C
+2024-12-22 21:52:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:52:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:52:01 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: D
+2024-12-22 21:52:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:52:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:52:01 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: E
+2024-12-22 21:52:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:52:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 26 items
+2024-12-22 21:52:02 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: F
+2024-12-22 21:52:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:52:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 17 items
+2024-12-22 21:52:02 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: G
+2024-12-22 21:52:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:52:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 66 items
+2024-12-22 21:52:02 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: H
+2024-12-22 21:52:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:52:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 2 items
+2024-12-22 21:52:02 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: I
+2024-12-22 21:52:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:52:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:52:03 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: J
+2024-12-22 21:52:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:52:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:52:03 INFO  c.f.adam.openapi.dart.OpenDartAPI - Completed updating recent reports in Redis
+2024-12-22 21:52:03 INFO  c.f.adam.service.AlarmCheckService - Starting report alarm trigger process
+2024-12-22 21:52:03 INFO  c.f.adam.service.AlarmCheckService - Created and saved 0 report notifications
+2024-12-22 21:52:03 INFO  c.f.adam.scheduler.ScheduledTasks - recentReportRedisUpdate end : 2024-12-22 Sun요일 21:52:03
+2024-12-22 21:53:00 INFO  c.f.adam.scheduler.SchedulerAspect - Scheduler is enabled. Executing recentReportRedisUpdate
+2024-12-22 21:53:00 INFO  c.f.adam.scheduler.ScheduledTasks - recentReportRedisUpdate start : 2024-12-22 Sun요일 21:53:00
+2024-12-22 21:53:00 INFO  c.f.adam.openapi.dart.OpenDartAPI - Updating recent reports in Redis by report type
+2024-12-22 21:53:00 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: A
+2024-12-22 21:53:00 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:53:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 10 items
+2024-12-22 21:53:01 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: B
+2024-12-22 21:53:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:53:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 71 items
+2024-12-22 21:53:01 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: C
+2024-12-22 21:53:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:53:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:53:01 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: D
+2024-12-22 21:53:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:53:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:53:02 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: E
+2024-12-22 21:53:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:53:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 26 items
+2024-12-22 21:53:02 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: F
+2024-12-22 21:53:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:53:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 17 items
+2024-12-22 21:53:02 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: G
+2024-12-22 21:53:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:53:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 66 items
+2024-12-22 21:53:02 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: H
+2024-12-22 21:53:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:53:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 2 items
+2024-12-22 21:53:03 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: I
+2024-12-22 21:53:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:53:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:53:03 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: J
+2024-12-22 21:53:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:53:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:53:03 INFO  c.f.adam.openapi.dart.OpenDartAPI - Completed updating recent reports in Redis
+2024-12-22 21:53:03 INFO  c.f.adam.service.AlarmCheckService - Starting report alarm trigger process
+2024-12-22 21:53:03 INFO  c.f.adam.service.AlarmCheckService - Created and saved 0 report notifications
+2024-12-22 21:53:03 INFO  c.f.adam.scheduler.ScheduledTasks - recentReportRedisUpdate end : 2024-12-22 Sun요일 21:53:03
+2024-12-22 21:54:00 INFO  c.f.adam.scheduler.SchedulerAspect - Scheduler is enabled. Executing recentReportRedisUpdate
+2024-12-22 21:54:00 INFO  c.f.adam.scheduler.ScheduledTasks - recentReportRedisUpdate start : 2024-12-22 Sun요일 21:54:00
+2024-12-22 21:54:00 INFO  c.f.adam.openapi.dart.OpenDartAPI - Updating recent reports in Redis by report type
+2024-12-22 21:54:00 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: A
+2024-12-22 21:54:00 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:54:00 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 10 items
+2024-12-22 21:54:00 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: B
+2024-12-22 21:54:00 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:54:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 71 items
+2024-12-22 21:54:01 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: C
+2024-12-22 21:54:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:54:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:54:01 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: D
+2024-12-22 21:54:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:54:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:54:02 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: E
+2024-12-22 21:54:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:54:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 26 items
+2024-12-22 21:54:02 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: F
+2024-12-22 21:54:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:54:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 17 items
+2024-12-22 21:54:02 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: G
+2024-12-22 21:54:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:54:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 66 items
+2024-12-22 21:54:02 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: H
+2024-12-22 21:54:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:54:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 2 items
+2024-12-22 21:54:03 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: I
+2024-12-22 21:54:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:54:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:54:03 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: J
+2024-12-22 21:54:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:54:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:54:03 INFO  c.f.adam.openapi.dart.OpenDartAPI - Completed updating recent reports in Redis
+2024-12-22 21:54:03 INFO  c.f.adam.service.AlarmCheckService - Starting report alarm trigger process
+2024-12-22 21:54:03 INFO  c.f.adam.service.AlarmCheckService - Created and saved 0 report notifications
+2024-12-22 21:54:03 INFO  c.f.adam.scheduler.ScheduledTasks - recentReportRedisUpdate end : 2024-12-22 Sun요일 21:54:03
+2024-12-22 21:55:00 INFO  c.f.adam.scheduler.SchedulerAspect - Scheduler is enabled. Executing recentReportRedisUpdate
+2024-12-22 21:55:00 INFO  c.f.adam.scheduler.ScheduledTasks - recentReportRedisUpdate start : 2024-12-22 Sun요일 21:55:00
+2024-12-22 21:55:00 INFO  c.f.adam.openapi.dart.OpenDartAPI - Updating recent reports in Redis by report type
+2024-12-22 21:55:00 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: A
+2024-12-22 21:55:00 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:55:00 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 10 items
+2024-12-22 21:55:00 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: B
+2024-12-22 21:55:00 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:55:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 71 items
+2024-12-22 21:55:01 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: C
+2024-12-22 21:55:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:55:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:55:01 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: D
+2024-12-22 21:55:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:55:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:55:02 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: E
+2024-12-22 21:55:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:55:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 26 items
+2024-12-22 21:55:02 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: F
+2024-12-22 21:55:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:55:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 17 items
+2024-12-22 21:55:02 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: G
+2024-12-22 21:55:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:55:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 66 items
+2024-12-22 21:55:02 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: H
+2024-12-22 21:55:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:55:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 2 items
+2024-12-22 21:55:03 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: I
+2024-12-22 21:55:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:55:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:55:03 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: J
+2024-12-22 21:55:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:55:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:55:03 INFO  c.f.adam.openapi.dart.OpenDartAPI - Completed updating recent reports in Redis
+2024-12-22 21:55:03 INFO  c.f.adam.service.AlarmCheckService - Starting report alarm trigger process
+2024-12-22 21:55:03 INFO  c.f.adam.service.AlarmCheckService - Created and saved 0 report notifications
+2024-12-22 21:55:03 INFO  c.f.adam.scheduler.ScheduledTasks - recentReportRedisUpdate end : 2024-12-22 Sun요일 21:55:03
+2024-12-22 21:56:00 INFO  c.f.adam.scheduler.SchedulerAspect - Scheduler is enabled. Executing recentReportRedisUpdate
+2024-12-22 21:56:00 INFO  c.f.adam.scheduler.ScheduledTasks - recentReportRedisUpdate start : 2024-12-22 Sun요일 21:56:00
+2024-12-22 21:56:00 INFO  c.f.adam.openapi.dart.OpenDartAPI - Updating recent reports in Redis by report type
+2024-12-22 21:56:00 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: A
+2024-12-22 21:56:00 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:56:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 10 items
+2024-12-22 21:56:01 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: B
+2024-12-22 21:56:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:56:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 71 items
+2024-12-22 21:56:01 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: C
+2024-12-22 21:56:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:56:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:56:01 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: D
+2024-12-22 21:56:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:56:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:56:02 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: E
+2024-12-22 21:56:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:56:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 26 items
+2024-12-22 21:56:02 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: F
+2024-12-22 21:56:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:56:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 17 items
+2024-12-22 21:56:02 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: G
+2024-12-22 21:56:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:56:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 66 items
+2024-12-22 21:56:02 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: H
+2024-12-22 21:56:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:56:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 2 items
+2024-12-22 21:56:03 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: I
+2024-12-22 21:56:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:56:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:56:03 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: J
+2024-12-22 21:56:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:56:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:56:03 INFO  c.f.adam.openapi.dart.OpenDartAPI - Completed updating recent reports in Redis
+2024-12-22 21:56:03 INFO  c.f.adam.service.AlarmCheckService - Starting report alarm trigger process
+2024-12-22 21:56:03 INFO  c.f.adam.service.AlarmCheckService - Created and saved 0 report notifications
+2024-12-22 21:56:03 INFO  c.f.adam.scheduler.ScheduledTasks - recentReportRedisUpdate end : 2024-12-22 Sun요일 21:56:03
+2024-12-22 21:57:00 INFO  c.f.adam.scheduler.SchedulerAspect - Scheduler is enabled. Executing recentReportRedisUpdate
+2024-12-22 21:57:00 INFO  c.f.adam.scheduler.ScheduledTasks - recentReportRedisUpdate start : 2024-12-22 Sun요일 21:57:00
+2024-12-22 21:57:00 INFO  c.f.adam.openapi.dart.OpenDartAPI - Updating recent reports in Redis by report type
+2024-12-22 21:57:00 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: A
+2024-12-22 21:57:00 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:57:00 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 10 items
+2024-12-22 21:57:00 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: B
+2024-12-22 21:57:00 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:57:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 71 items
+2024-12-22 21:57:01 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: C
+2024-12-22 21:57:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:57:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:57:02 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: D
+2024-12-22 21:57:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:57:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:57:02 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: E
+2024-12-22 21:57:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:57:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 26 items
+2024-12-22 21:57:02 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: F
+2024-12-22 21:57:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:57:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 17 items
+2024-12-22 21:57:02 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: G
+2024-12-22 21:57:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:57:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 66 items
+2024-12-22 21:57:03 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: H
+2024-12-22 21:57:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:57:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 2 items
+2024-12-22 21:57:03 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: I
+2024-12-22 21:57:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:57:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:57:03 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: J
+2024-12-22 21:57:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:57:04 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:57:04 INFO  c.f.adam.openapi.dart.OpenDartAPI - Completed updating recent reports in Redis
+2024-12-22 21:57:04 INFO  c.f.adam.service.AlarmCheckService - Starting report alarm trigger process
+2024-12-22 21:57:04 INFO  c.f.adam.service.AlarmCheckService - Created and saved 0 report notifications
+2024-12-22 21:57:04 INFO  c.f.adam.scheduler.ScheduledTasks - recentReportRedisUpdate end : 2024-12-22 Sun요일 21:57:04
+2024-12-22 21:58:00 INFO  c.f.adam.scheduler.SchedulerAspect - Scheduler is enabled. Executing recentReportRedisUpdate
+2024-12-22 21:58:00 INFO  c.f.adam.scheduler.ScheduledTasks - recentReportRedisUpdate start : 2024-12-22 Sun요일 21:58:00
+2024-12-22 21:58:00 INFO  c.f.adam.openapi.dart.OpenDartAPI - Updating recent reports in Redis by report type
+2024-12-22 21:58:00 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: A
+2024-12-22 21:58:00 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:58:00 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 10 items
+2024-12-22 21:58:00 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: B
+2024-12-22 21:58:00 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:58:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 71 items
+2024-12-22 21:58:01 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: C
+2024-12-22 21:58:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:58:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:58:01 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: D
+2024-12-22 21:58:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:58:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:58:01 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: E
+2024-12-22 21:58:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:58:01 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 26 items
+2024-12-22 21:58:02 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: F
+2024-12-22 21:58:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:58:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 17 items
+2024-12-22 21:58:02 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: G
+2024-12-22 21:58:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:58:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 66 items
+2024-12-22 21:58:02 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: H
+2024-12-22 21:58:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:58:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 2 items
+2024-12-22 21:58:02 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: I
+2024-12-22 21:58:02 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:58:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:58:03 INFO  c.f.adam.openapi.dart.OpenDartAPI - Getting recent reports - corpCode: null, pageCount: 100, reportType: J
+2024-12-22 21:58:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - Making API request to path: api/list.json
+2024-12-22 21:58:03 INFO  c.f.adam.openapi.dart.OpenDartUtil - API request completed successfully. Retrieved 100 items
+2024-12-22 21:58:03 INFO  c.f.adam.openapi.dart.OpenDartAPI - Completed updating recent reports in Redis
+2024-12-22 21:58:03 INFO  c.f.adam.service.AlarmCheckService - Starting report alarm trigger process
+2024-12-22 21:58:03 INFO  c.f.adam.service.AlarmCheckService - Created and saved 0 report notifications
+2024-12-22 21:58:03 INFO  c.f.adam.scheduler.ScheduledTasks - recentReportRedisUpdate end : 2024-12-22 Sun요일 21:58:03
+2024-12-22 21:58:35 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-12-22 21:58:36 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2024-12-22 21:58:36 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2024-12-22 22:00:42 INFO  com.finance.adam.AdamApplication - Starting AdamApplication v0.0.1-SNAPSHOT using Java 17-ea with PID 1 (/app/app.jar started by root in /)
+2024-12-22 22:00:42 INFO  com.finance.adam.AdamApplication - The following 3 profiles are active: "scheduler", "profile2", "common"
+2024-12-22 22:00:50 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2024-12-22 22:00:50 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-12-22 22:00:51 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 1401 ms. Found 10 JPA repository interfaces.
+2024-12-22 22:00:51 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2024-12-22 22:00:52 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2024-12-22 22:00:52 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.finance.adam.repository.pricealarm.PriceAlarmRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-22 22:00:52 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.finance.adam.repository.reportalarm.ReportAlarmRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-22 22:00:52 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.finance.adam.repository.corpinfo.CorpRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-22 22:00:52 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.finance.adam.repository.notification.NotificationRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-22 22:00:52 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.finance.adam.repository.account.UserRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-22 22:00:52 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.finance.adam.repository.targetpricealarm.TargetPriceAlarmRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-22 22:00:52 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.finance.adam.repository.memo.MemoRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-22 22:00:52 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.finance.adam.repository.stockprice.StockPriceRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-22 22:00:52 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.finance.adam.repository.financeinfo.FinanceInfoRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-22 22:00:52 INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.finance.adam.repository.savecorpinfo.SaveCorpInfoRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-22 22:00:52 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 124 ms. Found 0 Redis repository interfaces.
+2024-12-22 22:00:58 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2024-12-22 22:00:59 INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2024-12-22 22:00:59 INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2024-12-22 22:00:59 INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.18]
+2024-12-22 22:00:59 INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-12-22 22:00:59 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 17144 ms
+2024-12-22 22:01:02 INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-12-22 22:01:03 INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.4.1.Final
+2024-12-22 22:01:03 INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2024-12-22 22:01:06 INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-12-22 22:01:06 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2024-12-22 22:01:09 INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@de40aa1
+2024-12-22 22:01:09 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2024-12-22 22:01:13 INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2024-12-22 22:01:21 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-12-22 22:01:21 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-12-22 22:01:24 INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-12-22 22:01:34 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
