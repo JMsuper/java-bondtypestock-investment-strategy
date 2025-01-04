@@ -68,7 +68,7 @@
   - ROE 기준 기업 가치평가 및 스크리닝 시스템 구현
 
   <div align="center">
-  <img src="./images/종목_스크리닝_3.PNG" width="80%" />
+  <img src="./images/종목_스크리닝_3.png" width="80%" />
   <p align="center">💡 ROE 기반의 가치평가를 통해 기업 필터링</p>
     
   <img src="./images/종목_스크리닝.PNG" width="80%" />
@@ -86,7 +86,7 @@
   <img src="./images/신규_공시_구독.PNG" width="80%" />
   <p align="center">💡 기업별 맞춤 공시 정보 구독 설정</p>
     
-  <img src="./images/메일 알림.PNG" width="80%" />
+  <img src="./images/메일 알림.png" width="60%" />
   <p align="center">💡 이메일 알림 및 상세 정보 바로가기 제공</p>
   </div>
 
@@ -101,6 +101,8 @@
   <img src="./images/알림_기록_조회.PNG" width="80%" />
   <p align="center">💡 알림 이력 조회 및 설정별 발송 현황 확인</p>
   </div>
+
+  <br>
 
   ## 4️⃣ 시스템 아키텍처
   ### 시스템 구성도
@@ -137,11 +139,15 @@
     - GitHub Container Registry 활용
     - 도커 이미지 관리 비용 절감
 
+  <br>
+
   ## 5️⃣ 데이터베이스 설계
   ### ERD
   <div align="center">
-    <img src="./images/erd.png" width="100%" />
+    <img src="./images/erd.png" width="75%" />
   </div>
+
+  <br>
 
   ## 6️⃣ API 엔드포인트 목록
 
@@ -211,6 +217,8 @@
   | DELETE | `/memos/{memoId}` | 메모 삭제 |
   </details>
 
+  <br>
+
 ## 7️⃣ 모니터링 구축
 > 모니터링 URL: http://snowball-stock.site:3000
 
@@ -270,6 +278,8 @@
 | EC2 | 네트워크 트래픽 | +50% | 평소 대비 증가율 초과 시 |
 </details>
 
+  <br>
+
 ## 8️⃣ 트러블 슈팅
 
 <details>
@@ -317,6 +327,8 @@
 - 해결: Private 서브넷 도커 컨테이너의 /etc/hosts에 로컬 DNS 정보 등록
 - 결과: 불필요한 NAT 게이트웨이 통신 제거로 네트워크 비용 절감
 </details>
+
+  <br>
 
 ## 9️⃣ 회고
 작성중
