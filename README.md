@@ -45,7 +45,7 @@
   |------|-----------|-----------|
   | **Frontend** | • Next.js 13.4.3<br>• TypeScript 5.0.4<br>• React 18.2.0 | • MUI 5.x<br>• Recoil 0.7.7<br>• Vercel |
   | **Backend** | • Java 17<br>• Spring Boot 3.2.2<br>• JPA/Hibernate | • Spring Security 3.2.2<br>• Redis<br>• Actuator 3.2.3 |
-  | **Infrastructure** | • AWS EC2<br>• AWS RDS MySQL 8.0<br>• Docker 27.4.1<br>• Node Exporter | • AWS VPC<br>• AWS Route 53<br>• Nginx 1.24.0<br>• Prometheus & Grafana |
+  | **Infrastructure** | • AWS EC2(Ubuntu 22.04)<br>• AWS RDS MySQL 8.0<br>• Docker 27.4.1<br>• Node Exporter | • AWS VPC<br>• AWS Route 53<br>• Nginx<br>• Prometheus & Grafana |
 
   <br>
 
