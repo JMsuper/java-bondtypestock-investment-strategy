@@ -16,7 +16,7 @@
     <img src="./images/logo.PNG" alt="snowball stock logo" width="400px" />
     
   # Snowball Stock
-  > 가치투자를 위한 기업 정보 제공 서비스 (개발 기간: 2.5개월)
+  > 가치투자를 위한 기업 정보 제공 서비스 (개발 기간: 3개월)
     
   | 서비스 | URL | 테스트 계정 |
   |--------|-----|-------------|
