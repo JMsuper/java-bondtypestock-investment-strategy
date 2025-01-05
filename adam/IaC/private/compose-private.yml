@@ -57,6 +57,7 @@ services:
     container_name: springboot-scheduler
     environment:
       - SPRING_PROFILES_ACTIVE=scheduler
+      - JAVA_OPTS=-Xmx256m
     ports:
       - "8080:8080"
       - "8000:8000"
