@@ -2,50 +2,46 @@ package com.finance.adam.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.HttpHeaders;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.client.methods.RequestBuilder;
+import org.apache.http.impl.client.HttpClients;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class CacheService {
+    private static final String ORIGIN_URL = "https://snowball-stock.vercel.app";
+    private static final int SUCCESS_STATUS = 200;
     
-    private final RestTemplate restTemplate;
-    
+    private final HttpClient httpClient = HttpClients.custom().build();
+
     @Value("${cache.server.url-1}")
     private String CACHE_SERVER_URL_1;
     @Value("${cache.server.url-2}")
     private String CACHE_SERVER_URL_2;
 
     private boolean sendRequest(String url) {
+        HttpUriRequest request = RequestBuilder.get()
+                .setUri(url)
+                .setHeader(HttpHeaders.CACHE_CONTROL, "no-cache")
+                .setHeader("Origin", ORIGIN_URL)
+                .build();
         try {
-            HttpHeaders headers = new HttpHeaders();
-            headers.setCacheControl("no-cache");
-            
-            HttpEntity<String> entity = new HttpEntity<>(headers);
-            ResponseEntity<String> response = restTemplate.exchange(
-                url,
-                HttpMethod.GET,
-                entity,
-                String.class
-            );
-            
-            if (response.getStatusCode() == HttpStatus.OK) {
-                log.info("Cache refresh successful for URL: {}", url);
-                return true;
-            } else {
-                log.warn("Cache refresh failed for URL: {}. Status: {}", 
-                        url, response.getStatusCode());
-                return false;
-            }
-        } catch (Exception e) {
-            log.warn("Error refreshing cache for URL: {}. Error: {}", 
-                    url, e.getMessage());
+            HttpResponse response = httpClient.execute(request);
+            int statusCode = response.getStatusLine().getStatusCode();
+            log.info("Cache server response status code: {}", statusCode);
+            return statusCode == SUCCESS_STATUS;
+        } catch (IOException e) {
+            log.error("Error sending request to cache server: {}", e.getMessage());
             return false;
         }
     }

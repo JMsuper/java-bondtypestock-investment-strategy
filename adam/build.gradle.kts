@@ -31,6 +31,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-redis")
 	implementation("org.springframework.boot:spring-boot-starter-actuator:3.2.3")
 	implementation("io.micrometer:micrometer-registry-prometheus")
+	implementation("org.apache.httpcomponents:httpclient:4.5.13")
 
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	implementation("org.springframework.boot:spring-boot-starter-mail")
