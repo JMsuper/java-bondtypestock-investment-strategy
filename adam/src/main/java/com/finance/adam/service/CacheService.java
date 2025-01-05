@@ -26,6 +26,7 @@ public class CacheService {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.setCacheControl("no-cache");
+            headers.setOrigin("https://snowball-stock.vercel.app");
             
             HttpEntity<String> entity = new HttpEntity<>(headers);
             ResponseEntity<String> response = restTemplate.exchange(
