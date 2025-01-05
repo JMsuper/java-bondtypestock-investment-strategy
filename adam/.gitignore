@@ -36,7 +36,7 @@ out/
 
 ### VS Code ###
 .vscode/
-/nginx-springboot/logs/api-1/*
-/nginx-springboot/logs/api-2/*
-/nginx-springboot/logs/nginx/*
-/nginx-springboot/logs/scheduler/*
+/IaC/logs/api-1/*
+/IaC/logs/api-2/*
+/IaC/logs/nginx/*
+/IaC/logs/scheduler/*
