@@ -33,10 +33,9 @@ public class AsyncConfig {
     public Executor getAsyncExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         
-        // CPU 코어 수에 맞춘 설정
-        int coreCount = Runtime.getRuntime().availableProcessors();
-        executor.setCorePoolSize(coreCount);
-        executor.setMaxPoolSize(coreCount);
+        // 비동기 스레드간의 데드락을 방지하기 위해 우선 높게 설정
+        executor.setCorePoolSize(10);
+        executor.setMaxPoolSize(20);
         
         // Queue 크기는 넉넉하게 유지 (대기 작업용)
         executor.setQueueCapacity(500);
