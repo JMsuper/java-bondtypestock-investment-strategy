@@ -39,7 +39,7 @@ public class ScreeningService {
 
             StockPrice stockPrice = corpInfo.getStockPrice();
             if(stockPrice == null){
-                log.error("StockPrice is null for corporation: corpCode={}, stockCode={}", corpInfo.getCorpCode(), corpInfo.getStockCode());
+                log.info("StockPrice is null for corporation: corpCode={}, stockCode={}", corpInfo.getCorpCode(), corpInfo.getStockCode());
                 continue;
             }
             stockInfoDTO.setOpeningPrice(stockPrice.getOpeningPrice());
