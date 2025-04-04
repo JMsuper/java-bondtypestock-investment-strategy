@@ -18,11 +18,7 @@
   # Snowball Stock
   > 가치투자를 위한 기업 정보 제공 서비스 (개발 기간: 3개월)
     
-  | 서비스 | URL | 테스트 계정 |
-  |--------|-----|-------------|
-  | 웹 서비스 | https://snowball-stock.vercel.app/ (Vercel)| ID: test123, PW: 123123 |
-  | API | https://snowball-stock.site/api/v1 (Nginx)| - |
-  | 모니터링 | http://snowball-stock.site:3000 (Grafana) | - |
+  서비스 운영 비용상의 문제로 서비스를 중단
   </div>
 
   ### 핵심 기능
